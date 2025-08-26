@@ -44,7 +44,39 @@ src/
   types/               # Khai báo types/interfaces dùng chung
     auth.ts           # Authentication types
 public/                # Static assets
+  logo.png            # Logo của ứng dụng (32x32px cho nav, 64x64px cho login)
 ```
+
+## Logo Configuration
+
+Để thay thế logo của ứng dụng:
+
+1. **Tạo thư mục images**: Đảm bảo thư mục `public/images/` đã tồn tại
+2. **Thay thế file logo**: Đặt file logo của bạn vào `public/images/medi_track_logo.png`
+3. **Kích thước khuyến nghị**: 
+   - Navigation: 32x32px
+   - Login page: 64x64px
+4. **Định dạng**: PNG, JPG, JPEG, SVG, WebP
+5. **Tên file**: `medi_track_logo.png` (đã được cấu hình sẵn trong code)
+
+### Cấu trúc thư mục cần thiết:
+```
+public/
+├── images/
+│   └── medi_track_logo.png    # Logo của bạn ở đây
+├── logo.svg                   # Logo placeholder
+└── other-files...
+```
+
+Logo sẽ hiển thị ở:
+- Navigation bar (góc trái trên)
+- Login/Signup page header
+- Các vị trí khác nếu cần
+
+**Lưu ý**: 
+- Logo hiện tại là placeholder. Bạn cần thay thế file `public/images/medi_track_logo.png` bằng logo thực tế
+- Đảm bảo thư mục `public/images/` tồn tại trước khi thêm file
+- Next.js sẽ tự động serve file từ thư mục `public` với đường dẫn gốc `/`
 
 ## Trang và Routes
 
@@ -91,8 +123,9 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:3001
 
 1. Clone repository
 2. Install dependencies: `npm install`
-3. Start dev server: `npm run dev`
-4. Open http://localhost:3000
+3. **Thay thế logo**: Đặt file logo vào `public/logo.png`
+4. Start dev server: `npm run dev`
+5. Open http://localhost:3000
 
 ## Build và Deploy
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 import { useState } from "react";
 
 type TabType = "signin" | "signup";
@@ -39,8 +40,15 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-            <span className="text-white font-bold text-2xl">M</span>
+          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4 overflow-hidden">
+            <Image
+              src="/images/medi_track_logo.png"
+              alt="MediTrack Logo"
+              width={64}
+              height={64}
+              className="object-contain"
+              priority
+            />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to MediTrack</h2>
           <p className="text-gray-600">Sign in to your account or create a new one</p>
@@ -63,7 +71,7 @@ export default function LoginPage() {
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === "signup"
                 ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
+                : "text-gray-700 hover:text-gray-900"
             }`}
           >
             Sign Up
