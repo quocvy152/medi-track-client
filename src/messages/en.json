@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "about": "About Us",
+    "login": "Login",
+    "brand": "MediTrack"
+  },
+  "home": {
+    "title": "Track your health with {brand}",
+    "subtitle": "Understand your test results, track your journey, and make better decisions.",
+    "ctaGetStarted": "Get Started Free",
+    "ctaLearnMore": "Learn More",
+    "why": "Why Choose MediTrack?",
+    "ctaSectionTitle": "Ready to take control of your health?",
+    "ctaSectionSubtitle": "Join thousands already tracking their health with MediTrack.",
+    "ctaSectionButton": "Start Your Health Journey"
+  },
+  "about": {
+    "title": "About {brand}",
+    "desc": "MediTrack helps users track and understand their medical test results easily.",
+    "getStarted": "Get Started",
+    "mission": "Our Mission & Vision",
+    "missionDesc": "We're building the future of personal health management, making it easier for everyone to take control of their health journey.",
+    "why": "Why Choose MediTrack?",
+    "featureAccurate": "Accurate Results",
+    "featurePrivacy": "Privacy First",
+    "featureFast": "Lightning Fast"
+  },
+  "login": {
+    "welcome": "Welcome to MediTrack",
+    "subtitle": "Sign in to your account or create a new one",
+    "tabSignin": "Sign In",
+    "tabSignup": "Sign Up",
+    "email": "Email Address",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgot": "Forgot password?",
+    "signin": "Sign In",
+    "name": "Full Name",
+    "confirmPassword": "Confirm Password",
+    "termsPrefix": "I agree to the ",
+    "terms": "Terms of Service",
+    "and": " and ",
+    "privacy": "Privacy Policy",
+    "signup": "Create Account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "switchToSignup": "Sign up",
+    "switchToSignin": "Sign in"
+  },
+  "footer": {
+    "copyright": "© {year} MediTrack. All rights reserved."
+  },
+  "lang": {
+    "vietnamese": "Tiếng Việt",
+    "english": "English"
+  }
+} 

@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "about": "Giới thiệu",
+    "login": "Đăng nhập",
+    "brand": "MediTrack"
+  },
+  "home": {
+    "title": "Theo dõi sức khỏe với {brand}",
+    "subtitle": "Hiểu kết quả xét nghiệm, theo dõi hành trình sức khỏe và ra quyết định tốt hơn.",
+    "ctaGetStarted": "Bắt đầu miễn phí",
+    "ctaLearnMore": "Tìm hiểu thêm",
+    "why": "Vì sao chọn MediTrack?",
+    "ctaSectionTitle": "Sẵn sàng kiểm soát sức khỏe của bạn?",
+    "ctaSectionSubtitle": "Tham gia cùng hàng ngàn người dùng đang theo dõi sức khỏe với MediTrack.",
+    "ctaSectionButton": "Bắt đầu hành trình sức khỏe"
+  },
+  "about": {
+    "title": "Về {brand}",
+    "desc": "MediTrack giúp người dùng theo dõi và hiểu kết quả xét nghiệm y tế một cách dễ dàng.",
+    "getStarted": "Bắt đầu",
+    "mission": "Sứ mệnh & Tầm nhìn",
+    "missionDesc": "Chúng tôi xây dựng tương lai quản lý sức khỏe cá nhân, giúp mọi người làm chủ hành trình sức khỏe của mình.",
+    "why": "Tại sao chọn MediTrack?",
+    "featureAccurate": "Kết quả chính xác",
+    "featurePrivacy": "Ưu tiên quyền riêng tư",
+    "featureFast": "Tốc độ nhanh chóng"
+  },
+  "login": {
+    "welcome": "Chào mừng đến với MediTrack",
+    "subtitle": "Đăng nhập tài khoản hoặc tạo tài khoản mới",
+    "tabSignin": "Đăng nhập",
+    "tabSignup": "Đăng ký",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "remember": "Ghi nhớ đăng nhập",
+    "forgot": "Quên mật khẩu?",
+    "signin": "Đăng nhập",
+    "name": "Họ và tên",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "termsPrefix": "Tôi đồng ý với ",
+    "terms": "Điều khoản dịch vụ",
+    "and": " và ",
+    "privacy": "Chính sách bảo mật",
+    "signup": "Tạo tài khoản",
+    "noAccount": "Chưa có tài khoản?",
+    "haveAccount": "Đã có tài khoản?",
+    "switchToSignup": "Đăng ký",
+    "switchToSignin": "Đăng nhập"
+  },
+  "footer": {
+    "copyright": "© {year} MediTrack. Bảo lưu mọi quyền."
+  },
+  "lang": {
+    "vietnamese": "Tiếng Việt",
+    "english": "English"
+  }
+} 
