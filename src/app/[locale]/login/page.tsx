@@ -2,14 +2,17 @@
 
 import { Button } from "@/components/ui/Button";
 import { SocialButton } from "@/components/ui/SocialButton";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type TabType = "signin" | "signup";
 
 export default function LoginPage() {
   const t = useTranslations('login');
+  const locale = useLocale();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("signin");
   const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +31,11 @@ export default function LoginPage() {
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.email === "admin@gmail.com" && formData.password === "123456") {
+      localStorage.setItem("authToken", "123456");
+      router.replace(`/${locale}`);
+    }
   };
 
   const handleSignUp = (e: React.FormEvent) => {
@@ -38,12 +46,12 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="mx-auto w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4 overflow-hidden">
+          <div className="mx-auto bg-white-600 rounded-full flex items-center justify-center mb-4 overflow-hidden">
             <Image
               src="/images/medi_track_logo.png"
               alt="MediTrack Logo"
-              width={64}
-              height={64}
+              width={150}
+              height={150}
               className="object-contain"
               priority
             />
@@ -181,7 +189,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="signup-password" className="block text.sm font-medium text-gray-700 mb-2">
                   {t('password')}
                 </label>
                 <input

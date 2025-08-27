@@ -12,9 +12,16 @@ export function Navigation() {
   const locale = useLocale();
   const t = useTranslations('nav');
   const [mounted, setMounted] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    try {
+      const token = localStorage.getItem('authToken') || localStorage.getItem('isLoggedIn');
+      setIsAuthed(!!token);
+    } catch {
+      setIsAuthed(false);
+    }
   }, []);
 
   const isActive = (path: string) => mounted && pathname === `/${locale}${path}`;
@@ -25,17 +32,17 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="bg-white-600 rounded-lg flex items-center justify-center overflow-hidden">
               <Image
                 src="/images/medi_track_logo.png"
                 alt="MediTrack Logo"
-                width={32}
-                height={32}
+                width={200}
+                height={200}
                 className="object-contain"
                 priority
               />
             </div>
-            <span className="text-xl font-bold text-gray-900">{t('brand')}</span>
+            {/* <span className="text-xl font-bold text-gray-900">{t('brand')}</span> */}
           </Link>
 
           {/* Navigation Links */}
@@ -51,15 +58,27 @@ export function Navigation() {
               {t('about')}
             </Link>
             <Link
-              href={`/${locale}/login`}
+              href={`/${locale}/upload`}
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive('/login')
+                isActive('/upload')
                   ? "text-blue-600 bg-blue-50"
                   : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
               }`}
             >
-              {t('login')}
+              {t('upload')}
             </Link>
+            {!isAuthed && (
+              <Link
+                href={`/${locale}/login`}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/login')
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                }`}
+              >
+                {t('login')}
+              </Link>
+            )}
             <LanguageSwitcher />
           </div>
 

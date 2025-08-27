@@ -2,7 +2,8 @@
   "nav": {
     "about": "Giới thiệu",
     "login": "Đăng nhập",
-    "brand": "MediTrack"
+    "brand": "MediTrack",
+    "upload": "Tải lên & Phân tích"
   },
   "home": {
     "title": "Theo dõi sức khỏe với {brand}",
@@ -48,10 +49,93 @@
     "switchToSignin": "Đăng nhập"
   },
   "footer": {
-    "copyright": "© {year} MediTrack. Bảo lưu mọi quyền."
+    "copyright": "© {year} MediTrack. Bảo lưu mọi quyền.",
+    "terms": "Điều khoản & Chính sách"
   },
   "lang": {
     "vietnamese": "Tiếng Việt",
     "english": "English"
+  },
+  "terms": {
+    "title": "Điều khoản & Chính sách",
+    "subtitle": "Vui lòng xem các điều khoản và chính sách khi sử dụng Medi Track.",
+    "agree": "Đồng ý & Tiếp tục",
+    "sections": {
+      "tos": {
+        "title": "Điều khoản dịch vụ",
+        "p1": "Đây là nội dung minh họa cho điều khoản dịch vụ của Medi Track. Bằng việc sử dụng ứng dụng, bạn đồng ý tuân thủ các hướng dẫn, giới hạn và chính sách sử dụng được mô tả tại đây. Dịch vụ được cung cấp ‘nguyên trạng’ và có thể được cập nhật định kỳ. Việc tiếp tục sử dụng đồng nghĩa bạn chấp nhận các thay đổi.",
+        "p2": "Việc sử dụng dịch vụ tuân theo pháp luật hiện hành. Bạn chịu trách nhiệm bảo mật tài khoản và mọi hoạt động phát sinh từ tài khoản của mình."
+      },
+      "rights": {
+        "title": "Quyền và Trách nhiệm của Người dùng",
+        "i1": "Bạn có quyền truy cập, tải lên và quản lý kết quả xét nghiệm trong ứng dụng.",
+        "i2": "Bạn đồng ý cung cấp thông tin chính xác và sử dụng ứng dụng hợp pháp.",
+        "i3": "Bạn chịu trách nhiệm giữ bí mật thông tin đăng nhập của mình.",
+        "i4": "Bạn có thể yêu cầu chỉnh sửa hoặc xóa dữ liệu theo quy định pháp luật."
+      },
+      "privacy": {
+        "title": "Quyền riêng tư & Bảo vệ dữ liệu",
+        "p1": "Medi Track đặt quyền riêng tư của bạn lên hàng đầu. Chúng tôi áp dụng các biện pháp hành chính, kỹ thuật và vật lý hợp lý để bảo vệ dữ liệu cá nhân. Nội dung minh họa: cách dữ liệu được thu thập, lưu trữ, mã hóa và xử lý sẽ được mô tả tại đây.",
+        "p2": "Chúng tôi chỉ thu thập dữ liệu tối thiểu cần thiết để cung cấp dịch vụ và cải thiện trải nghiệm. Bạn có thể điều chỉnh cài đặt quyền riêng tư (nếu có)."
+      },
+      "disclaimer": {
+        "title": "Tuyên bố miễn trừ trách nhiệm y khoa",
+        "p1": "Thông tin do Medi Track cung cấp, bao gồm các gợi ý, chỉ nhằm mục đích tham khảo và không thay thế lời khuyên, chẩn đoán hoặc điều trị y khoa chuyên môn. Nội dung minh họa: hãy tham khảo bác sĩ để được tư vấn phù hợp. Không bỏ qua hoặc trì hoãn việc tìm kiếm tư vấn chuyên môn vì thông tin từ ứng dụng."
+      },
+      "sharing": {
+        "title": "Quy tắc chia sẻ dữ liệu",
+        "i1": "Chúng tôi không bán dữ liệu cá nhân. Nội dung minh họa cho các quy tắc chia sẻ khác.",
+        "i2": "Dữ liệu chỉ được chia sẻ khi có sự đồng ý của bạn hoặc theo yêu cầu của pháp luật.",
+        "i3": "Dữ liệu đã ẩn danh, tổng hợp có thể được dùng để cải thiện dịch vụ."
+      },
+      "contact": {
+        "title": "Thông tin liên hệ",
+        "p1": "Có câu hỏi hoặc thắc mắc? Liên hệ giả lập: support@medi-track.example và 123-456-7890. Đội ngũ hỗ trợ sẽ phản hồi trong thời gian hợp lý."
+      }
+    }
+  },
+  "upload": {
+    "step": {
+      "upload": "Tải lên",
+      "processing": "Đang xử lý",
+      "results": "Kết quả"
+    },
+    "dropHere": "Kéo & thả phiếu xét nghiệm vào đây",
+    "hintTypes": "PDF, JPEG hoặc PNG, tối đa {max}MB",
+    "btn": {
+      "upload": "Chọn tệp",
+      "capture": "Chụp bằng camera",
+      "analyze": "Phân tích ngay",
+      "uploadNew": "Tải tệp mới",
+      "download": "Tải PDF",
+      "share": "Chia sẻ",
+      "retry": "Thử lại / Tải phiếu mới"
+    },
+    "errors": {
+      "unsupported": "Định dạng không hỗ trợ. Vui lòng tải PDF, JPEG hoặc PNG.",
+      "tooLarge": "Tệp quá lớn. Tối đa {max}MB.",
+      "previewUnavailable": "Không thể xem trước với định dạng này"
+    },
+    "processing": {
+      "title": "Đang xử lý tệp",
+      "subtitle": "Đang trích xuất chỉ số và tạo phân tích..."
+    },
+    "summary": {
+      "allNormal": "Tất cả chỉ số trong ngưỡng bình thường",
+      "someAbnormal": "Phát hiện một số chỉ số bất thường",
+      "disclaimer": "Đây là nhận định ban đầu. Vui lòng tham khảo bác sĩ để được tư vấn."
+    },
+    "metrics": {
+      "status": {
+        "low": "THẤP",
+        "normal": "BÌNH THƯỜNG",
+        "high": "CAO"
+      },
+      "details": {
+        "title": "Diễn giải chi tiết",
+        "toggle": "Xem diễn giải chi tiết",
+        "more": "Diễn giải bổ sung và ghi chú lâm sàng cho {key}. Nội dung minh hoạ."
+      }
+    }
   }
 } 

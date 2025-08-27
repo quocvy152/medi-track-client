@@ -2,7 +2,8 @@
   "nav": {
     "about": "About Us",
     "login": "Login",
-    "brand": "MediTrack"
+    "brand": "MediTrack",
+    "upload": "Upload & Analysis"
   },
   "home": {
     "title": "Track your health with {brand}",
@@ -48,10 +49,93 @@
     "switchToSignin": "Sign in"
   },
   "footer": {
-    "copyright": "© {year} MediTrack. All rights reserved."
+    "copyright": "© {year} MediTrack. All rights reserved.",
+    "terms": "Terms & Policy"
   },
   "lang": {
     "vietnamese": "Tiếng Việt",
     "english": "English"
+  },
+  "terms": {
+    "title": "Terms & Policy",
+    "subtitle": "Please review the terms and policies that govern your use of Medi Track.",
+    "agree": "Agree & Continue",
+    "sections": {
+      "tos": {
+        "title": "Terms of Service",
+        "p1": "These are placeholder terms of service for Medi Track. By using the application, you agree to follow the guidelines, restrictions, and acceptable use policies described here. The service is provided ‘as is’ and may be updated periodically. Continued use constitutes acceptance of any changes.",
+        "p2": "Use of the service is subject to applicable laws and regulations. You are responsible for maintaining the security of your account and for all activities under your account."
+      },
+      "rights": {
+        "title": "User Rights & Responsibilities",
+        "i1": "You have the right to access, upload, and manage your lab test results within the app.",
+        "i2": "You agree to provide accurate information and to use the app in a lawful manner.",
+        "i3": "You are responsible for maintaining the confidentiality of your login credentials.",
+        "i4": "You may request correction or deletion of your data according to applicable laws."
+      },
+      "privacy": {
+        "title": "Privacy & Data Protection",
+        "p1": "Medi Track prioritizes your privacy. We implement reasonable administrative, technical, and physical safeguards to protect your personal data. Placeholder text: details on how your data is collected, stored, encrypted, and processed will be described here.",
+        "p2": "We minimize data collection to what is necessary for providing the service and improve user experience. You can adjust privacy settings where available."
+      },
+      "disclaimer": {
+        "title": "Medical Disclaimer",
+        "p1": "The information provided by Medi Track, including insights, is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Placeholder text: consult your physician for personalized medical guidance. Do not ignore or delay seeking professional advice because of information obtained through the app."
+      },
+      "sharing": {
+        "title": "Data Sharing Rules",
+        "i1": "We do not sell personal data. Placeholder for additional sharing rules.",
+        "i2": "Data may be shared with your explicit consent or as required by law.",
+        "i3": "De-identified, aggregated data may be used to improve services."
+      },
+      "contact": {
+        "title": "Contact Information",
+        "p1": "Have questions or concerns? Placeholder contact details: support@medi-track.example and 123-456-7890. Our support team will respond within a reasonable timeframe."
+      }
+    }
+  },
+  "upload": {
+    "step": {
+      "upload": "Upload",
+      "processing": "Processing",
+      "results": "Results"
+    },
+    "dropHere": "Drag & drop your test file here",
+    "hintTypes": "PDF, JPEG, or PNG up to {max}MB",
+    "btn": {
+      "upload": "Upload File",
+      "capture": "Capture with Camera",
+      "analyze": "Analyze Now",
+      "uploadNew": "Upload New",
+      "download": "Download PDF",
+      "share": "Share",
+      "retry": "Retry / Upload New Test"
+    },
+    "errors": {
+      "unsupported": "Unsupported file type. Please upload PDF, JPEG, or PNG.",
+      "tooLarge": "File is too large. Max {max}MB allowed.",
+      "previewUnavailable": "Preview not available for this file type"
+    },
+    "processing": {
+      "title": "Processing your file",
+      "subtitle": "Extracting values and generating insights..."
+    },
+    "summary": {
+      "allNormal": "All results are within normal range",
+      "someAbnormal": "Some abnormal results found",
+      "disclaimer": "These are preliminary insights. Consult a medical professional for advice."
+    },
+    "metrics": {
+      "status": {
+        "low": "LOW",
+        "normal": "NORMAL",
+        "high": "HIGH"
+      },
+      "details": {
+        "title": "Detailed Interpretation",
+        "toggle": "Show detailed interpretation",
+        "more": "Further interpretation and clinical notes for {key}. This is placeholder content for now."
+      }
+    }
   }
 } 
