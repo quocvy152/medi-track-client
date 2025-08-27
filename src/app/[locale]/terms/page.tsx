@@ -2,9 +2,9 @@
 
 import TermsAndPolicyPage from "@/components/TermsAndPolicyPage";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { Suspense, useCallback } from "react";
 
-export default function TermsPage() {
+function TermsInner() {
 	const params = useParams<{ locale: string }>();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -26,5 +26,13 @@ export default function TermsPage() {
 			isFirstVisit={isFirstVisit}
 			onAgree={isFirstVisit ? handleAgree : undefined}
 		/>
+	);
+}
+
+export default function TermsPage() {
+	return (
+		<Suspense fallback={null}>
+			<TermsInner />
+		</Suspense>
 	);
 } 
