@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import React from 'react';
+import toast from 'react-hot-toast';
 import Button from './ui/Button';
 
 export type TermsAndPolicyPageProps = {
@@ -23,6 +24,12 @@ const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({ t
 
 const TermsAndPolicyPage: React.FC<TermsAndPolicyPageProps> = ({ isFirstVisit = false, onAgree, className }) => {
 	const t = useTranslations('terms');
+
+	const handleAgree = () => {
+		localStorage.setItem('termsAccepted', 'true');
+		toast.success(t('agreementSuccess'));
+		// You can add navigation logic here if needed
+	};
 
 	return (
 		<div className={`min-h-screen w-full bg-gray-50 flex flex-col ${className ?? ''}`}>
@@ -77,7 +84,7 @@ const TermsAndPolicyPage: React.FC<TermsAndPolicyPageProps> = ({ isFirstVisit = 
 			{isFirstVisit && (
 				<div className="sticky bottom-0 w-full border-t border-gray-200 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
 					<div className="mx-auto w-full max-w-4xl px-4 py-4 flex items-center justify-end">
-						<Button onClick={onAgree} className="px-5">
+						<Button onClick={handleAgree} className="px-5">
 							{t('agree')}
 						</Button>
 					</div>

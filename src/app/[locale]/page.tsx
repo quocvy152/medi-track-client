@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   const t = useTranslations('home');
@@ -15,6 +16,14 @@ export default function HomePage() {
     { title: "🔒", description: "Secure & Private" }
   ];
 
+  const handleGetStarted = () => {
+    toast.success(t('toast.getStarted'));
+  };
+
+  const handleLearnMore = () => {
+    toast.success(t('toast.learnMore'));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
@@ -26,12 +35,12 @@ export default function HomePage() {
             {t('subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={`/${locale}/login`}>
+            <Link href={`/${locale}/login`} onClick={handleGetStarted}>
               <Button size="lg" className="text-lg px-8 py-4">
                 {t('ctaGetStarted')}
               </Button>
             </Link>
-            <Link href={`/${locale}/about`}>
+            <Link href={`/${locale}/about`} onClick={handleLearnMore}>
               <Button variant="secondary" size="lg" className="text-lg px-8 py-4">
                 {t('ctaLearnMore')}
               </Button>
@@ -72,7 +81,7 @@ export default function HomePage() {
           <p className="text-xl text-blue-100 mb-8">
             {t('ctaSectionSubtitle')}
           </p>
-          <Link href={`/${locale}/login`}>
+          <Link href={`/${locale}/login`} onClick={handleGetStarted}>
             <Button variant="secondary" size="lg" className="text-lg px-8 py-4">
               {t('ctaSectionButton')}
             </Button>

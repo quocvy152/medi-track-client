@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from 'react-hot-toast';
 
 type TabType = "signin" | "signup";
 
@@ -31,15 +32,36 @@ export default function LoginPage() {
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (formData.email === "admin@gmail.com" && formData.password === "123456") {
       localStorage.setItem("authToken", "123456");
+      toast.success(t('loginSuccess'));
       router.replace(`/${locale}`);
+    } else {
+      toast.error(t('loginError'));
     }
   };
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.error(t('passwordMismatch'));
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      toast.error(t('passwordTooShort'));
+      return;
+    }
+    
+    toast.success(t('signupSuccess'));
+    // Reset form after successful signup
+    setFormData({
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    });
+    setActiveTab('signin');
   };
 
   return (
@@ -56,7 +78,7 @@ export default function LoginPage() {
               priority
             />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('welcome')}</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h2>
           <p className="text-gray-600">{t('subtitle')}</p>
         </div>
 
@@ -69,7 +91,7 @@ export default function LoginPage() {
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            {t('tabSignin')}
+            {t('signin')}
           </button>
           <button
             onClick={() => setActiveTab("signup")}
@@ -79,7 +101,7 @@ export default function LoginPage() {
                 : "text-gray-700 hover:text-gray-900"
             }`}
           >
-            {t('tabSignup')}
+            {t('signup')}
           </button>
         </div>
 
@@ -116,7 +138,7 @@ export default function LoginPage() {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                     placeholder="name@example.com"
                   />
                 </div>
@@ -132,7 +154,7 @@ export default function LoginPage() {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                     placeholder="••••••••"
                   />
                 </div>
@@ -167,7 +189,7 @@ export default function LoginPage() {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                   placeholder="Nguyễn Văn A"
                 />
               </div>
@@ -183,7 +205,7 @@ export default function LoginPage() {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                   placeholder="name@example.com"
                 />
               </div>
@@ -199,7 +221,7 @@ export default function LoginPage() {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                   placeholder="••••••••"
                 />
               </div>
@@ -215,7 +237,7 @@ export default function LoginPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400"
                   placeholder="••••••••"
                 />
               </div>

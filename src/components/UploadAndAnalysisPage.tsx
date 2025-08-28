@@ -3,6 +3,7 @@
 
 import { useTranslations } from "next-intl";
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import Button from "./ui/Button";
 import Loading from "./ui/Loading";
 
@@ -76,25 +77,28 @@ export default function UploadAndAnalysisPage() {
 		const f = files[0];
 		const err = validateFile(f);
 		if (err) {
-			setError(err);
+			toast.error(err);
 			return;
 		}
-		setError(null);
 		setFile(f);
+		setError(null);
+		    toast.success(t('toast.fileUploaded'));
 		const url = URL.createObjectURL(f);
 		setPreviewUrl(url);
 	};
 
-	const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+	const onDrop = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
-		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-			handleFiles(e.dataTransfer.files);
+		const files = e.dataTransfer.files;
+		if (files.length > 0) {
+			handleFiles(files);
 		}
-	};
+	}, []);
 
 	const startProcessing = async () => {
 		if (!file) return;
 		setStep(2);
+		    toast.success(t('toast.processingStarted'));
 		setProgress(0);
 
 		for (let i = 0; i <= 100; i += 5) {
@@ -117,9 +121,11 @@ export default function UploadAndAnalysisPage() {
 
 		setResults(mockResults);
 		setStep(3);
+		    toast.success(t('toast.analysisComplete'));
 	};
 
 	const downloadPdf = () => {
+		    toast.success(t('toast.downloadStarted'));
 		const blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/pdf" });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
@@ -127,22 +133,31 @@ export default function UploadAndAnalysisPage() {
 		a.download = "medi-track-results.pdf";
 		a.click();
 		URL.revokeObjectURL(url);
+		setTimeout(() => {
+			      toast.success(t('toast.downloadComplete'));
+		}, 1000);
 	};
 
-	type ShareData = { title?: string; text?: string; url?: string };
-	type MaybeShareNavigator = Navigator & { share?: (data: ShareData) => Promise<void> };
+	// type ShareData = { title?: string; text?: string; url?: string };
+	// type MaybeShareNavigator = Navigator & { share?: (data: ShareData) => Promise<void> };
 
 	const shareResults = async () => {
-		const nav = navigator as MaybeShareNavigator;
-		if (nav.share) {
-			try {
-				await nav.share({ title: "Medi Track Results", text: "My recent lab test insights", url: window.location.href });
-			} catch {}
-		} else {
-			try {
+		try {
+			if (navigator.share) {
+				await navigator.share({
+					title: 'My Lab Test Results',
+					text: 'Check out my lab test results from MediTrack',
+					url: window.location.href,
+				});
+				        toast.success(t('toast.shareSuccess'));
+			} else {
+				// Fallback to clipboard
 				await navigator.clipboard.writeText(JSON.stringify(results));
-				alert("Results copied to clipboard");
-			} catch {}
+				        toast.success(t('toast.linkCopied'));
+			}
+		} catch (error) {
+			console.error(error);
+			toast.error(t('toast.shareError'));
 		}
 	};
 

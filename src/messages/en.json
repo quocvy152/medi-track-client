@@ -1,19 +1,24 @@
 {
   "nav": {
-    "about": "About Us",
-    "login": "Login",
     "brand": "MediTrack",
-    "upload": "Upload & Analysis"
+    "home": "Home",
+    "upload": "Upload & Analysis",
+    "about": "About",
+    "login": "Login"
   },
   "home": {
-    "title": "Track your health with {brand}",
-    "subtitle": "Understand your test results, track your journey, and make better decisions.",
-    "ctaGetStarted": "Get Started Free",
+    "title": "Welcome to {brand}",
+    "subtitle": "Track and understand your medical test results with AI-powered insights",
+    "ctaGetStarted": "Get Started",
     "ctaLearnMore": "Learn More",
     "why": "Why Choose MediTrack?",
-    "ctaSectionTitle": "Ready to take control of your health?",
-    "ctaSectionSubtitle": "Join thousands already tracking their health with MediTrack.",
-    "ctaSectionButton": "Start Your Health Journey"
+    "ctaSectionTitle": "Ready to get started?",
+    "ctaSectionSubtitle": "Join thousands of users who trust MediTrack with their health data",
+    "ctaSectionButton": "Start Tracking Now",
+    "toast": {
+      "getStarted": "Welcome! Let's get you started with MediTrack.",
+      "learnMore": "Learn more about our features and benefits!"
+    }
   },
   "about": {
     "title": "About {brand}",
@@ -27,30 +32,33 @@
     "featureFast": "Lightning Fast"
   },
   "login": {
-    "welcome": "Welcome to MediTrack",
+    "title": "Welcome to MediTrack",
     "subtitle": "Sign in to your account or create a new one",
-    "tabSignin": "Sign In",
-    "tabSignup": "Sign Up",
-    "email": "Email Address",
-    "password": "Password",
-    "remember": "Remember me",
-    "forgot": "Forgot password?",
     "signin": "Sign In",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
     "name": "Full Name",
     "confirmPassword": "Confirm Password",
-    "termsPrefix": "I agree to the ",
-    "terms": "Terms of Service",
-    "and": " and ",
-    "privacy": "Privacy Policy",
-    "signup": "Create Account",
+    "remember": "Remember me",
+    "forgot": "Forgot your password?",
+    "loginSuccess": "Login successful! Redirecting...",
+    "loginError": "Invalid email or password. Please try again.",
+    "signupSuccess": "Account created successfully! Please sign in.",
+    "passwordMismatch": "Passwords do not match. Please try again.",
+    "passwordTooShort": "Password must be at least 6 characters long.",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "switchToSignup": "Sign up",
-    "switchToSignin": "Sign in"
+    "switchToSignin": "Sign in",
+    "termsPrefix": "I agree to the ",
+    "terms": "Terms of Service",
+    "and": " and ",
+    "privacy": "Privacy Policy"
   },
   "footer": {
-    "copyright": "© {year} MediTrack. All rights reserved.",
-    "terms": "Terms & Policy"
+    "terms": "Terms & Policy",
+    "copyright": "© {year} MediTrack. All rights reserved."
   },
   "lang": {
     "vietnamese": "Tiếng Việt",
@@ -58,39 +66,39 @@
   },
   "terms": {
     "title": "Terms & Policy",
-    "subtitle": "Please review the terms and policies that govern your use of Medi Track.",
+    "subtitle": "Please read and accept our terms and policies to continue",
     "agree": "Agree & Continue",
+    "agreementSuccess": "Thank you for accepting our terms and policies!",
     "sections": {
       "tos": {
         "title": "Terms of Service",
-        "p1": "These are placeholder terms of service for Medi Track. By using the application, you agree to follow the guidelines, restrictions, and acceptable use policies described here. The service is provided ‘as is’ and may be updated periodically. Continued use constitutes acceptance of any changes.",
-        "p2": "Use of the service is subject to applicable laws and regulations. You are responsible for maintaining the security of your account and for all activities under your account."
+        "p1": "By using MediTrack, you agree to these terms of service. Our platform provides medical test result analysis and health insights based on the data you provide.",
+        "p2": "We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of any changes."
       },
       "rights": {
         "title": "User Rights & Responsibilities",
-        "i1": "You have the right to access, upload, and manage your lab test results within the app.",
-        "i2": "You agree to provide accurate information and to use the app in a lawful manner.",
-        "i3": "You are responsible for maintaining the confidentiality of your login credentials.",
-        "i4": "You may request correction or deletion of your data according to applicable laws."
+        "p1": "You have the right to access, modify, and delete your personal data at any time. You are responsible for providing accurate information and maintaining the security of your account.",
+        "p2": "You must not use the service for any illegal purposes or attempt to access other users' data."
       },
       "privacy": {
         "title": "Privacy & Data Protection",
-        "p1": "Medi Track prioritizes your privacy. We implement reasonable administrative, technical, and physical safeguards to protect your personal data. Placeholder text: details on how your data is collected, stored, encrypted, and processed will be described here.",
-        "p2": "We minimize data collection to what is necessary for providing the service and improve user experience. You can adjust privacy settings where available."
+        "p1": "Your privacy is important to us. We collect and process your data in accordance with applicable privacy laws and our privacy policy.",
+        "p2": "We implement appropriate security measures to protect your personal information and test results."
       },
-      "disclaimer": {
+      "medical": {
         "title": "Medical Disclaimer",
-        "p1": "The information provided by Medi Track, including insights, is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Placeholder text: consult your physician for personalized medical guidance. Do not ignore or delay seeking professional advice because of information obtained through the app."
+        "p1": "MediTrack provides analysis and insights based on your test results, but this information is for educational purposes only.",
+        "p2": "Always consult with qualified healthcare professionals for medical advice, diagnosis, and treatment. Do not rely solely on our analysis for medical decisions."
       },
       "sharing": {
         "title": "Data Sharing Rules",
-        "i1": "We do not sell personal data. Placeholder for additional sharing rules.",
-        "i2": "Data may be shared with your explicit consent or as required by law.",
-        "i3": "De-identified, aggregated data may be used to improve services."
+        "p1": "We do not sell, trade, or rent your personal information to third parties without your explicit consent.",
+        "p2": "Your test results and health data are only shared with healthcare providers you authorize or as required by law."
       },
       "contact": {
         "title": "Contact Information",
-        "p1": "Have questions or concerns? Placeholder contact details: support@medi-track.example and 123-456-7890. Our support team will respond within a reasonable timeframe."
+        "p1": "If you have questions about these terms or our privacy policy, please contact us at support@meditrack.com.",
+        "p2": "For technical support or account-related issues, please visit our help center or contact our support team."
       }
     }
   },
@@ -136,6 +144,16 @@
         "toggle": "Show detailed interpretation",
         "more": "Further interpretation and clinical notes for {key}. This is placeholder content for now."
       }
+    },
+    "toast": {
+      "fileUploaded": "File uploaded successfully!",
+      "processingStarted": "Analysis started. Please wait...",
+      "analysisComplete": "Analysis completed successfully!",
+      "downloadStarted": "Starting download...",
+      "downloadComplete": "Download completed!",
+      "shareSuccess": "Results shared successfully!",
+      "linkCopied": "Link copied to clipboard!",
+      "shareError": "Failed to share results. Please try again."
     }
   }
 } 

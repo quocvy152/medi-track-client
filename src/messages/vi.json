@@ -1,19 +1,24 @@
 {
   "nav": {
-    "about": "Giới thiệu",
-    "login": "Đăng nhập",
     "brand": "MediTrack",
-    "upload": "Tải lên & Phân tích"
+    "home": "Trang chủ",
+    "upload": "Tải lên & Phân tích",
+    "about": "Giới thiệu",
+    "login": "Đăng nhập"
   },
   "home": {
-    "title": "Theo dõi sức khỏe với {brand}",
-    "subtitle": "Hiểu kết quả xét nghiệm, theo dõi hành trình sức khỏe và ra quyết định tốt hơn.",
-    "ctaGetStarted": "Bắt đầu miễn phí",
+    "title": "Chào mừng đến với {brand}",
+    "subtitle": "Theo dõi và hiểu kết quả xét nghiệm y tế của bạn với thông tin chi tiết được hỗ trợ bởi AI",
+    "ctaGetStarted": "Bắt đầu",
     "ctaLearnMore": "Tìm hiểu thêm",
-    "why": "Vì sao chọn MediTrack?",
-    "ctaSectionTitle": "Sẵn sàng kiểm soát sức khỏe của bạn?",
-    "ctaSectionSubtitle": "Tham gia cùng hàng ngàn người dùng đang theo dõi sức khỏe với MediTrack.",
-    "ctaSectionButton": "Bắt đầu hành trình sức khỏe"
+    "why": "Tại sao chọn MediTrack?",
+    "ctaSectionTitle": "Sẵn sàng bắt đầu?",
+    "ctaSectionSubtitle": "Tham gia cùng hàng nghìn người dùng tin tưởng MediTrack với dữ liệu sức khỏe của họ",
+    "ctaSectionButton": "Bắt đầu theo dõi ngay",
+    "toast": {
+      "getStarted": "Chào mừng! Hãy để chúng tôi giúp bạn bắt đầu với MediTrack.",
+      "learnMore": "Tìm hiểu thêm về các tính năng và lợi ích của chúng tôi!"
+    }
   },
   "about": {
     "title": "Về {brand}",
@@ -27,30 +32,33 @@
     "featureFast": "Tốc độ nhanh chóng"
   },
   "login": {
-    "welcome": "Chào mừng đến với MediTrack",
-    "subtitle": "Đăng nhập tài khoản hoặc tạo tài khoản mới",
-    "tabSignin": "Đăng nhập",
-    "tabSignup": "Đăng ký",
+    "title": "Chào mừng đến với MediTrack",
+    "subtitle": "Đăng nhập vào tài khoản hoặc tạo tài khoản mới",
+    "signin": "Đăng nhập",
+    "signup": "Đăng ký",
     "email": "Email",
     "password": "Mật khẩu",
-    "remember": "Ghi nhớ đăng nhập",
-    "forgot": "Quên mật khẩu?",
-    "signin": "Đăng nhập",
     "name": "Họ và tên",
     "confirmPassword": "Xác nhận mật khẩu",
-    "termsPrefix": "Tôi đồng ý với ",
-    "terms": "Điều khoản dịch vụ",
-    "and": " và ",
-    "privacy": "Chính sách bảo mật",
-    "signup": "Tạo tài khoản",
+    "remember": "Ghi nhớ đăng nhập",
+    "forgot": "Quên mật khẩu?",
+    "loginSuccess": "Đăng nhập thành công! Đang chuyển hướng...",
+    "loginError": "Email hoặc mật khẩu không đúng. Vui lòng thử lại.",
+    "signupSuccess": "Tạo tài khoản thành công! Vui lòng đăng nhập.",
+    "passwordMismatch": "Mật khẩu không khớp. Vui lòng thử lại.",
+    "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự.",
     "noAccount": "Chưa có tài khoản?",
     "haveAccount": "Đã có tài khoản?",
     "switchToSignup": "Đăng ký",
-    "switchToSignin": "Đăng nhập"
+    "switchToSignin": "Đăng nhập",
+    "termsPrefix": "Tôi đồng ý với ",
+    "terms": "Điều khoản dịch vụ",
+    "and": " và ",
+    "privacy": "Chính sách bảo mật"
   },
   "footer": {
-    "copyright": "© {year} MediTrack. Bảo lưu mọi quyền.",
-    "terms": "Điều khoản & Chính sách"
+    "terms": "Điều khoản & Chính sách",
+    "copyright": "© {year} MediTrack. Bảo lưu mọi quyền."
   },
   "lang": {
     "vietnamese": "Tiếng Việt",
@@ -58,72 +66,72 @@
   },
   "terms": {
     "title": "Điều khoản & Chính sách",
-    "subtitle": "Vui lòng xem các điều khoản và chính sách khi sử dụng Medi Track.",
+    "subtitle": "Vui lòng đọc và chấp nhận điều khoản và chính sách của chúng tôi để tiếp tục",
     "agree": "Đồng ý & Tiếp tục",
+    "agreementSuccess": "Cảm ơn bạn đã chấp nhận điều khoản và chính sách của chúng tôi!",
     "sections": {
       "tos": {
         "title": "Điều khoản dịch vụ",
-        "p1": "Đây là nội dung minh họa cho điều khoản dịch vụ của Medi Track. Bằng việc sử dụng ứng dụng, bạn đồng ý tuân thủ các hướng dẫn, giới hạn và chính sách sử dụng được mô tả tại đây. Dịch vụ được cung cấp ‘nguyên trạng’ và có thể được cập nhật định kỳ. Việc tiếp tục sử dụng đồng nghĩa bạn chấp nhận các thay đổi.",
-        "p2": "Việc sử dụng dịch vụ tuân theo pháp luật hiện hành. Bạn chịu trách nhiệm bảo mật tài khoản và mọi hoạt động phát sinh từ tài khoản của mình."
+        "p1": "Bằng việc sử dụng MediTrack, bạn đồng ý với các điều khoản dịch vụ này. Nền tảng của chúng tôi cung cấp phân tích kết quả xét nghiệm y tế và thông tin sức khỏe dựa trên dữ liệu bạn cung cấp.",
+        "p2": "Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào. Việc tiếp tục sử dụng dịch vụ đồng nghĩa với việc chấp nhận mọi thay đổi."
       },
       "rights": {
-        "title": "Quyền và Trách nhiệm của Người dùng",
-        "i1": "Bạn có quyền truy cập, tải lên và quản lý kết quả xét nghiệm trong ứng dụng.",
-        "i2": "Bạn đồng ý cung cấp thông tin chính xác và sử dụng ứng dụng hợp pháp.",
-        "i3": "Bạn chịu trách nhiệm giữ bí mật thông tin đăng nhập của mình.",
-        "i4": "Bạn có thể yêu cầu chỉnh sửa hoặc xóa dữ liệu theo quy định pháp luật."
+        "title": "Quyền và trách nhiệm của người dùng",
+        "p1": "Bạn có quyền truy cập, sửa đổi và xóa dữ liệu cá nhân của mình bất cứ lúc nào. Bạn có trách nhiệm cung cấp thông tin chính xác và duy trì bảo mật tài khoản của mình.",
+        "p2": "Bạn không được sử dụng dịch vụ cho bất kỳ mục đích bất hợp pháp nào hoặc cố gắng truy cập dữ liệu của người dùng khác."
       },
       "privacy": {
         "title": "Quyền riêng tư & Bảo vệ dữ liệu",
-        "p1": "Medi Track đặt quyền riêng tư của bạn lên hàng đầu. Chúng tôi áp dụng các biện pháp hành chính, kỹ thuật và vật lý hợp lý để bảo vệ dữ liệu cá nhân. Nội dung minh họa: cách dữ liệu được thu thập, lưu trữ, mã hóa và xử lý sẽ được mô tả tại đây.",
-        "p2": "Chúng tôi chỉ thu thập dữ liệu tối thiểu cần thiết để cung cấp dịch vụ và cải thiện trải nghiệm. Bạn có thể điều chỉnh cài đặt quyền riêng tư (nếu có)."
+        "p1": "Quyền riêng tư của bạn rất quan trọng đối với chúng tôi. Chúng tôi thu thập và xử lý dữ liệu của bạn theo đúng luật bảo vệ quyền riêng tư hiện hành và chính sách bảo mật của chúng tôi.",
+        "p2": "Chúng tôi thực hiện các biện pháp bảo mật phù hợp để bảo vệ thông tin cá nhân và kết quả xét nghiệm của bạn."
       },
-      "disclaimer": {
-        "title": "Tuyên bố miễn trừ trách nhiệm y khoa",
-        "p1": "Thông tin do Medi Track cung cấp, bao gồm các gợi ý, chỉ nhằm mục đích tham khảo và không thay thế lời khuyên, chẩn đoán hoặc điều trị y khoa chuyên môn. Nội dung minh họa: hãy tham khảo bác sĩ để được tư vấn phù hợp. Không bỏ qua hoặc trì hoãn việc tìm kiếm tư vấn chuyên môn vì thông tin từ ứng dụng."
+      "medical": {
+        "title": "Tuyên bố miễn trừ y tế",
+        "p1": "MediTrack cung cấp phân tích và thông tin chi tiết dựa trên kết quả xét nghiệm của bạn, nhưng thông tin này chỉ mang tính chất giáo dục.",
+        "p2": "Luôn tham khảo ý kiến của các chuyên gia y tế có trình độ để được tư vấn y tế, chẩn đoán và điều trị. Không nên chỉ dựa vào phân tích của chúng tôi để đưa ra quyết định y tế."
       },
       "sharing": {
         "title": "Quy tắc chia sẻ dữ liệu",
-        "i1": "Chúng tôi không bán dữ liệu cá nhân. Nội dung minh họa cho các quy tắc chia sẻ khác.",
-        "i2": "Dữ liệu chỉ được chia sẻ khi có sự đồng ý của bạn hoặc theo yêu cầu của pháp luật.",
-        "i3": "Dữ liệu đã ẩn danh, tổng hợp có thể được dùng để cải thiện dịch vụ."
+        "p1": "Chúng tôi không bán, trao đổi hoặc cho thuê thông tin cá nhân của bạn cho bên thứ ba mà không có sự đồng ý rõ ràng của bạn.",
+        "p2": "Kết quả xét nghiệm và dữ liệu sức khỏe của bạn chỉ được chia sẻ với các nhà cung cấp dịch vụ y tế mà bạn ủy quyền hoặc theo yêu cầu của pháp luật."
       },
       "contact": {
         "title": "Thông tin liên hệ",
-        "p1": "Có câu hỏi hoặc thắc mắc? Liên hệ giả lập: support@medi-track.example và 123-456-7890. Đội ngũ hỗ trợ sẽ phản hồi trong thời gian hợp lý."
+        "p1": "Nếu bạn có câu hỏi về các điều khoản này hoặc chính sách bảo mật của chúng tôi, vui lòng liên hệ với chúng tôi tại support@meditrack.com.",
+        "p2": "Để được hỗ trợ kỹ thuật hoặc các vấn đề liên quan đến tài khoản, vui lòng truy cập trung tâm trợ giúp của chúng tôi hoặc liên hệ với nhóm hỗ trợ."
       }
     }
   },
   "upload": {
     "step": {
       "upload": "Tải lên",
-      "processing": "Đang xử lý",
+      "processing": "Xử lý",
       "results": "Kết quả"
     },
-    "dropHere": "Kéo & thả phiếu xét nghiệm vào đây",
-    "hintTypes": "PDF, JPEG hoặc PNG, tối đa {max}MB",
+    "dropHere": "Kéo và thả file xét nghiệm của bạn vào đây",
+    "hintTypes": "PDF, JPEG, hoặc PNG tối đa {max}MB",
     "btn": {
-      "upload": "Chọn tệp",
-      "capture": "Chụp bằng camera",
+      "upload": "Tải file lên",
+      "capture": "Chụp bằng Camera",
       "analyze": "Phân tích ngay",
-      "uploadNew": "Tải tệp mới",
+      "uploadNew": "Tải lên mới",
       "download": "Tải PDF",
       "share": "Chia sẻ",
-      "retry": "Thử lại / Tải phiếu mới"
+      "retry": "Thử lại / Tải xét nghiệm mới"
     },
     "errors": {
-      "unsupported": "Định dạng không hỗ trợ. Vui lòng tải PDF, JPEG hoặc PNG.",
-      "tooLarge": "Tệp quá lớn. Tối đa {max}MB.",
-      "previewUnavailable": "Không thể xem trước với định dạng này"
+      "unsupported": "Loại file không được hỗ trợ. Vui lòng tải lên PDF, JPEG, hoặc PNG.",
+      "tooLarge": "File quá lớn. Tối đa {max}MB được phép.",
+      "previewUnavailable": "Không thể xem trước loại file này"
     },
     "processing": {
-      "title": "Đang xử lý tệp",
-      "subtitle": "Đang trích xuất chỉ số và tạo phân tích..."
+      "title": "Đang xử lý file của bạn",
+      "subtitle": "Trích xuất giá trị và tạo thông tin chi tiết..."
     },
     "summary": {
-      "allNormal": "Tất cả chỉ số trong ngưỡng bình thường",
-      "someAbnormal": "Phát hiện một số chỉ số bất thường",
-      "disclaimer": "Đây là nhận định ban đầu. Vui lòng tham khảo bác sĩ để được tư vấn."
+      "allNormal": "Tất cả kết quả đều trong phạm vi bình thường",
+      "someAbnormal": "Tìm thấy một số kết quả bất thường",
+      "disclaimer": "Đây là thông tin sơ bộ. Hãy tham khảo ý kiến chuyên gia y tế để được tư vấn."
     },
     "metrics": {
       "status": {
@@ -132,10 +140,20 @@
         "high": "CAO"
       },
       "details": {
-        "title": "Diễn giải chi tiết",
-        "toggle": "Xem diễn giải chi tiết",
-        "more": "Diễn giải bổ sung và ghi chú lâm sàng cho {key}. Nội dung minh hoạ."
+        "title": "Giải thích chi tiết",
+        "toggle": "Hiển thị giải thích chi tiết",
+        "more": "Giải thích thêm và ghi chú lâm sàng cho {key}. Đây là nội dung mẫu hiện tại."
       }
+    },
+    "toast": {
+      "fileUploaded": "Tải file lên thành công!",
+      "processingStarted": "Bắt đầu phân tích. Vui lòng chờ...",
+      "analysisComplete": "Phân tích hoàn tất thành công!",
+      "downloadStarted": "Bắt đầu tải xuống...",
+      "downloadComplete": "Tải xuống hoàn tất!",
+      "shareSuccess": "Chia sẻ kết quả thành công!",
+      "linkCopied": "Đã sao chép liên kết vào clipboard!",
+      "shareError": "Không thể chia sẻ kết quả. Vui lòng thử lại."
     }
   }
 } 
