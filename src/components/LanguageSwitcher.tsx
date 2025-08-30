@@ -1,6 +1,5 @@
 "use client";
 
-import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -10,24 +9,38 @@ const LOCALES: { code: "vi" | "en"; label: string; flag: string }[] = [
 ];
 
 export function LanguageSwitcher() {
-  const locale = useLocale() as "vi" | "en";
   const router = useRouter();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
+  // Extract locale from pathname instead of useLocale hook
+  const locale = (pathname?.split('/')[1] as "vi" | "en") || "vi";
   const current = LOCALES.find(l => l.code === locale) ?? LOCALES[0];
+
+  // Debug logging (remove in production)
+  console.log('LanguageSwitcher Debug:', { pathname, locale, current: current.code });
 
   const switchTo = (target: "vi" | "en") => {
     if (!pathname) return;
+    
     const segments = pathname.split("/").filter(Boolean);
+    let newPath: string;
+    
     if (segments.length === 0) {
-      router.push(`/${target}`);
-      return;
+      // Root path
+      newPath = `/${target}`;
+    } else if (segments[0] === 'vi' || segments[0] === 'en') {
+      // Replace locale segment
+      segments[0] = target;
+      newPath = `/${segments.join("/")}`;
+    } else {
+      // No locale in path, add it
+      newPath = `/${target}${pathname}`;
     }
-    segments[0] = target; // replace locale segment
-    router.push(`/${segments.join("/")}`);
+    
+    router.push(newPath);
     setOpen(false);
   };
 

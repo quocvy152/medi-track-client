@@ -13,14 +13,14 @@ export default function UploadPage() {
     try {
       const token = localStorage.getItem("authToken") || localStorage.getItem("isLoggedIn");
       if (!token) {
-        router.replace(`/${params.locale}/login`);
+        router.replace(`/${params?.locale}/login`);
         return;
       }
       setAllowed(true);
     } catch {
-      router.replace(`/${params.locale}/login`);
+      router.replace(`/${params?.locale}/login`);
     }
-  }, [params.locale, router]);
+  }, [params?.locale, router]);
 
   if (!allowed) return null;
 

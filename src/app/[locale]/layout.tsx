@@ -12,19 +12,20 @@ export function generateStaticParams() {
 
 export default async function LocaleLayout({
   children,
-  params: { locale }
+  params
 }: {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const messages = await getMessages();
+  const { locale } = await params;
+  const messages = await getMessages({ locale });
 
   if (!['vi', 'en'].includes(locale)) {
     notFound();
   }
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider messages={messages} locale={locale}>
       <div className="min-h-screen flex flex-col">
         <Navigation />
         <main className="flex-1">{children}</main>
