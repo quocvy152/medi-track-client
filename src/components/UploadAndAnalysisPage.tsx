@@ -62,7 +62,7 @@ export default function UploadAndAnalysisPage() {
 		setStep(1);
 	}, [previewUrl]);
 
-	const validateFile = (f: File) => {
+	const validateFile = useCallback((f: File) => {
 		if (!ACCEPTED_TYPES.includes(f.type)) {
 			return t('errors.unsupported');
 		}
@@ -70,9 +70,9 @@ export default function UploadAndAnalysisPage() {
 			return t('errors.tooLarge', { max: MAX_SIZE_MB });
 		}
 		return null;
-	};
+	}, [t]);
 
-	const handleFiles = (files: FileList | null) => {
+	const handleFiles = useCallback((files: FileList | null) => {
 		if (!files || files.length === 0) return;
 		const f = files[0];
 		const err = validateFile(f);
@@ -85,7 +85,7 @@ export default function UploadAndAnalysisPage() {
 		    toast.success(t('toast.fileUploaded'));
 		const url = URL.createObjectURL(f);
 		setPreviewUrl(url);
-	};
+	}, [t, validateFile]);
 
 	const onDrop = useCallback((e: React.DragEvent) => {
 		e.preventDefault();
@@ -93,7 +93,7 @@ export default function UploadAndAnalysisPage() {
 		if (files.length > 0) {
 			handleFiles(files);
 		}
-	}, []);
+	}, [handleFiles]);
 
 	const startProcessing = async () => {
 		if (!file) return;

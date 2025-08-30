@@ -10,7 +10,7 @@ function TermsInner() {
 	const searchParams = useSearchParams();
 
 	const isFirstVisit = (() => {
-		const v = searchParams.get("firstVisit");
+		const v = searchParams?.get("firstVisit");
 		return v === "1" || v === "true";
 	})();
 
@@ -18,8 +18,8 @@ function TermsInner() {
 		try {
 			localStorage.setItem("termsAccepted", "true");
 		} catch {}
-		router.push(`/${params.locale}`);
-	}, [params.locale, router]);
+		router.push(`/${params?.locale}`);
+	}, [params?.locale, router]);
 
 	return (
 		<TermsAndPolicyPage

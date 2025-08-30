@@ -22,7 +22,7 @@ const SectionCard: React.FC<{ title: string; children: React.ReactNode }> = ({ t
 	);
 };
 
-const TermsAndPolicyPage: React.FC<TermsAndPolicyPageProps> = ({ isFirstVisit = false, onAgree, className }) => {
+const TermsAndPolicyPage: React.FC<TermsAndPolicyPageProps> = ({ isFirstVisit = false, className }) => {
 	const t = useTranslations('terms');
 
 	const handleAgree = () => {
