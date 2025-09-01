@@ -6,16 +6,22 @@ import { SocialButton } from "@/components/ui/SocialButton";
 import { authService } from "@/services/authService";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
 
 type TabType = "signin" | "signup";
 
-export default function LoginPage() {
+interface LoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onLoginSuccess: () => void;
+}
+
+export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const t = useTranslations('login');
-  const locale = useLocale();
   const router = useRouter();
+  const locale = useLocale();
   const [activeTab, setActiveTab] = useState<TabType>("signin");
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,10 +59,8 @@ export default function LoginPage() {
       const { email, password } = formData;
 
       const response = await authService.login({ email, password });
-      const { state, data } = response;
-
-      if (state) {
-        localStorage.setItem("authToken", data.accessToken);
+      if (!response.error) {
+        localStorage.setItem("authToken", response.accessToken);
         toast.success(t('loginSuccess'));
         
         // Dispatch custom event to notify Navigation component
@@ -67,7 +71,6 @@ export default function LoginPage() {
         toast.error(t('loginError'));
       }
     } catch (error) {
-      console.log({ error })
       toast.error(t('loginError'));
     } finally {
       setIsLoading(false);
@@ -97,52 +100,65 @@ export default function LoginPage() {
     setActiveTab('signin');
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <div className="mx-auto bg-white-600 rounded-full flex items-center justify-center mb-4 overflow-hidden">
-            <Image
-              src="/images/medi_track_logo.png"
-              alt="MediTrack Logo"
-              width={150}
-              height={150}
-              className="object-contain"
-              priority
-            />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="border border-gray-300 w-10 h-10 rounded-full flex items-center justify-center overflow-hidden">
+                <Image
+                  src="/images/medi_track_logo.png"
+                  alt="MediTrack Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">{t('title')}</h2>
+                <p className="text-sm text-gray-600">{t('subtitle')}</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h2>
-          <p className="text-gray-600">{t('subtitle')}</p>
-        </div>
 
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab("signin")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "signin"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            {t('signin')}
-          </button>
-          <button
-            onClick={() => setActiveTab("signup")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "signup"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-700 hover:text-gray-900"
-            }`}
-          >
-            {t('signup')}
-          </button>
-        </div>
+          <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
+            <button
+              onClick={() => setActiveTab("signin")}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "signin"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {t('signin')}
+            </button>
+            <button
+              onClick={() => setActiveTab("signup")}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                activeTab === "signup"
+                  ? "bg-white text-blue-600 shadow-sm"
+                  : "text-gray-700 hover:text-gray-900"
+              }`}
+            >
+              {t('signup')}
+            </button>
+          </div>
 
-        <div className="bg-white rounded-xl shadow-xl p-8 border border-gray-100">
           {activeTab === "signin" ? (
             <>
               {/* Social auth */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-6">
                 <SocialButton provider="google" onClick={() => {}}>
                   Continue with Google
                 </SocialButton>
@@ -184,7 +200,7 @@ export default function LoginPage() {
           ) : (
             <>
               {/* Social auth */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-6">
                 <SocialButton provider="google" onClick={() => {}}>
                   Continue with Google
                 </SocialButton>

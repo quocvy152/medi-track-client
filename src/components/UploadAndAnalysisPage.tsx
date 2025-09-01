@@ -2,10 +2,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import LoginModal from "./LoginModal";
 import Button from "./ui/Button";
-import Loading from "./ui/Loading";
 
 type Step = 1 | 2 | 3; // 1 Upload, 2 Processing, 3 Results
 
@@ -47,10 +47,37 @@ export default function UploadAndAnalysisPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [progress, setProgress] = useState<number>(0);
 	const [results, setResults] = useState<AnalysisResults | null>(null);
+	const [showLoginModal, setShowLoginModal] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const cameraRef = useRef<HTMLInputElement>(null);
 
 	const isImage = useMemo(() => (file ? file.type.startsWith("image/") : false), [file]);
+
+	// Check if user is authenticated
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+	// Function to check authentication status
+	const checkAuthStatus = useCallback(() => {
+		if (typeof window !== 'undefined') {
+			const token = localStorage.getItem("authToken");
+			setIsAuthenticated(!!token);
+		}
+	}, []);
+
+	useEffect(() => {
+		checkAuthStatus();
+
+		// Listen for authentication state changes
+		const handleAuthChange = () => {
+			checkAuthStatus();
+		};
+
+		window.addEventListener('authStateChanged', handleAuthChange);
+
+		return () => {
+			window.removeEventListener('authStateChanged', handleAuthChange);
+		};
+	}, [checkAuthStatus]);
 
 	const resetAll = useCallback(() => {
 		if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -95,8 +122,23 @@ export default function UploadAndAnalysisPage() {
 		}
 	}, [handleFiles]);
 
+	const handleLoginSuccess = useCallback(() => {
+		// After successful login, start the analysis
+		// Dispatch custom event to notify Navigation component
+		window.dispatchEvent(new Event('authStateChanged'));
+		// Don't call startProcessing here as it may cause issues with dependencies
+		// The user can click the process button again after login
+	}, []);
+
 	const startProcessing = async () => {
 		if (!file) return;
+		
+		// Check if user is authenticated
+		if (!isAuthenticated) {
+			setShowLoginModal(true);
+			return;
+		}
+
 		setStep(2);
 		    toast.success(t('toast.processingStarted'));
 		setProgress(0);
@@ -125,6 +167,12 @@ export default function UploadAndAnalysisPage() {
 	};
 
 	const downloadPdf = () => {
+		// Check if user is authenticated for download
+		if (!isAuthenticated) {
+			setShowLoginModal(true);
+			return;
+		}
+
 		    toast.success(t('toast.downloadStarted'));
 		const blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/pdf" });
 		const url = URL.createObjectURL(blob);
@@ -138,10 +186,13 @@ export default function UploadAndAnalysisPage() {
 		}, 1000);
 	};
 
-	// type ShareData = { title?: string; text?: string; url?: string };
-	// type MaybeShareNavigator = Navigator & { share?: (data: ShareData) => Promise<void> };
-
 	const shareResults = async () => {
+		// Check if user is authenticated for sharing
+		if (!isAuthenticated) {
+			setShowLoginModal(true);
+			return;
+		}
+
 		try {
 			if (navigator.share) {
 				await navigator.share({
@@ -162,38 +213,77 @@ export default function UploadAndAnalysisPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50">
-			<div className="mx-auto w-full max-w-5xl px-4 py-6">
-				<ol className="flex items-center justify-center gap-4 mb-6">
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+			{/* Header Section */}
+			<div className="text-center pt-16 pb-12 px-4">
+				<h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
+					Medi Track
+				</h1>
+				<p className="text-xl text-gray-300 max-w-2xl mx-auto">
+					{t('description')}
+				</p>
+			</div>
+
+			<div className="mx-auto w-full max-w-7xl px-4 pb-16">
+				{/* Progress Steps */}
+				<div className="flex items-center justify-center gap-6 mb-12">
 					{[
-						{ id: 1, label: t('step.upload') },
-						{ id: 2, label: t('step.processing') },
-						{ id: 3, label: t('step.results') },
+						{ id: 1, label: t('step.upload'), icon: "🗂" },
+						{ id: 2, label: t('step.processing'), icon: "⚡" },
+						{ id: 3, label: t('step.results'), icon: "📊" },
 					].map((s) => (
-						<li key={s.id} className="flex items-center">
-							<div className={`h-9 px-3 rounded-full flex items-center text-sm font-medium border ${
-								s.id === step ? "bg-blue-600 text-white border-blue-600" : s.id < step ? "bg-blue-50 text-blue-700 border-blue-200" : "bg-white text-gray-600 border-gray-200"
+						<div key={s.id} className="flex items-center">
+							<div className={`h-16 w-16 rounded-full flex items-center justify-center text-2xl transition-all duration-300 ${
+								s.id === step 
+									? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 scale-110" 
+									: s.id < step 
+										? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
+										: "bg-gray-700 text-gray-400 border border-gray-600"
+							}`}>
+								{step > s.id ? "✓" : s.icon}
+							</div>
+							<div className={`ml-4 text-sm font-medium ${
+								s.id === step ? "text-white" : s.id < step ? "text-green-400" : "text-gray-400"
 							}`}>
 								{s.label}
 							</div>
-							{s.id < 3 && <div className={`w-8 h-px ${s.id < step ? "bg-blue-300" : "bg-gray-200"}`} />}
-						</li>
+							{s.id < 3 && (
+								<div className={`w-12 h-px mx-4 ${
+									s.id < step ? "bg-gradient-to-r from-green-500 to-emerald-600" : "bg-gray-600"
+								}`} />
+							)}
+						</div>
 					))}
-				</ol>
+				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-					<div className="lg:col-span-1 space-y-4">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+					{/* Upload Section */}
+					<div className="lg:col-span-1">
 						<div
 							onDragOver={(e) => e.preventDefault()}
 							onDrop={onDrop}
-							className="bg-white rounded-xl border border-dashed border-gray-300 p-6 text-center shadow-sm"
+							className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8 text-center shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
 						>
-							<div className="text-gray-700 font-medium">{t('dropHere')}</div>
-							<div className="text-sm text-gray-500 mt-1">{t('hintTypes', { max: MAX_SIZE_MB })}</div>
-							<div className="mt-4 flex items-center justify-center gap-3">
-								<Button onClick={() => inputRef.current?.click()}>{t('btn.upload')}</Button>
-								<Button variant="secondary" onClick={() => cameraRef.current?.click()}>{t('btn.capture')}</Button>
+							<div className="text-3xl mb-4">📋</div>
+							<div className="text-white text-xl font-semibold mb-2">{t('dropHere')}</div>
+							<div className="text-gray-400 mb-6">{t('hintTypes', { max: MAX_SIZE_MB })}</div>
+							
+							<div className="space-y-4 mb-6">
+								<Button 
+									onClick={() => inputRef.current?.click()}
+									className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+								>
+									{t('btn.upload')}
+								</Button>
+								<Button 
+									variant="secondary" 
+									onClick={() => cameraRef.current?.click()}
+									className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+								>
+									{t('btn.capture')}
+								</Button>
 							</div>
+
 							<input
 								ref={inputRef}
 								type="file"
@@ -211,82 +301,115 @@ export default function UploadAndAnalysisPage() {
 							/>
 
 							{file && (
-								<div className="mt-4 text-left">
-									<div className="flex items-center justify-between">
-										<div className="text-sm text-gray-700 truncate max-w-[70%]">{file.name}</div>
-										<div className="text-xs text-gray-500">{formatBytes(file.size)}</div>
+								<div className="mt-6 p-4 bg-gray-700/50 rounded-xl border border-gray-600/50">
+									<div className="flex items-center justify-between mb-3">
+										<div className="text-white font-medium truncate max-w-[70%]">{file.name}</div>
+										<div className="text-gray-400 text-sm">{formatBytes(file.size)}</div>
 									</div>
 									{isImage && previewUrl ? (
-										<div className="mt-3 overflow-hidden rounded-lg border border-gray-200">
+										<div className="mb-4 overflow-hidden rounded-lg border border-gray-600/50">
 											<img src={previewUrl} alt="Preview" className="w-full h-48 object-cover" />
 										</div>
 									) : (
-										<div className="mt-3 text-xs text-gray-500">{t('errors.previewUnavailable')}</div>
+										<div className="mb-4 text-sm text-gray-400">{t('errors.previewUnavailable')}</div>
 									)}
-									<div className="mt-4 flex items-center gap-3">
-										<Button onClick={startProcessing} disabled={!file}>{t('btn.analyze')}</Button>
-										<Button variant="secondary" onClick={resetAll}>{t('btn.uploadNew')}</Button>
+									<div className="space-y-3">
+										<Button 
+											onClick={startProcessing} 
+											disabled={!file}
+											className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-green-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+										>
+											{isAuthenticated ? t('btn.analyze') : t('btn.analyze')}
+										</Button>
+										<Button 
+											variant="secondary" 
+											onClick={resetAll}
+											className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+										>
+											{t('btn.uploadNew')}
+										</Button>
 									</div>
+									{!isAuthenticated && (
+										<div className="mt-3 text-sm text-blue-400 bg-blue-900/20 rounded-lg p-2">
+											{t('loginRequired')}
+										</div>
+									)}
 								</div>
 							)}
 
 							{error && (
-								<div className="mt-4 text-sm text-red-600">{error}</div>
+								<div className="mt-4 text-sm text-red-400 bg-red-900/20 rounded-lg p-3">{error}</div>
 							)}
 						</div>
 					</div>
 
+					{/* Main Content Area */}
 					<div className="lg:col-span-2">
 						{step === 1 && (
-							<div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm text-center text-gray-600">
-								{t('dropHere')}
+							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-12 shadow-2xl text-center">
+								<div className="text-6xl mb-6">🔬</div>
+								<div className="text-white text-2xl font-semibold mb-4">Ready to analyze your results?</div>
+								<div className="text-gray-400 text-lg">Upload your medical test file to get started</div>
 							</div>
 						)}
 
 						{step === 2 && (
-							<div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-								<div className="flex items-center gap-3">
-									<Loading />
+							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8 shadow-2xl">
+								<div className="flex items-center gap-4 mb-6">
+									<div className="text-4xl">⚡</div>
 									<div>
-										<div className="font-medium text-gray-900">{t('processing.title')}</div>
-										<div className="text-sm text-gray-600">{t('processing.subtitle')}</div>
+										<div className="text-white text-xl font-semibold">{t('processing.title')}</div>
+										<div className="text-gray-400">{t('processing.subtitle')}</div>
 									</div>
 								</div>
-								<div className="mt-4 w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-									<div className="h-full bg-blue-600 transition-all" style={{ width: `${progress}%` }} />
+								<div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+									<div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 rounded-full" style={{ width: `${progress}%` }} />
 								</div>
+								<div className="text-center mt-4 text-blue-400 font-medium">{progress}%</div>
 							</div>
 						)}
 
 						{step === 3 && results && (
-							<div className="space-y-4">
-								<div className={`rounded-xl p-4 border ${
-									results.summary.status === 'all-normal' ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'
+							<div className="space-y-6">
+								{/* Summary Card */}
+								<div className={`rounded-2xl p-6 border backdrop-blur-sm ${
+									results.summary.status === 'all-normal' 
+										? 'bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-green-600/50' 
+										: 'bg-gradient-to-r from-amber-900/50 to-orange-900/50 border-amber-600/50'
 								}`}>
-									<div className="font-semibold text-gray-900">
+									<div className="text-white text-xl font-semibold mb-2">
 										{results.summary.status === 'all-normal' ? t('summary.allNormal') : t('summary.someAbnormal')}
 									</div>
-									<div className="text-sm text-gray-700">{t('summary.disclaimer')}</div>
+									<div className="text-gray-300">{t('summary.disclaimer')}</div>
 								</div>
 
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								{/* Metrics Grid */}
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 									{results.metrics.map((m: Metric) => (
-										<div key={m.key} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-											<div className="flex items-center justify-between">
-												<div className="font-medium text-gray-900">{m.key}</div>
-												<div className={`text-sm px-2 py-1 rounded-full border ${
-													m.status === 'normal' ? 'bg-green-50 text-green-700 border-green-200' : m.status === 'high' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200'
-												}`}>{t(`metrics.status.${m.status}`)}</div>
+										<div key={m.key} className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
+											<div className="flex items-center justify-between mb-4">
+												<div className="text-white font-semibold text-lg">{m.key}</div>
+												<div className={`text-sm px-3 py-1 rounded-full border font-medium ${
+													m.status === 'normal' 
+														? 'bg-green-900/50 text-green-400 border-green-600/50' 
+														: m.status === 'high' 
+															? 'bg-red-900/50 text-red-400 border-red-600/50' 
+															: 'bg-amber-900/50 text-amber-400 border-amber-600/50'
+												}`}>
+													{t(`metrics.status.${m.status}`)}
+												</div>
 											</div>
-											<div className="mt-1 text-gray-700">
-												<span className="text-2xl font-bold">{m.value}</span>
-												<span className="ml-1 text-sm text-gray-500">{m.unit}</span>
+											<div className="mb-3">
+												<span className="text-3xl font-bold text-white">{m.value}</span>
+												<span className="ml-2 text-lg text-gray-400">{m.unit}</span>
 											</div>
-											<div className="mt-2 text-sm text-gray-600">{m.explanation}</div>
+											<div className="text-gray-300 text-sm mb-4">{m.explanation}</div>
 
-											<details className="mt-3 group">
-												<summary className="text-sm text-gray-700 cursor-pointer select-none">{t('metrics.details.toggle')}</summary>
-												<div className="mt-2 text-sm text-gray-600 leading-relaxed">
+											<details className="group">
+												<summary className="text-sm text-blue-400 cursor-pointer select-none hover:text-blue-300 transition-colors">
+													{t('metrics.details.toggle')}
+												</summary>
+												<div className="mt-3 text-sm text-gray-400 leading-relaxed">
 													{t('metrics.details.more', { key: m.key })}
 												</div>
 											</details>
@@ -294,13 +417,31 @@ export default function UploadAndAnalysisPage() {
 									))}
 								</div>
 
-								<div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-									<div className="font-semibold text-gray-900">{t('metrics.details.title')}</div>
-									<p className="mt-2 text-gray-700 text-sm leading-relaxed">{results.details}</p>
-									<div className="mt-4 flex flex-wrap gap-3">
-										<Button onClick={downloadPdf}>{t('btn.download')}</Button>
-										<Button variant="secondary" onClick={shareResults}>{t('btn.share')}</Button>
-										<Button variant="ghost" onClick={resetAll}>{t('btn.retry')}</Button>
+								{/* Actions Card */}
+								<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl">
+									<div className="text-white text-xl font-semibold mb-4">{t('metrics.details.title')}</div>
+									<p className="text-gray-300 text-sm leading-relaxed mb-6">{results.details}</p>
+									<div className="flex flex-wrap gap-4">
+										<Button 
+											onClick={downloadPdf}
+											className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+										>
+											{t('btn.download')}
+										</Button>
+										<Button 
+											variant="secondary" 
+											onClick={shareResults}
+											className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+										>
+											{t('btn.share')}
+										</Button>
+										<Button 
+											variant="ghost" 
+											onClick={resetAll}
+											className="text-gray-400 hover:text-white hover:bg-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+										>
+											{t('btn.retry')}
+										</Button>
 									</div>
 								</div>
 							</div>
@@ -308,6 +449,13 @@ export default function UploadAndAnalysisPage() {
 					</div>
 				</div>
 			</div>
+
+			{/* Login Modal */}
+			<LoginModal
+				isOpen={showLoginModal}
+				onClose={() => setShowLoginModal(false)}
+				onLoginSuccess={handleLoginSuccess}
+			/>
 		</div>
 	);
 } 

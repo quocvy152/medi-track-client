@@ -4,7 +4,8 @@
     "home": "Home",
     "upload": "Upload & Analysis",
     "about": "About",
-    "login": "Login"
+    "login": "Login",
+    "logout": "Logout"
   },
   "home": {
     "title": "Welcome to {brand}",
@@ -54,7 +55,8 @@
     "termsPrefix": "I agree to the ",
     "terms": "Terms of Service",
     "and": " and ",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "emailAndPasswordRequired": "Please enter email and password!"
   },
   "footer": {
     "terms": "Terms & Policy",
@@ -145,6 +147,7 @@
         "more": "Further interpretation and clinical notes for {key}. This is placeholder content for now."
       }
     },
+    "loginRequired": "Login required to analyze results",
     "toast": {
       "fileUploaded": "File uploaded successfully!",
       "processingStarted": "Analysis started. Please wait...",
@@ -154,6 +157,7 @@
       "shareSuccess": "Results shared successfully!",
       "linkCopied": "Link copied to clipboard!",
       "shareError": "Failed to share results. Please try again."
-    }
+    },
+    "description": "Upload your medical test results and get AI-powered insights in seconds. Try it for free!"
   }
 } 

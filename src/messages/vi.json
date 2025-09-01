@@ -4,7 +4,8 @@
     "home": "Trang chủ",
     "upload": "Tải lên & Phân tích",
     "about": "Giới thiệu",
-    "login": "Đăng nhập"
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất"
   },
   "home": {
     "title": "Chào mừng đến với {brand}",
@@ -54,7 +55,8 @@
     "termsPrefix": "Tôi đồng ý với ",
     "terms": "Điều khoản dịch vụ",
     "and": " và ",
-    "privacy": "Chính sách bảo mật"
+    "privacy": "Chính sách bảo mật",
+    "emailAndPasswordRequired": "Vui lòng nhập email và mật khẩu!"
   },
   "footer": {
     "terms": "Điều khoản & Chính sách",
@@ -145,6 +147,7 @@
         "more": "Giải thích thêm và ghi chú lâm sàng cho {key}. Đây là nội dung mẫu hiện tại."
       }
     },
+    "loginRequired": "Cần đăng nhập để phân tích kết quả",
     "toast": {
       "fileUploaded": "Tải file lên thành công!",
       "processingStarted": "Bắt đầu phân tích. Vui lòng chờ...",
@@ -154,6 +157,7 @@
       "shareSuccess": "Chia sẻ kết quả thành công!",
       "linkCopied": "Đã sao chép liên kết vào clipboard!",
       "shareError": "Không thể chia sẻ kết quả. Vui lòng thử lại."
-    }
+    },
+    "description": "Tải lên kết quả xét nghiệm y tế của bạn và nhận thông tin chi tiết từ AI chỉ trong vài giây. Dùng thử miễn phí!"
   }
 } 

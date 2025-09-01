@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import UploadAndAnalysisPage from "@/components/UploadAndAnalysisPage";
@@ -9,7 +10,8 @@ export default function UploadPage() {
   const params = useParams<{ locale: string }>();
   const [allowed, setAllowed] = useState(false);
 
-  useEffect(() => {
+  // Function to check authentication status
+  const checkAuthStatus = () => {
     try {
       const token = localStorage.getItem("authToken") || localStorage.getItem("isLoggedIn");
       if (!token) {
@@ -20,6 +22,21 @@ export default function UploadPage() {
     } catch {
       router.replace(`/${params?.locale}/login`);
     }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+
+    // Listen for authentication state changes
+    const handleAuthChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener('authStateChanged', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('authStateChanged', handleAuthChange);
+    };
   }, [params?.locale, router]);
 
   if (!allowed) return null;
