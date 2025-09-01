@@ -11,7 +11,7 @@ type Step = 1 | 2 | 3; // 1 Upload, 2 Processing, 3 Results
 
 type Metric = {
 	key: string;
-	value: number;
+	value: string | number;
 	unit: string;
 	status: "low" | "normal" | "high";
 	explanation: string;
@@ -150,15 +150,91 @@ export default function UploadAndAnalysisPage() {
 
 		const mockResults: AnalysisResults = {
 			summary: {
-				status: "partial-abnormal",
-				text: t('summary.someAbnormal'),
+			  status: "partial-abnormal",
+			  text: "Nhiều chỉ số bất thường, nghi ngờ suy giảm chức năng thận và cần theo dõi chức năng gan.",
 			},
 			metrics: [
-				{ key: "Hemoglobin", value: 10.8, unit: "g/dL", status: "low", explanation: "Below normal range; consider iron intake." },
-				{ key: "WBC", value: 6.2, unit: "10^9/L", status: "normal", explanation: "Within normal range." },
-				{ key: "Cholesterol", value: 225, unit: "mg/dL", status: "high", explanation: "Slightly elevated; consider diet changes." },
+			  { 
+				key: "Creatinine", 
+				value: 2.4, 
+				unit: "mg/dL", 
+				status: "high", 
+				explanation: "Creatinine tăng cao, dấu hiệu suy thận mạn." 
+			  },
+			  { 
+				key: "Ure", 
+				value: 72, 
+				unit: "mg/dL", 
+				status: "high", 
+				explanation: "Ure máu tăng cao, phản ánh giảm chức năng lọc cầu thận." 
+			  },
+			  { 
+				key: "eGFR", 
+				value: 35, 
+				unit: "mL/ph/1.73m2", 
+				status: "low", 
+				explanation: "eGFR thấp, gợi ý suy thận mạn độ 3b." 
+			  },
+			  { 
+				key: "Protein niệu", 
+				value: "+3", 
+				unit: "", 
+				status: "high", 
+				explanation: "Protein niệu dương tính mạnh, chỉ điểm tổn thương cầu thận." 
+			  },
+			  { 
+				key: "Acid uric", 
+				value: 9.2, 
+				unit: "mg/dL", 
+				status: "high", 
+				explanation: "Acid uric tăng, thường gặp ở bệnh nhân suy thận mạn." 
+			  },
+			  { 
+				key: "Kali", 
+				value: 5.9, 
+				unit: "mmol/L", 
+				status: "high", 
+				explanation: "Tăng Kali máu, biến chứng nguy hiểm ở bệnh nhân suy thận." 
+			  },
+		  
+			  // Gan
+			  { 
+				key: "AST (GOT)", 
+				value: 45, 
+				unit: "U/L", 
+				status: "high", 
+				explanation: "AST hơi tăng, cần theo dõi chức năng gan." 
+			  },
+			  { 
+				key: "ALT (GPT)", 
+				value: 38, 
+				unit: "U/L", 
+				status: "normal", 
+				explanation: "ALT trong giới hạn bình thường." 
+			  },
+			  { 
+				key: "GGT", 
+				value: 82, 
+				unit: "U/L", 
+				status: "high", 
+				explanation: "GGT tăng, gợi ý ảnh hưởng chức năng gan hoặc mật." 
+			  },
+			  { 
+				key: "Albumin", 
+				value: 3.1, 
+				unit: "g/dL", 
+				status: "low", 
+				explanation: "Albumin máu thấp, có thể liên quan đến suy thận hoặc bệnh gan." 
+			  },
+			  { 
+				key: "Bilirubin toàn phần", 
+				value: 0.9, 
+				unit: "mg/dL", 
+				status: "normal", 
+				explanation: "Bilirubin trong giới hạn bình thường." 
+			  },
 			],
-			details: "Detailed interpretation lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp."
 		};
 
 		setResults(mockResults);
