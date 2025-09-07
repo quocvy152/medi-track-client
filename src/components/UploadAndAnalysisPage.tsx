@@ -123,11 +123,7 @@ export default function UploadAndAnalysisPage() {
 	}, [handleFiles]);
 
 	const handleLoginSuccess = useCallback(() => {
-		// After successful login, start the analysis
-		// Dispatch custom event to notify Navigation component
 		window.dispatchEvent(new Event('authStateChanged'));
-		// Don't call startProcessing here as it may cause issues with dependencies
-		// The user can click the process button again after login
 	}, []);
 
 	const startProcessing = async () => {

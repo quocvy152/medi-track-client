@@ -74,8 +74,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
-    e.preventDefault();
+  const validateSignUpForm = () => {
     if (formData.password !== formData.confirmPassword) {
       toast.error(t('passwordMismatch'));
       return;
@@ -85,16 +84,40 @@ export default function LoginPage() {
       toast.error(t('passwordTooShort'));
       return;
     }
-    
-    toast.success(t('signupSuccess'));
-    // Reset form after successful signup
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    });
-    setActiveTab('signin');
+
+    return true;
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateSignUpForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { name, email, password } = formData;
+
+    const response = await authService.register({ email, password, firstName: name });
+    const { state, } = response;
+
+    if (state) {
+      toast.success(t('signupSuccess'));
+
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+
+      setActiveTab('signin');
+    } else {
+      toast.error(t('signupError'));
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -154,7 +177,7 @@ export default function LoginPage() {
               {/* Divider */}
               <div className="flex items-center my-6">
                 <div className="flex-1 h-px bg-gray-200" />
-                <span className="px-3 text-sm text-gray-500">Or continue with email</span>
+                <span className="px-3 text-sm text-gray-500">{t('descriptionBtnLogin')}</span>
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 
@@ -196,7 +219,7 @@ export default function LoginPage() {
               {/* Divider */}
               <div className="flex items-center my-6">
                 <div className="flex-1 h-px bg-gray-200" />
-                <span className="px-3 text-sm text-gray-500">Or continue with email</span>
+                <span className="px-3 text-sm text-gray-500">{t('descriptionBtnLogin')}</span>
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 

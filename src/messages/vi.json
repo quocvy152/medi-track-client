@@ -56,7 +56,8 @@
     "terms": "Điều khoản dịch vụ",
     "and": " và ",
     "privacy": "Chính sách bảo mật",
-    "emailAndPasswordRequired": "Vui lòng nhập email và mật khẩu!"
+    "emailAndPasswordRequired": "Vui lòng nhập email và mật khẩu!",
+    "descriptionBtnLogin": "Hoặc tiếp tục với email"
   },
   "footer": {
     "terms": "Điều khoản & Chính sách",
@@ -80,22 +81,28 @@
       "rights": {
         "title": "Quyền và trách nhiệm của người dùng",
         "p1": "Bạn có quyền truy cập, sửa đổi và xóa dữ liệu cá nhân của mình bất cứ lúc nào. Bạn có trách nhiệm cung cấp thông tin chính xác và duy trì bảo mật tài khoản của mình.",
-        "p2": "Bạn không được sử dụng dịch vụ cho bất kỳ mục đích bất hợp pháp nào hoặc cố gắng truy cập dữ liệu của người dùng khác."
+        "p2": "Bạn không được sử dụng dịch vụ cho bất kỳ mục đích bất hợp pháp nào hoặc cố gắng truy cập dữ liệu của người dùng khác.",
+        "i1": "Truy cập và quản lý thông tin cá nhân của bạn",
+        "i2": "Yêu cầu xóa dữ liệu của bạn bất cứ lúc nào",
+        "i3": "Cung cấp thông tin chính xác và giữ an toàn thông tin đăng nhập",
+        "i4": "Không lạm dụng dịch vụ hoặc vi phạm pháp luật hiện hành"
       },
       "privacy": {
         "title": "Quyền riêng tư & Bảo vệ dữ liệu",
         "p1": "Quyền riêng tư của bạn rất quan trọng đối với chúng tôi. Chúng tôi thu thập và xử lý dữ liệu của bạn theo đúng luật bảo vệ quyền riêng tư hiện hành và chính sách bảo mật của chúng tôi.",
         "p2": "Chúng tôi thực hiện các biện pháp bảo mật phù hợp để bảo vệ thông tin cá nhân và kết quả xét nghiệm của bạn."
       },
-      "medical": {
+      "disclaimer": {
         "title": "Tuyên bố miễn trừ y tế",
-        "p1": "MediTrack cung cấp phân tích và thông tin chi tiết dựa trên kết quả xét nghiệm của bạn, nhưng thông tin này chỉ mang tính chất giáo dục.",
-        "p2": "Luôn tham khảo ý kiến của các chuyên gia y tế có trình độ để được tư vấn y tế, chẩn đoán và điều trị. Không nên chỉ dựa vào phân tích của chúng tôi để đưa ra quyết định y tế."
+        "p1": "MediTrack cung cấp phân tích và thông tin chi tiết dựa trên kết quả xét nghiệm của bạn chỉ cho mục đích giáo dục. Luôn tham khảo ý kiến chuyên gia y tế có trình độ để được tư vấn, chẩn đoán và điều trị."
       },
       "sharing": {
         "title": "Quy tắc chia sẻ dữ liệu",
         "p1": "Chúng tôi không bán, trao đổi hoặc cho thuê thông tin cá nhân của bạn cho bên thứ ba mà không có sự đồng ý rõ ràng của bạn.",
-        "p2": "Kết quả xét nghiệm và dữ liệu sức khỏe của bạn chỉ được chia sẻ với các nhà cung cấp dịch vụ y tế mà bạn ủy quyền hoặc theo yêu cầu của pháp luật."
+        "p2": "Kết quả xét nghiệm và dữ liệu sức khỏe của bạn chỉ được chia sẻ với các nhà cung cấp dịch vụ y tế mà bạn ủy quyền hoặc theo yêu cầu của pháp luật.",
+        "i1": "Không bán dữ liệu cá nhân khi chưa có sự đồng ý rõ ràng",
+        "i2": "Chỉ chia sẻ với nhà cung cấp do bạn ủy quyền",
+        "i3": "Tuân thủ các yêu cầu pháp lý và quy định"
       },
       "contact": {
         "title": "Thông tin liên hệ",

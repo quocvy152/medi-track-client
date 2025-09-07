@@ -24,7 +24,7 @@ export interface ApiError {
 export interface ApiResponse<T = unknown> {
 	data: T;
 	message?: string;
-	success: boolean;
+	state: boolean;
 }
 
 // HTTP Methods

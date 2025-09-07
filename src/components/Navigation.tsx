@@ -87,7 +87,7 @@ export function Navigation() {
             </button>
 
             {/* Logo */}
-            <Link href={`/${locale}`} className="flex items-center space-x-2">
+            <Link href={`/${locale}`} className="hidden md:flex items-center space-x-2">
               <Image
                 src="/images/medi_track_logo.png"
                 alt="MediTrack Logo"

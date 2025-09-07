@@ -18,7 +18,7 @@ interface LoginModalProps {
   onLoginSuccess: () => void;
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, }: LoginModalProps) {
   const t = useTranslations('login');
   const router = useRouter();
   const locale = useLocale();
@@ -59,26 +59,26 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       const { email, password } = formData;
 
       const response = await authService.login({ email, password });
-      if (!response.error) {
-        localStorage.setItem("authToken", response.accessToken);
+      const { state, data } = response;
+
+      if (state) {
+        onClose();
+        localStorage.setItem("authToken", data.accessToken);
         toast.success(t('loginSuccess'));
-        
-        // Dispatch custom event to notify Navigation component
         window.dispatchEvent(new Event('authStateChanged'));
-        
         router.replace(`/${locale}`);
       } else {
         toast.error(t('loginError'));
       }
     } catch (error) {
+      console.log({ error })
       toast.error(t('loginError'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
-    e.preventDefault();
+  const validateSignUpForm = () => {
     if (formData.password !== formData.confirmPassword) {
       toast.error(t('passwordMismatch'));
       return;
@@ -88,16 +88,40 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       toast.error(t('passwordTooShort'));
       return;
     }
-    
-    toast.success(t('signupSuccess'));
-    // Reset form after successful signup
-    setFormData({
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    });
-    setActiveTab('signin');
+
+    return true;
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateSignUpForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { name, email, password } = formData;
+
+    const response = await authService.register({ email, password, firstName: name });
+    const { state, } = response;
+
+    if (state) {
+      toast.success(t('signupSuccess'));
+
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+
+      setActiveTab('signin');
+    } else {
+      toast.error(t('signupError'));
+    }
+
+    setIsLoading(false);
   };
 
   if (!isOpen) return null;

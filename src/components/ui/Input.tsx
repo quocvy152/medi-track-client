@@ -14,7 +14,8 @@ export function Input({
   id, 
   ...props 
 }: InputProps) {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const reactGeneratedId = React.useId();
+  const inputId = id || reactGeneratedId;
 
   return (
     <div className="w-full">
@@ -28,7 +29,7 @@ export function Input({
         className={`
           w-full px-3 py-2 border rounded-md shadow-sm 
           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-          transition-colors duration-200
+          transition-colors duration-200 placeholder:text-gray-400 text-black
           ${error 
             ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
             : 'border-gray-300'

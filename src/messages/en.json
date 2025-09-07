@@ -56,7 +56,8 @@
     "terms": "Terms of Service",
     "and": " and ",
     "privacy": "Privacy Policy",
-    "emailAndPasswordRequired": "Please enter email and password!"
+    "emailAndPasswordRequired": "Please enter email and password!",
+    "descriptionBtnLogin": "Or continue with email"
   },
   "footer": {
     "terms": "Terms & Policy",
@@ -80,22 +81,28 @@
       "rights": {
         "title": "User Rights & Responsibilities",
         "p1": "You have the right to access, modify, and delete your personal data at any time. You are responsible for providing accurate information and maintaining the security of your account.",
-        "p2": "You must not use the service for any illegal purposes or attempt to access other users' data."
+        "p2": "You must not use the service for any illegal purposes or attempt to access other users' data.",
+        "i1": "Access and manage your personal information",
+        "i2": "Request deletion of your data at any time",
+        "i3": "Provide accurate information and keep your credentials secure",
+        "i4": "Do not misuse the service or violate applicable laws"
       },
       "privacy": {
         "title": "Privacy & Data Protection",
         "p1": "Your privacy is important to us. We collect and process your data in accordance with applicable privacy laws and our privacy policy.",
         "p2": "We implement appropriate security measures to protect your personal information and test results."
       },
-      "medical": {
+      "disclaimer": {
         "title": "Medical Disclaimer",
-        "p1": "MediTrack provides analysis and insights based on your test results, but this information is for educational purposes only.",
-        "p2": "Always consult with qualified healthcare professionals for medical advice, diagnosis, and treatment. Do not rely solely on our analysis for medical decisions."
+        "p1": "MediTrack provides analysis and insights based on your test results for educational purposes only. Always consult qualified healthcare professionals for medical advice, diagnosis, and treatment."
       },
       "sharing": {
         "title": "Data Sharing Rules",
         "p1": "We do not sell, trade, or rent your personal information to third parties without your explicit consent.",
-        "p2": "Your test results and health data are only shared with healthcare providers you authorize or as required by law."
+        "p2": "Your test results and health data are only shared with healthcare providers you authorize or as required by law.",
+        "i1": "No sale of personal data without explicit consent",
+        "i2": "Sharing only with providers you authorize",
+        "i3": "Compliance with legal and regulatory requirements"
       },
       "contact": {
         "title": "Contact Information",

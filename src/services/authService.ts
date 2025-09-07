@@ -1,5 +1,11 @@
 import { BaseService } from './baseService';
 
+type ApiResponse<T> = {
+	state: boolean;
+	data: T;
+	message?: string;
+  };
+
 export interface LoginCredentials {
 	email: string;
 	password: string;
@@ -8,13 +14,7 @@ export interface LoginCredentials {
 export interface RegisterData {
 	email: string;
 	password: string;
-	confirmPassword: string;
-	name: string;
-}
-
-export interface SignInResponse {
-	state: boolean;
-	data: AuthResponse;
+	firstName: string;
 }
 
 export interface AuthResponse {
@@ -49,7 +49,7 @@ export class AuthService extends BaseService {
 	/**
 	 * User login
 	 */
-	async login(credentials: LoginCredentials): Promise<SignInResponse> {
+	async login(credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> {
 		const response = await this.post<AuthResponse>('/signin', credentials);
 		
 		if (typeof window !== 'undefined') {
@@ -57,33 +57,33 @@ export class AuthService extends BaseService {
 			localStorage.setItem('refreshToken', response.refreshToken);
 			localStorage.setItem('user', JSON.stringify(response.user));
 			
-			// Dispatch custom event to notify Navigation component
 			window.dispatchEvent(new Event('authStateChanged'));
 		}
 		
 		return {
 			state: true,
-			data: response
+			data: response,
 		};
 	}
 
 	/**
 	 * User registration
 	 */
-	async register(data: RegisterData): Promise<AuthResponse> {
-		const response = await this.post<AuthResponse>('/register', data);
+	async register(data: RegisterData): Promise<ApiResponse<AuthResponse>> {
+		const response = await this.post<AuthResponse>('/signup', data);
 		
-		// Store tokens in localStorage
 		if (typeof window !== 'undefined') {
 			localStorage.setItem('authToken', response.accessToken);
 			localStorage.setItem('refreshToken', response.refreshToken);
 			localStorage.setItem('user', JSON.stringify(response.user));
 			
-			// Dispatch custom event to notify Navigation component
 			window.dispatchEvent(new Event('authStateChanged'));
 		}
 		
-		return response;
+		return {
+			state: true,
+			data: response,
+		};
 	}
 
 	/**
@@ -200,3 +200,12 @@ export class AuthService extends BaseService {
 
 // Export singleton instance
 export const authService = new AuthService(); 
+export interface GoogleSignInData {
+googleId: string;
+email: string;
+name: string;
+picture?: string;
+accessToken: string;
+idToken: string;
+}
+
