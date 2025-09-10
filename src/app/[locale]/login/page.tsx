@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { SocialButton } from "@/components/ui/SocialButton";
+import { getGoogleAuthUrl } from "@/lib/googleAuth";
 import { authService } from "@/services/authService";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -56,10 +57,9 @@ export default function LoginPage() {
       const { state, data } = response;
 
       if (state) {
-        localStorage.setItem("authToken", data.accessToken);
+        localStorage.setItem("authToken", data?.accessToken || '');
         toast.success(t('loginSuccess'));
         
-        // Dispatch custom event to notify Navigation component
         window.dispatchEvent(new Event('authStateChanged'));
         
         router.replace(`/${locale}`);
@@ -67,10 +67,18 @@ export default function LoginPage() {
         toast.error(t('loginError'));
       }
     } catch (error) {
-      console.log({ error })
       toast.error(t('loginError'));
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleStart = () => {
+    try {
+      const url = getGoogleAuthUrl();
+      window.location.href = url;
+    } catch (error) {
+      toast.error('Failed to start Google Sign-In');
     }
   };
 
@@ -166,7 +174,7 @@ export default function LoginPage() {
             <>
               {/* Social auth */}
               <div className="space-y-3">
-                <SocialButton provider="google" onClick={() => {}}>
+                <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
                 <SocialButton provider="facebook" onClick={() => {}}>
@@ -208,7 +216,7 @@ export default function LoginPage() {
             <>
               {/* Social auth */}
               <div className="space-y-3">
-                <SocialButton provider="google" onClick={() => {}}>
+                <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
                 <SocialButton provider="facebook" onClick={() => {}}>
@@ -257,7 +265,7 @@ export default function LoginPage() {
                   onChange={handleInputChange}
                   required
                 />
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" loading={isLoading}>
                   {t('signup')}
                 </Button>
               </form>

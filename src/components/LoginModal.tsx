@@ -63,7 +63,7 @@ export default function LoginModal({ isOpen, onClose, }: LoginModalProps) {
 
       if (state) {
         onClose();
-        localStorage.setItem("authToken", data.accessToken);
+        localStorage.setItem("authToken", data?.accessToken || '');
         toast.success(t('loginSuccess'));
         window.dispatchEvent(new Event('authStateChanged'));
         router.replace(`/${locale}`);

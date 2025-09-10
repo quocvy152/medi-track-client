@@ -2,7 +2,7 @@ import { BaseService } from './baseService';
 
 type ApiResponse<T> = {
 	state: boolean;
-	data: T;
+	data: T | null;
 	message?: string;
   };
 
@@ -70,20 +70,28 @@ export class AuthService extends BaseService {
 	 * User registration
 	 */
 	async register(data: RegisterData): Promise<ApiResponse<AuthResponse>> {
-		const response = await this.post<AuthResponse>('/signup', data);
+		try {
+			const response = await this.post<AuthResponse>('/signup', data);
 		
-		if (typeof window !== 'undefined') {
-			localStorage.setItem('authToken', response.accessToken);
-			localStorage.setItem('refreshToken', response.refreshToken);
-			localStorage.setItem('user', JSON.stringify(response.user));
+			if (typeof window !== 'undefined') {
+				localStorage.setItem('authToken', response.accessToken);
+				localStorage.setItem('refreshToken', response.refreshToken);
+				localStorage.setItem('user', JSON.stringify(response.user));
+				
+				window.dispatchEvent(new Event('authStateChanged'));
+			}
 			
-			window.dispatchEvent(new Event('authStateChanged'));
+			return {
+				state: true,
+				data: response,
+			};
+		} catch (error: any) {
+			return {
+				state: false,
+				data: null,
+				message: error.message,
+			};
 		}
-		
-		return {
-			state: true,
-			data: response,
-		};
 	}
 
 	/**
@@ -196,16 +204,31 @@ export class AuthService extends BaseService {
 		if (typeof window === 'undefined') return null;
 		return localStorage.getItem('authToken');
 	}
+
+	/**
+	 * Google Sign-In: send only googleId, backend issues app tokens
+	 */
+	async googleSignIn(data: GoogleSignInData): Promise<ApiResponse<AuthResponse>> {
+		const response = await this.post<AuthResponse>('/google', data);
+
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('authToken', response.accessToken);
+			localStorage.setItem('refreshToken', response.refreshToken);
+			localStorage.setItem('user', JSON.stringify(response.user));
+			window.dispatchEvent(new Event('authStateChanged'));
+		}
+
+		return {
+			state: true,
+			data: response,
+		};
+	}
 }
 
 // Export singleton instance
 export const authService = new AuthService(); 
 export interface GoogleSignInData {
-googleId: string;
-email: string;
-name: string;
-picture?: string;
-accessToken: string;
-idToken: string;
+	code: string;
+	redirectUri: string;
 }
 

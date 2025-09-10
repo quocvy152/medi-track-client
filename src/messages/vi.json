@@ -57,7 +57,8 @@
     "and": " và ",
     "privacy": "Chính sách bảo mật",
     "emailAndPasswordRequired": "Vui lòng nhập email và mật khẩu!",
-    "descriptionBtnLogin": "Hoặc tiếp tục với email"
+    "descriptionBtnLogin": "Hoặc tiếp tục với email",
+    "signupError": "Tạo tài khoản thất bại. Vui lòng thử lại."
   },
   "footer": {
     "terms": "Điều khoản & Chính sách",

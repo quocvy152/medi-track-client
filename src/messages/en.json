@@ -57,7 +57,8 @@
     "and": " and ",
     "privacy": "Privacy Policy",
     "emailAndPasswordRequired": "Please enter email and password!",
-    "descriptionBtnLogin": "Or continue with email"
+    "descriptionBtnLogin": "Or continue with email",
+    "signupError": "Failed to create account. Please try again."
   },
   "footer": {
     "terms": "Terms & Policy",
