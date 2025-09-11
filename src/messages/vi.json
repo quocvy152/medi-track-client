@@ -58,7 +58,9 @@
     "privacy": "Chính sách bảo mật",
     "emailAndPasswordRequired": "Vui lòng nhập email và mật khẩu!",
     "descriptionBtnLogin": "Hoặc tiếp tục với email",
-    "signupError": "Tạo tài khoản thất bại. Vui lòng thử lại."
+    "signupError": "Tạo tài khoản thất bại. Vui lòng thử lại.",
+    "googleSignInError": "Đăng nhập bằng Google thất bại! Vui lòng thử lại!",
+    "googleSignInSuccess": "Đăng nhập thành công!"
   },
   "footer": {
     "terms": "Điều khoản & Chính sách",

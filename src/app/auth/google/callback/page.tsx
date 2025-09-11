@@ -8,23 +8,23 @@ import toast from "react-hot-toast";
 function GoogleCallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   useEffect(() => {
     const run = async () => {
       const code = params?.get("code");
       const error = params?.get("error");
-      const locale = pathname?.split("/")?.[1] || "en";
+      // const locale = pathname?.split("/")?.[1] || "en";
 
       if (error) {
         toast.error("Google sign-in was cancelled or failed");
-        router.replace(`/${locale}/login`);
+        router.replace(`/vi/login`);
         return;
       }
 
       if (!code) {
         toast.error("Missing authorization code");
-        router.replace(`/${locale}/login`);
+        router.replace(`/vi/login`);
         return;
       }
 
@@ -37,11 +37,11 @@ function GoogleCallbackInner() {
           router.replace(`/vi`);
         } else {
           toast.error("Failed to sign in with Google");
-          router.replace(`/${locale}/login`);
+          router.replace(`/vi/login`);
         }
       } catch {
         toast.error("Failed to sign in with Google");
-        router.replace(`/${locale}/login`);
+        router.replace(`/vi/login`);
       }
     };
 

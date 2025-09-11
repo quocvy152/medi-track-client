@@ -85,7 +85,7 @@ export class AuthService extends BaseService {
 				state: true,
 				data: response,
 			};
-		} catch (error: unknown) {
+		} catch (error: any) {
 			return {
 				state: false,
 				data: null,
