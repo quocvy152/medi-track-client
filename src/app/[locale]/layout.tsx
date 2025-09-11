@@ -2,6 +2,7 @@ import { Footer } from '@/components/Footer';
 import { Navigation } from '@/components/Navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -18,11 +19,15 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const messages = await getMessages({ locale });
 
   if (!['vi', 'en'].includes(locale)) {
     notFound();
   }
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
+  const messages = await getMessages({ locale });
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
@@ -57,4 +62,4 @@ export default async function LocaleLayout({
       </div>
     </NextIntlClientProvider>
   );
-} 
+}

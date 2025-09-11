@@ -66,7 +66,7 @@ export default function LoginPage() {
       } else {
         toast.error(t('loginError'));
       }
-    } catch (error) {
+    } catch {
       toast.error(t('loginError'));
     } finally {
       setIsLoading(false);
@@ -77,7 +77,7 @@ export default function LoginPage() {
     try {
       const url = getGoogleAuthUrl();
       window.location.href = url;
-    } catch (error) {
+    } catch {
       toast.error('Failed to start Google Sign-In');
     }
   };

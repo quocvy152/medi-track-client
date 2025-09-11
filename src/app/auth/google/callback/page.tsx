@@ -1,12 +1,11 @@
 "use client";
 
 import { handleGoogleCallback } from "@/lib/googleAuth";
-import { authService } from "@/services/authService";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export default function GoogleCallbackPage() {
+function GoogleCallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
   const pathname = usePathname();
@@ -40,7 +39,7 @@ export default function GoogleCallbackPage() {
           toast.error("Failed to sign in with Google");
           router.replace(`/${locale}/login`);
         }
-      } catch (e) {
+      } catch {
         toast.error("Failed to sign in with Google");
         router.replace(`/${locale}/login`);
       }
@@ -51,4 +50,12 @@ export default function GoogleCallbackPage() {
   }, []);
 
   return null;
+}
+
+export default function GoogleCallbackPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GoogleCallbackInner />
+    </Suspense>
+  );
 }

@@ -1,38 +1,18 @@
-"use client";
-
 import TermsAndPolicyPage from "@/components/TermsAndPolicyPage";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback } from "react";
+import { setRequestLocale } from 'next-intl/server';
+import { Suspense } from "react";
 
-function TermsInner() {
-	const params = useParams<{ locale: string }>();
-	const router = useRouter();
-	const searchParams = useSearchParams();
+type Props = {
+  params: Promise<{ locale: string }>;
+};
 
-	const isFirstVisit = (() => {
-		const v = searchParams?.get("firstVisit");
-		return v === "1" || v === "true";
-	})();
+export default async function TermsPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-	const handleAgree = useCallback(() => {
-		try {
-			localStorage.setItem("termsAccepted", "true");
-		} catch {}
-		router.push(`/${params?.locale}`);
-	}, [params?.locale, router]);
-
-	return (
-		<TermsAndPolicyPage
-			isFirstVisit={isFirstVisit}
-			onAgree={isFirstVisit ? handleAgree : undefined}
-		/>
-	);
+  return (
+    <Suspense fallback={null}>
+      <TermsAndPolicyPage />
+    </Suspense>
+  );
 }
-
-export default function TermsPage() {
-	return (
-		<Suspense fallback={null}>
-			<TermsInner />
-		</Suspense>
-	);
-} 

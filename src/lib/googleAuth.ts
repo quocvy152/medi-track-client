@@ -1,4 +1,4 @@
-import { ApiResponse, AuthResponse, authService } from "@/services";
+import { authService } from "@/services";
 
 export const GOOGLE_CONFIG = {
   clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
