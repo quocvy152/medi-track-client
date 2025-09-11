@@ -85,11 +85,11 @@ export class AuthService extends BaseService {
 				state: true,
 				data: response,
 			};
-		} catch (error: any) {
+		} catch (error: unknown) {
 			return {
 				state: false,
 				data: null,
-				message: error.message,
+				message: error instanceof Error ? error.message : String(error),
 			};
 		}
 	}

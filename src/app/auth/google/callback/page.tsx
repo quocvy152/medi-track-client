@@ -1,7 +1,7 @@
 "use client";
 
 import { handleGoogleCallback } from "@/lib/googleAuth";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import toast from "react-hot-toast";
 
