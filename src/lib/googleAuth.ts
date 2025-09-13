@@ -6,7 +6,7 @@ export const GOOGLE_CONFIG = {
   scope: 'openid email profile',
 };
 
-const MEDITRACK_URL = process.env.MEDITRACK_URL || 'http://localhost:3000';
+// const MEDITRACK_URL = process.env.MEDITRACK_URL || 'http://localhost:3000';
 
 export interface GoogleUser {
   id: string;
@@ -36,7 +36,7 @@ export const getGoogleAuthUrl = (): string => {
 
 export const handleGoogleCallback = async (code: string) => {
   try {
-    const dataSignInGoogle = { code, redirectUri: MEDITRACK_URL + '/auth/google/callback' }
+    const dataSignInGoogle = { code, redirectUri: GOOGLE_CONFIG.redirectUri }
     const response = await authService.googleSignIn(dataSignInGoogle);
     return response;
   } catch (error) {
