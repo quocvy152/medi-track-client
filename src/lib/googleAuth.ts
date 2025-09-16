@@ -36,8 +36,8 @@ export const getGoogleAuthUrl = (): string => {
 
 export const handleGoogleCallback = async (code: string) => {
   try {
-    const dataSignInGoogle = { code, redirectUri: GOOGLE_CONFIG.redirectUri }
-    const response = await authService.googleSignIn(dataSignInGoogle);
+    const dataSignInGoogle = { code, redirectUri: GOOGLE_CONFIG.redirectUri, platform: 'GOOGLE', }
+    const response = await authService.socialSignIn(dataSignInGoogle);
     return response;
   } catch (error) {
     console.error('Google OAuth error:', error);

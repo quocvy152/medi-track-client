@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { SocialButton } from "@/components/ui/SocialButton";
+import { getFacebookAuthUrl } from "@/lib/facebookAuth";
 import { getGoogleAuthUrl } from "@/lib/googleAuth";
 import { authService } from "@/services/authService";
 import { useLocale, useTranslations } from "next-intl";
@@ -76,6 +77,15 @@ export default function LoginPage() {
   const handleGoogleStart = () => {
     try {
       const url = getGoogleAuthUrl();
+      window.location.href = url;
+    } catch {
+      toast.error('Failed to start Google Sign-In');
+    }
+  };
+  
+  const handleFacebookStart = () => {
+    try {
+      const url = getFacebookAuthUrl();
       window.location.href = url;
     } catch {
       toast.error('Failed to start Google Sign-In');
@@ -177,7 +187,7 @@ export default function LoginPage() {
                 <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
-                <SocialButton provider="facebook" onClick={() => {}}>
+                <SocialButton provider="facebook" onClick={handleFacebookStart}>
                   Continue with Facebook
                 </SocialButton>
               </div>

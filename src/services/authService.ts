@@ -207,9 +207,11 @@ export class AuthService extends BaseService {
 
 	/**
 	 * Google Sign-In: send only googleId, backend issues app tokens
+	 * OR
+	 * Facebook Sign-In: send only code and redirectUri, backend issues app tokens
 	 */
-	async googleSignIn(data: GoogleSignInData): Promise<ApiResponse<AuthResponse>> {
-		const response = await this.post<AuthResponse>('/google', data);
+	async socialSignIn(data: GoogleSignInData): Promise<ApiResponse<AuthResponse>> {
+		const response = await this.post<AuthResponse>('/social', data);
 
 		if (typeof window !== 'undefined') {
 			localStorage.setItem('authToken', response.accessToken);
@@ -227,8 +229,15 @@ export class AuthService extends BaseService {
 
 // Export singleton instance
 export const authService = new AuthService(); 
+export interface FacebookSignInData {
+	code: string;
+	redirectUri: string;
+	platform: string;
+}
+
 export interface GoogleSignInData {
 	code: string;
 	redirectUri: string;
+	platform: string;
 }
 
