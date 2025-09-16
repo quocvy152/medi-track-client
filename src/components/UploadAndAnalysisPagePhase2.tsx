@@ -21,7 +21,6 @@ type AnalysisResults = {
 	summary: { status: "all-normal" | "partial-abnormal"; text: string };
 	metrics: Metric[];
 	details: string;
-	analysisTexts?: string[];
 };
 
 const ACCEPTED_TYPES = [
@@ -193,6 +192,8 @@ export default function UploadAndAnalysisPage() {
 				status: "high", 
 				explanation: "Tăng Kali máu, biến chứng nguy hiểm ở bệnh nhân suy thận." 
 			  },
+		  
+			  // Gan
 			  { 
 				key: "AST (GOT)", 
 				value: 45, 
@@ -229,13 +230,7 @@ export default function UploadAndAnalysisPage() {
 				explanation: "Bilirubin trong giới hạn bình thường." 
 			  },
 			],
-			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp.",
-			analysisTexts: [
-				"Chức năng thận giảm với eGFR thấp và Creatinine tăng, cần theo dõi sát.",
-				"Ure và Kali tăng, nguy cơ biến chứng tim mạch, điều chỉnh chế độ ăn và thuốc.",
-				"Một số chỉ số gan (AST, GGT) tăng nhẹ, cân nhắc kiểm tra thêm nếu có triệu chứng.",
-				"Khuyến nghị tái khám chuyên khoa phù hợp và mang theo kết quả này."
-			]
+			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp."
 		};
 
 		setResults(mockResults);
@@ -453,19 +448,44 @@ export default function UploadAndAnalysisPage() {
 									results.summary.status === 'all-normal' 
 										? 'bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-green-600/50' 
 										: 'bg-gradient-to-r from-amber-900/50 to-orange-900/50 border-amber-600/50'
-								}` }>
+								}`}>
 									<div className="text-white text-xl font-semibold mb-2">
 										{results.summary.status === 'all-normal' ? t('summary.allNormal') : t('summary.someAbnormal')}
 									</div>
 									<div className="text-gray-300">{t('summary.disclaimer')}</div>
 								</div>
 
-								{/* Textual Analysis Sections */}
-								<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-2xl space-y-4">
-									{(results.analysisTexts && results.analysisTexts.length > 0 ? results.analysisTexts : [results.details]).map((paragraph, idx) => (
-										<p key={idx} className="text-gray-300 text-sm leading-relaxed">
-											{paragraph}
-										</p>
+								{/* Metrics Grid */}
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+									{results.metrics.map((m: Metric) => (
+										<div key={m.key} className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
+											<div className="flex items-center justify-between mb-4">
+												<div className="text-white font-semibold text-lg">{m.key}</div>
+												<div className={`text-sm px-3 py-1 rounded-full border font-medium ${
+													m.status === 'normal' 
+														? 'bg-green-900/50 text-green-400 border-green-600/50' 
+														: m.status === 'high' 
+															? 'bg-red-900/50 text-red-400 border-red-600/50' 
+															: 'bg-amber-900/50 text-amber-400 border-amber-600/50'
+												}`}>
+													{t(`metrics.status.${m.status}`)}
+												</div>
+											</div>
+											<div className="mb-3">
+												<span className="text-3xl font-bold text-white">{m.value}</span>
+												<span className="ml-2 text-lg text-gray-400">{m.unit}</span>
+											</div>
+											<div className="text-gray-300 text-sm mb-4">{m.explanation}</div>
+
+											<details className="group">
+												<summary className="text-sm text-blue-400 cursor-pointer select-none hover:text-blue-300 transition-colors">
+													{t('metrics.details.toggle')}
+												</summary>
+												<div className="mt-3 text-sm text-gray-400 leading-relaxed">
+													{t('metrics.details.more', { key: m.key })}
+												</div>
+											</details>
+										</div>
 									))}
 								</div>
 

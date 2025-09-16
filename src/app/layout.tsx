@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MediTrack - Track Your Medical Test Results",
   description: "MediTrack helps users track and understand their medical test results easily.",
+  icons: {
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+    ],
+    apple: "/images/medi_track_logo.png",
+  },
 };
 
 export default function RootLayout({
