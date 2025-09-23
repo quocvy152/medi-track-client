@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { analyzeService } from "@/services/analyzeService";
 import { useTranslations } from "next-intl";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -9,19 +10,23 @@ import Button from "./ui/Button";
 
 type Step = 1 | 2 | 3; // 1 Upload, 2 Processing, 3 Results
 
+type LevelMetric = 'High' | 'Normal' | 'Low';
+
 type Metric = {
-	key: string;
+	name: string;
 	value: string | number;
 	unit: string;
-	status: "low" | "normal" | "high";
-	explanation: string;
+	level: LevelMetric;
 };
 
+type MetricSummary = Metric;
+
+type MetricRisks = Metric & { explaination: string; };
+
 type AnalysisResults = {
-	summary: { status: "all-normal" | "partial-abnormal"; text: string };
-	metrics: Metric[];
-	details: string;
-	analysisTexts?: string[];
+	summary: MetricSummary[],
+	risks: MetricRisks[],
+	recommendations: string[],
 };
 
 const ACCEPTED_TYPES = [
@@ -51,6 +56,18 @@ export default function UploadAndAnalysisPage() {
 	const [showLoginModal, setShowLoginModal] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const cameraRef = useRef<HTMLInputElement>(null);
+
+	// New: processing UX state
+	const [phase, setPhase] = useState<'idle' | 'upload' | 'analyze'>('idle');
+	const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+	const [tipIndex, setTipIndex] = useState<number>(0);
+	const tips = useMemo(() => [
+		t('processing.tips.0'),
+		t('processing.tips.1'),
+		t('processing.tips.2'),
+		t('processing.tips.3'),
+		t('processing.tips.4'),
+	], [t]);
 
 	const isImage = useMemo(() => (file ? file.type.startsWith("image/") : false), [file]);
 
@@ -87,6 +104,9 @@ export default function UploadAndAnalysisPage() {
 		setError(null);
 		setProgress(0);
 		setResults(null);
+		setPhase('idle');
+		setElapsedSeconds(0);
+		setTipIndex(0);
 		setStep(1);
 	}, [previewUrl]);
 
@@ -128,119 +148,72 @@ export default function UploadAndAnalysisPage() {
 	}, []);
 
 	const startProcessing = async () => {
-		if (!file) return;
-		
-		// Check if user is authenticated
-		if (!isAuthenticated) {
-			setShowLoginModal(true);
-			return;
+		let elapsedTimer: number | undefined;
+		let tipTimer: number | undefined;
+		try {
+			if (!file) return;
+			
+			if (!isAuthenticated) {
+				setShowLoginModal(true);
+				return;
+			}
+
+			setStep(2);
+			toast.success(t('toast.processingStarted'));
+			setProgress(0);
+			setPhase('upload');
+			setElapsedSeconds(0);
+
+			// Timers: elapsed and rotating tips
+			elapsedTimer = window.setInterval(() => {
+				setElapsedSeconds((s) => s + 1);
+			}, 1000);
+			tipTimer = window.setInterval(() => {
+				setTipIndex((i) => (i + 1) % tips.length);
+			}, 3500);
+
+			// Use real upload progress up to ~90%
+			const resultsAnalyze = await analyzeService.analyzeFile({ 
+				file, 
+				onProgress: (p) => {
+					const capped = Math.min(90, Math.round(p * 0.9));
+					setProgress(capped);
+					if (p >= 100) {
+						setPhase('analyze');
+					}
+				}
+			});
+
+			// Smoothly complete to 100%
+			for (let i = Math.max(progress, 90); i <= 100; i += 2) {
+				// small delay for smoothness
+				// eslint-disable-next-line no-await-in-loop
+				await new Promise((r) => setTimeout(r, 40));
+				setProgress(i);
+			}
+
+			const analysis = JSON.parse(JSON.stringify(resultsAnalyze.analysis));
+
+			setResults({
+				summary: analysis.summary,
+				risks: analysis.risks,
+				recommendations: analysis.recommendations,
+			});
+			setStep(3);
+			toast.success(t('toast.analysisComplete'));
+		} catch (error) {
+			toast.error(t('toast.analysisError'));
+			// Reset processing UI state on error
+			setPhase('idle');
+			setProgress(0);
+			setElapsedSeconds(0);
+			setTipIndex(0);
+			setStep(1);
+		} finally {
+			if (elapsedTimer) window.clearInterval(elapsedTimer);
+			if (tipTimer) window.clearInterval(tipTimer);
+			setPhase('idle');
 		}
-
-		setStep(2);
-		    toast.success(t('toast.processingStarted'));
-		setProgress(0);
-
-		for (let i = 0; i <= 100; i += 5) {
-			await new Promise((r) => setTimeout(r, 80));
-			setProgress(i);
-		}
-
-		const mockResults: AnalysisResults = {
-			summary: {
-			  status: "partial-abnormal",
-			  text: "Nhiều chỉ số bất thường, nghi ngờ suy giảm chức năng thận và cần theo dõi chức năng gan.",
-			},
-			metrics: [
-			  { 
-				key: "Creatinine", 
-				value: 2.4, 
-				unit: "mg/dL", 
-				status: "high", 
-				explanation: "Creatinine tăng cao, dấu hiệu suy thận mạn." 
-			  },
-			  { 
-				key: "Ure", 
-				value: 72, 
-				unit: "mg/dL", 
-				status: "high", 
-				explanation: "Ure máu tăng cao, phản ánh giảm chức năng lọc cầu thận." 
-			  },
-			  { 
-				key: "eGFR", 
-				value: 35, 
-				unit: "mL/ph/1.73m2", 
-				status: "low", 
-				explanation: "eGFR thấp, gợi ý suy thận mạn độ 3b." 
-			  },
-			  { 
-				key: "Protein niệu", 
-				value: "+3", 
-				unit: "", 
-				status: "high", 
-				explanation: "Protein niệu dương tính mạnh, chỉ điểm tổn thương cầu thận." 
-			  },
-			  { 
-				key: "Acid uric", 
-				value: 9.2, 
-				unit: "mg/dL", 
-				status: "high", 
-				explanation: "Acid uric tăng, thường gặp ở bệnh nhân suy thận mạn." 
-			  },
-			  { 
-				key: "Kali", 
-				value: 5.9, 
-				unit: "mmol/L", 
-				status: "high", 
-				explanation: "Tăng Kali máu, biến chứng nguy hiểm ở bệnh nhân suy thận." 
-			  },
-			  { 
-				key: "AST (GOT)", 
-				value: 45, 
-				unit: "U/L", 
-				status: "high", 
-				explanation: "AST hơi tăng, cần theo dõi chức năng gan." 
-			  },
-			  { 
-				key: "ALT (GPT)", 
-				value: 38, 
-				unit: "U/L", 
-				status: "normal", 
-				explanation: "ALT trong giới hạn bình thường." 
-			  },
-			  { 
-				key: "GGT", 
-				value: 82, 
-				unit: "U/L", 
-				status: "high", 
-				explanation: "GGT tăng, gợi ý ảnh hưởng chức năng gan hoặc mật." 
-			  },
-			  { 
-				key: "Albumin", 
-				value: 3.1, 
-				unit: "g/dL", 
-				status: "low", 
-				explanation: "Albumin máu thấp, có thể liên quan đến suy thận hoặc bệnh gan." 
-			  },
-			  { 
-				key: "Bilirubin toàn phần", 
-				value: 0.9, 
-				unit: "mg/dL", 
-				status: "normal", 
-				explanation: "Bilirubin trong giới hạn bình thường." 
-			  },
-			],
-			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp.",
-			analysisTexts: [
-				"Chức năng thận giảm với eGFR thấp và Creatinine tăng, cần theo dõi sát.",
-				"Ure và Kali tăng, nguy cơ biến chứng tim mạch, điều chỉnh chế độ ăn và thuốc.",
-				"Một số chỉ số gan (AST, GGT) tăng nhẹ, cân nhắc kiểm tra thêm nếu có triệu chứng.",
-				"Khuyến nghị tái khám chuyên khoa phù hợp và mang theo kết quả này."
-			]
-		};
-
-		setResults(mockResults);
-		setStep(3);
-		    toast.success(t('toast.analysisComplete'));
 	};
 
 	const downloadPdf = () => {
@@ -432,67 +405,194 @@ export default function UploadAndAnalysisPage() {
 
 						{step === 2 && (
 							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8 shadow-2xl">
-								<div className="flex items-center gap-4 mb-6">
-									<div className="text-4xl">⚡</div>
-									<div>
-										<div className="text-white text-xl font-semibold">{t('processing.title')}</div>
-										<div className="text-gray-400">{t('processing.subtitle')}</div>
+								<div className="flex items-start justify-between gap-4 mb-6">
+									<div className="flex items-center gap-4">
+										<div className="text-4xl">⚡</div>
+										<div>
+											<div className="text-white text-xl font-semibold">{t('processing.title')}</div>
+											<div className="text-gray-400">{t('processing.subtitle')}</div>
+										</div>
+									</div>
+									<div className="flex items-center gap-2">
+										<span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 ring-1 ring-blue-400/30 text-blue-200 font-semibold text-xs md:text-sm tracking-wide">
+											<span className="text-lg">⏱</span>
+											<span className="font-mono tabular-nums">{t('processing.elapsed', { s: elapsedSeconds })}</span>
+										</span>
 									</div>
 								</div>
+
 								<div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-									<div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 rounded-full" style={{ width: `${progress}%` }} />
+									{phase === 'upload' ? (
+										<div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-200 rounded-full" style={{ width: `${progress}%` }} />
+									) : (
+										<div className="relative h-full w-full">
+											<div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-600/30" />
+											<div className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" style={{ width: '92%' }} />
+										</div>
+									)}
 								</div>
-								<div className="text-center mt-4 text-blue-400 font-medium">{progress}%</div>
+								<div className="mt-4 flex items-center justify-between text-sm">
+									<div className="text-blue-400 font-medium">
+										{phase === 'upload' ? t('processing.phases.uploading') : t('processing.phases.analyzing')}
+									</div>
+									<div className="text-gray-400">{t('processing.comfort')}</div>
+								</div>
+
+								<div className="mt-6 p-5 bg-gradient-to-r from-blue-900/20 to-purple-900/10 rounded-2xl border border-blue-500/20 shadow-inner">
+									<div className="text-base md:text-lg text-blue-200/90 font-medium leading-relaxed">
+										<span className="mr-2 align-middle text-blue-300/90">💡</span>{tips[tipIndex]}
+									</div>
+									<div className="text-xs md:text-sm mt-3 uppercase tracking-widest text-blue-300/60">{t('processing.youCan')}</div>
+								</div>
 							</div>
 						)}
 
 						{step === 3 && results && (
-							<div className="space-y-6">
-								{/* Summary Card */}
-								<div className={`rounded-2xl p-6 border backdrop-blur-sm ${
-									results.summary.status === 'all-normal' 
-										? 'bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-green-600/50' 
-										: 'bg-gradient-to-r from-amber-900/50 to-orange-900/50 border-amber-600/50'
-								}` }>
-									<div className="text-white text-xl font-semibold mb-2">
-										{results.summary.status === 'all-normal' ? t('summary.allNormal') : t('summary.someAbnormal')}
+							<div className="space-y-8">
+								{/* Part 1: Test Results Summary */}
+								<div className="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 backdrop-blur-sm rounded-3xl border border-blue-500/20 p-8 shadow-2xl shadow-blue-500/10">
+									<div className="flex items-center gap-4 mb-8">
+										<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-xl">
+											📋
+										</div>
+										<div>
+											<h3 className="text-2xl font-bold text-white">Tóm tắt kết quả xét nghiệm</h3>
+											<p className="text-gray-400">Tổng quan các chỉ số trong kết quả của bạn</p>
+										</div>
 									</div>
-									<div className="text-gray-300">{t('summary.disclaimer')}</div>
+									
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+										{results.summary.map((itSummary, idx) => (
+											<div key={idx} className={`p-5 rounded-2xl border-2 transition-all duration-300 ${
+												itSummary.level === 'Normal' 
+													? 'bg-green-900/20 border-green-500/30 hover:bg-green-900/30' 
+													: 'bg-orange-900/20 border-orange-500/30 hover:bg-orange-900/30'
+											} shadow-lg hover:shadow-xl`}>
+												<div className="flex items-center justify-between mb-3">
+													<h4 className="text-lg font-semibold text-white">{itSummary.name}</h4>
+													<div className={`w-3 h-3 rounded-full ${
+														itSummary.level === 'Normal' ? 'bg-green-500' : 'bg-orange-500'
+													}`}></div>
+												</div>
+												<div className="text-2xl font-bold text-white mb-2">
+													{itSummary.value} <span className="text-sm text-gray-400">{itSummary.unit}</span>
+												</div>
+												<p className={`text-sm font-medium ${
+													itSummary.level === 'Normal' ? 'text-green-300' : 'text-orange-300'
+												}`}>
+													{itSummary.level === 'Normal' ? 'Bình thường' : 'Cần chú ý'}
+												</p>
+											</div>
+										))}
+									</div>
 								</div>
 
-								{/* Textual Analysis Sections */}
-								<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-2xl space-y-4">
-									{(results.analysisTexts && results.analysisTexts.length > 0 ? results.analysisTexts : [results.details]).map((paragraph, idx) => (
-										<p key={idx} className="text-gray-300 text-sm leading-relaxed">
-											{paragraph}
-										</p>
-									))}
+								{/* Part 2: Health Concerns & Important Notes */}
+								<div className="bg-gradient-to-br from-amber-900/30 to-orange-900/30 backdrop-blur-sm rounded-3xl border border-amber-500/20 p-8 shadow-2xl shadow-amber-500/10">
+									<div className="flex items-center gap-4 mb-8">
+										<div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-xl">
+											⚠️
+										</div>
+										<div>
+											<h3 className="text-2xl font-bold text-white">Điều cần lưu ý về sức khỏe</h3>
+											<p className="text-gray-400">Những chỉ số cần quan tâm và tình trạng hiện tại</p>
+										</div>
+									</div>
+									
+									<div className="space-y-6">
+										{results.risks
+											.filter(risk => risk.level !== 'Normal')
+											.map((risk, idx) => (
+												<div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+													<div className="flex items-start gap-4">
+														<div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+															risk.level === 'High' 
+																? 'bg-gradient-to-br from-red-500 to-pink-600' 
+																: 'bg-gradient-to-br from-blue-500 to-cyan-600'
+														}`}>
+															{risk.level === 'High' ? '↑' : '↓'}
+														</div>
+														<div className="flex-1">
+															<div className="flex items-center justify-between mb-2">
+																<h4 className="text-xl font-bold text-white">{risk.name}</h4>
+																<div className="text-2xl font-bold text-white">
+																	{risk.value} <span className="text-sm text-gray-400">{risk.unit}</span>
+																</div>
+															</div>
+															<p className="text-gray-300 text-lg leading-relaxed">
+																{risk.explaination}
+															</p>
+														</div>
+													</div>
+												</div>
+											))
+										}
+										
+										{/* Overall Health Status */}
+										{/* <div className="mt-8 p-6 bg-gradient-to-r from-orange-900/20 to-red-900/20 rounded-2xl border border-orange-500/30">
+											<div className="flex items-start gap-4">
+												<div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center text-xl">
+													🏥
+												</div>
+												<div>
+													<h4 className="text-xl font-bold text-white mb-3">Tình trạng sức khỏe tổng thể</h4>
+													<p className="text-gray-300 text-lg leading-relaxed"></p>
+												</div>
+											</div>
+										</div> */}
+									</div>
 								</div>
 
-								{/* Actions Card */}
-								<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl">
-									<div className="text-white text-xl font-semibold mb-4">{t('metrics.details.title')}</div>
-									<p className="text-gray-300 text-sm leading-relaxed mb-6">{results.details}</p>
-									<div className="flex flex-wrap gap-4">
-										<Button 
+								{/* Part 3: Recommendations & Next Steps */}
+								<div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 backdrop-blur-sm rounded-3xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
+									<div className="flex items-center gap-4 mb-8">
+										<div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-xl">
+											💡
+										</div>
+										<div>
+											<h3 className="text-2xl font-bold text-white">Lời khuyên & Hướng dẫn</h3>
+											<p className="text-gray-400">Những điều bạn nên làm tiếp theo</p>
+										</div>
+									</div>
+									
+									<div className="space-y-6">
+										{results.recommendations && results.recommendations.length > 0 ? (
+											results.recommendations.map((recommend, idx) => (
+												<div key={idx} className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+													<div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+														{idx + 1}
+													</div>
+													<p className="text-gray-200 text-lg leading-relaxed">
+														{recommend}
+													</p>
+												</div>
+											))
+										) : (
+											<div className="p-6 bg-white/5 rounded-2xl border border-white/10">
+												<p className="text-gray-200 text-lg leading-relaxed"></p>
+											</div>
+										)}
+									</div>
+
+									{/* Action Buttons */}
+									<div className="flex flex-col sm:flex-row gap-4 mt-8">
+										{/* <Button 
 											onClick={downloadPdf}
-											className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+											className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
 										>
-											{t('btn.download')}
-										</Button>
-										<Button 
-											variant="secondary" 
+											📄 Tải báo cáo PDF
+										</Button> */}
+										{/* <Button 
 											onClick={shareResults}
-											className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+											className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
 										>
-											{t('btn.share')}
-										</Button>
+											🔗 Chia sẻ kết quả
+										</Button> */}
 										<Button 
-											variant="ghost" 
 											onClick={resetAll}
-											className="text-gray-400 hover:text-white hover:bg-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+											className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-4 px-8 rounded-xl border border-gray-600 transition-all duration-300"
 										>
-											{t('btn.retry')}
+											Phân tích mới
 										</Button>
 									</div>
 								</div>

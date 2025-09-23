@@ -138,7 +138,21 @@
     },
     "processing": {
       "title": "Đang xử lý file của bạn",
-      "subtitle": "Trích xuất giá trị và tạo thông tin chi tiết..."
+      "subtitle": "Trích xuất giá trị và tạo thông tin chi tiết...",
+      "phases": {
+        "uploading": "Đang tải lên...",
+        "analyzing": "Đang phân tích..."
+      },
+      "elapsed": "Đã trôi qua: {s}s",
+      "comfort": "Bạn có thể ở lại trang này — chúng tôi sẽ thông báo khi xong.",
+      "youCan": "💡 Mẹo: Bạn có thể chuyển tab. Chúng tôi vẫn tiếp tục xử lý nền.",
+      "tips": {
+        "0": "Dữ liệu của bạn được mã hóa trong quá trình truyền.",
+        "1": "Chúng tôi đang trích xuất các chỉ số sinh học quan trọng.",
+        "2": "AI đang ánh xạ kết quả vào các ngưỡng lâm sàng.",
+        "3": "Bạn sẽ nhận được tóm tắt và khuyến nghị hữu ích.",
+        "4": "Bạn có thể tải lên file khác bất cứ lúc nào."
+      }
     },
     "summary": {
       "allNormal": "Tất cả kết quả đều trong phạm vi bình thường",
@@ -166,7 +180,8 @@
       "downloadComplete": "Tải xuống hoàn tất!",
       "shareSuccess": "Chia sẻ kết quả thành công!",
       "linkCopied": "Đã sao chép liên kết vào clipboard!",
-      "shareError": "Không thể chia sẻ kết quả. Vui lòng thử lại."
+      "shareError": "Không thể chia sẻ kết quả. Vui lòng thử lại.",
+      "analysisError": "Không thể phân tích kết quả. Vui lòng thử lại."
     },
     "description": "Tải lên kết quả xét nghiệm y tế của bạn và nhận thông tin chi tiết từ AI chỉ trong vài giây. Dùng thử miễn phí!"
   }

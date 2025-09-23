@@ -138,7 +138,21 @@
     },
     "processing": {
       "title": "Processing your file",
-      "subtitle": "Extracting values and generating insights..."
+      "subtitle": "Extracting values and generating insights...",
+      "phases": {
+        "uploading": "Uploading...",
+        "analyzing": "Analyzing..."
+      },
+      "elapsed": "Elapsed: {s}s",
+      "comfort": "You can stay on this page — we’ll notify when done.",
+      "youCan": "💡 Tip: You can switch tabs. We’ll keep working in the background.",
+      "tips": {
+        "0": "We ensure your data is encrypted in transit.",
+        "1": "We’re extracting key biomarkers from your document.",
+        "2": "AI is mapping results to clinical ranges.",
+        "3": "You’ll get summaries plus actionable recommendations.",
+        "4": "You can upload a different file anytime."
+      }
     },
     "summary": {
       "allNormal": "All results are within normal range",
@@ -166,7 +180,8 @@
       "downloadComplete": "Download completed!",
       "shareSuccess": "Results shared successfully!",
       "linkCopied": "Link copied to clipboard!",
-      "shareError": "Failed to share results. Please try again."
+      "shareError": "Failed to share results. Please try again.",
+      "analysisError": "Failed to analyze results. Please try again."
     },
     "description": "Upload your medical test results and get AI-powered insights in seconds. Try it for free!"
   }

@@ -1,9 +1,9 @@
 import type {
-    ApiError,
-    ApiResponse,
-    PaginatedResponse,
-    PaginationParams,
-    RequestConfig
+	ApiError,
+	ApiResponse,
+	PaginatedResponse,
+	PaginationParams,
+	RequestConfig
 } from '@/types/api';
 import type { AxiosRequestConfig } from 'axios';
 import { apiClient } from './apiClient';

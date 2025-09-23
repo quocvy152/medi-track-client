@@ -21,6 +21,7 @@ type AnalysisResults = {
 	summary: { status: "all-normal" | "partial-abnormal"; text: string };
 	metrics: Metric[];
 	details: string;
+	analysisTexts?: string[];
 };
 
 const ACCEPTED_TYPES = [
@@ -146,7 +147,8 @@ export default function UploadAndAnalysisPage() {
 
 		const mockResults: AnalysisResults = {
 			summary: {
-			  status: "partial-abnormal",
+			//   status: "partial-abnormal",
+			  status: "all-normal",
 			  text: "Nhiều chỉ số bất thường, nghi ngờ suy giảm chức năng thận và cần theo dõi chức năng gan.",
 			},
 			metrics: [
@@ -192,8 +194,6 @@ export default function UploadAndAnalysisPage() {
 				status: "high", 
 				explanation: "Tăng Kali máu, biến chứng nguy hiểm ở bệnh nhân suy thận." 
 			  },
-		  
-			  // Gan
 			  { 
 				key: "AST (GOT)", 
 				value: 45, 
@@ -230,7 +230,13 @@ export default function UploadAndAnalysisPage() {
 				explanation: "Bilirubin trong giới hạn bình thường." 
 			  },
 			],
-			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp."
+			details: "Kết quả cho thấy bệnh nhân có nhiều chỉ số bất thường, đặc biệt liên quan đến chức năng thận (Creatinine, Ure, eGFR, Protein niệu, Kali). Ngoài ra, một số chỉ số gan (AST, GGT, Albumin) cũng cần theo dõi. Khuyến nghị khám chuyên khoa Thận và Gan để được chẩn đoán và điều trị phù hợp.",
+			analysisTexts: [
+				"Chức năng thận giảm với eGFR thấp và Creatinine tăng, cần theo dõi sát.",
+				"Ure và Kali tăng, nguy cơ biến chứng tim mạch, điều chỉnh chế độ ăn và thuốc.",
+				"Một số chỉ số gan (AST, GGT) tăng nhẹ, cân nhắc kiểm tra thêm nếu có triệu chứng.",
+				"Khuyến nghị tái khám chuyên khoa phù hợp và mang theo kết quả này."
+			]
 		};
 
 		setResults(mockResults);
@@ -442,77 +448,126 @@ export default function UploadAndAnalysisPage() {
 						)}
 
 						{step === 3 && results && (
-							<div className="space-y-6">
-								{/* Summary Card */}
-								<div className={`rounded-2xl p-6 border backdrop-blur-sm ${
-									results.summary.status === 'all-normal' 
-										? 'bg-gradient-to-r from-green-900/50 to-emerald-900/50 border-green-600/50' 
-										: 'bg-gradient-to-r from-amber-900/50 to-orange-900/50 border-amber-600/50'
-								}`}>
-									<div className="text-white text-xl font-semibold mb-2">
-										{results.summary.status === 'all-normal' ? t('summary.allNormal') : t('summary.someAbnormal')}
-									</div>
-									<div className="text-gray-300">{t('summary.disclaimer')}</div>
-								</div>
-
-								{/* Metrics Grid */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{results.metrics.map((m: Metric) => (
-										<div key={m.key} className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
-											<div className="flex items-center justify-between mb-4">
-												<div className="text-white font-semibold text-lg">{m.key}</div>
-												<div className={`text-sm px-3 py-1 rounded-full border font-medium ${
-													m.status === 'normal' 
-														? 'bg-green-900/50 text-green-400 border-green-600/50' 
-														: m.status === 'high' 
-															? 'bg-red-900/50 text-red-400 border-red-600/50' 
-															: 'bg-amber-900/50 text-amber-400 border-amber-600/50'
-												}`}>
-													{t(`metrics.status.${m.status}`)}
-												</div>
+							<div className="space-y-8">
+								{/* Part 1: Summary Section */}
+								<div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-3xl border border-blue-500/20 p-8 shadow-2xl shadow-blue-500/10">
+									<div className="flex items-start gap-6">
+										<div className="flex-shrink-0">
+											<div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold ${
+												results.summary.status === 'all-normal' 
+													? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25' 
+													: 'bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/25'
+											}`}>
+												{results.summary.status === 'all-normal' ? '✓' : '⚠'}
 											</div>
-											<div className="mb-3">
-												<span className="text-3xl font-bold text-white">{m.value}</span>
-												<span className="ml-2 text-lg text-gray-400">{m.unit}</span>
-											</div>
-											<div className="text-gray-300 text-sm mb-4">{m.explanation}</div>
-
-											<details className="group">
-												<summary className="text-sm text-blue-400 cursor-pointer select-none hover:text-blue-300 transition-colors">
-													{t('metrics.details.toggle')}
-												</summary>
-												<div className="mt-3 text-sm text-gray-400 leading-relaxed">
-													{t('metrics.details.more', { key: m.key })}
-												</div>
-											</details>
 										</div>
-									))}
+										<div className="flex-1">
+											<h3 className="text-2xl font-bold text-white mb-3">
+												{results.summary.status === 'all-normal' ? 'Kết quả bình thường' : 'Cần chú ý'}
+											</h3>
+											<p className="text-gray-300 text-lg leading-relaxed">
+												{results.summary.text}
+											</p>
+										</div>
+									</div>
 								</div>
 
-								{/* Actions Card */}
-								<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-6 shadow-xl">
-									<div className="text-white text-xl font-semibold mb-4">{t('metrics.details.title')}</div>
-									<p className="text-gray-300 text-sm leading-relaxed mb-6">{results.details}</p>
-									<div className="flex flex-wrap gap-4">
+								{/* Part 2: Metrics & Key Findings */}
+								<div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-3xl border border-gray-700/50 p-8 shadow-2xl">
+									<div className="flex items-center gap-4 mb-8">
+										<div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-xl">
+											📊
+										</div>
+										<div>
+											<h3 className="text-2xl font-bold text-white">Chỉ số xét nghiệm</h3>
+											<p className="text-gray-400">Các chỉ số cần lưu ý trong kết quả của bạn</p>
+										</div>
+									</div>
+									
+									<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+										{results.metrics.map((metric, idx) => (
+											<div key={idx} className={`p-6 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
+												metric.status === 'high' 
+													? 'bg-red-900/20 border-red-500/30 hover:shadow-red-500/20' 
+													: metric.status === 'low'
+													? 'bg-blue-900/20 border-blue-500/30 hover:shadow-blue-500/20'
+													: 'bg-green-900/20 border-green-500/30 hover:shadow-green-500/20'
+											} shadow-lg`}>
+												<div className="flex items-center justify-between mb-4">
+													<h4 className="text-lg font-semibold text-white">{metric.key}</h4>
+													<div className={`px-3 py-1 rounded-full text-sm font-medium ${
+														metric.status === 'high' 
+															? 'bg-red-500/20 text-red-300 border border-red-500/30' 
+															: metric.status === 'low'
+															? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+															: 'bg-green-500/20 text-green-300 border border-green-500/30'
+													}`}>
+														{metric.status === 'high' ? 'Cao' : metric.status === 'low' ? 'Thấp' : 'Bình thường'}
+													</div>
+												</div>
+												<div className="text-3xl font-bold text-white mb-2">
+													{metric.value} <span className="text-lg text-gray-400">{metric.unit}</span>
+												</div>
+												<p className="text-gray-300 text-sm leading-relaxed">
+													{metric.explanation}
+												</p>
+											</div>
+										))}
+									</div>
+								</div>
+
+								{/* Part 3: Recommendations & Next Steps */}
+								<div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 backdrop-blur-sm rounded-3xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
+									<div className="flex items-center gap-4 mb-8">
+										<div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-xl">
+											💡
+										</div>
+										<div>
+											<h3 className="text-2xl font-bold text-white">Lời khuyên & Hướng dẫn</h3>
+											<p className="text-gray-400">Những điều bạn nên làm tiếp theo</p>
+										</div>
+									</div>
+									
+									<div className="space-y-6">
+										{results.analysisTexts && results.analysisTexts.length > 0 ? (
+											results.analysisTexts.map((advice, idx) => (
+												<div key={idx} className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+													<div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+														{idx + 1}
+													</div>
+													<p className="text-gray-200 text-lg leading-relaxed">
+														{advice}
+													</p>
+												</div>
+											))
+										) : (
+											<div className="p-6 bg-white/5 rounded-2xl border border-white/10">
+												<p className="text-gray-200 text-lg leading-relaxed">
+													{results.details}
+												</p>
+											</div>
+										)}
+									</div>
+
+									{/* Action Buttons */}
+									<div className="flex flex-col sm:flex-row gap-4 mt-8">
 										<Button 
 											onClick={downloadPdf}
-											className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+											className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
 										>
-											{t('btn.download')}
+											📄 Tải báo cáo PDF
 										</Button>
 										<Button 
-											variant="secondary" 
 											onClick={shareResults}
-											className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+											className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
 										>
-											{t('btn.share')}
+											🔗 Chia sẻ kết quả
 										</Button>
 										<Button 
-											variant="ghost" 
 											onClick={resetAll}
-											className="text-gray-400 hover:text-white hover:bg-gray-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+											className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-4 px-8 rounded-xl border border-gray-600 transition-all duration-300"
 										>
-											{t('btn.retry')}
+											 Phân tích mới
 										</Button>
 									</div>
 								</div>

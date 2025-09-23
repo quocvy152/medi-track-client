@@ -102,7 +102,7 @@ const errorInterceptor = (error: AxiosError): Promise<never> => {
 export function createApiClient(): AxiosInstance {
 	const instance = axios.create({
 		baseURL: config.apiBaseUrl,
-		timeout: 10000, // 10 seconds
+		timeout: 25000, // 25 seconds
 		withCredentials: true,
 		headers: {
 			"Content-Type": "application/json",
