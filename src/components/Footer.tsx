@@ -16,7 +16,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="text-center md:text-left">
             <div className="text-lg font-semibold text-gray-900">MediTrack</div>
-            <p className="mt-1 text-sm text-gray-500">Track and understand your medical test results.</p>
+            <p className="mt-1 text-sm text-gray-500">Theo dõi và hiểu kết quả xét nghiệm y tế của bạn.</p>
           </div>
 
           <div className="flex justify-center space-x-6">

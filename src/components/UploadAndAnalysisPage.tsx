@@ -398,8 +398,8 @@ export default function UploadAndAnalysisPage() {
 						{step === 1 && (
 							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-12 shadow-2xl text-center">
 								<div className="text-6xl mb-6">🔬</div>
-								<div className="text-white text-2xl font-semibold mb-4">Ready to analyze your results?</div>
-								<div className="text-gray-400 text-lg">Upload your medical test file to get started</div>
+								<div className="text-white text-2xl font-semibold mb-4">Sẵn sàng phân tích kết quả của bạn?</div>
+								<div className="text-gray-400 text-lg">Tải lên tệp xét nghiệm y tế của bạn để bắt đầu</div>
 							</div>
 						)}
 
