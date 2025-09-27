@@ -17,13 +17,13 @@ function GoogleCallbackInner() {
       // const locale = pathname?.split("/")?.[1] || "en";
 
       if (error) {
-        toast.error("Google sign-in was cancelled or failed");
+        toast.error("Đăng nhập bằng Google thất bại!");
         router.replace(`/vi/login`);
         return;
       }
 
       if (!code) {
-        toast.error("Missing authorization code");
+        toast.error("Thiếu mã xác thực!");
         router.replace(`/vi/login`);
         return;
       }
@@ -33,14 +33,14 @@ function GoogleCallbackInner() {
         const { state } = response;
 
         if (state) {
-          toast.success("Signed in with Google");
+          toast.success("Đăng nhập bằng Google thành công!");
           router.replace(`/vi`);
         } else {
-          toast.error("Failed to sign in with Google");
+          toast.error("Đăng nhập bằng Google thất bại!");
           router.replace(`/vi/login`);
         }
       } catch {
-        toast.error("Failed to sign in with Google");
+        toast.error("Đăng nhập bằng Google thất bại!");
         router.replace(`/vi/login`);
       }
     };

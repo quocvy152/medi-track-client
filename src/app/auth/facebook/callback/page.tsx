@@ -15,31 +15,30 @@ function FacebookCallbackInner() {
       const error = params?.get("error");
 
       if (error) {
-        toast.error("Facebook sign-in was cancelled or failed");
+        toast.error("Đăng nhập bằng Facebook thất bại!");
         router.replace(`/vi/login`);
         return;
       }
 
       if (!code) {
-        toast.error("Missing authorization code");
+        toast.error("Thiếu mã xác thực!");
         router.replace(`/vi/login`);
         return;
       }
 
       try {
         const response = await handleFacebookCallback(code);
-        console.log("🚀 ~ run ~ response:", response)
         const { state } = response;
 
         if (state) {
-          toast.success("Signed in with Facebook");
+          toast.success("Đăng nhập bằng Facebook thành công!");
           router.replace(`/vi`);
         } else {
-          toast.error("Failed to sign in with Facebook");
+          toast.error("Đăng nhập bằng Facebook thất bại!");
           router.replace(`/vi/login`);
         }
       } catch {
-        toast.error("Failed to sign in with Facebook");
+        toast.error("Đăng nhập bằng Facebook thất bại!");
         router.replace(`/vi/login`);
       }
     };
