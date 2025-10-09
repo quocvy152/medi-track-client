@@ -4,6 +4,7 @@
     "home": "Home",
     "upload": "Upload & Analysis",
     "about": "About",
+    "articles": "Articles",
     "login": "Login",
     "logout": "Logout"
   },
@@ -31,6 +32,29 @@
     "featureAccurate": "Accurate Results",
     "featurePrivacy": "Privacy First",
     "featureFast": "Lightning Fast"
+  },
+  "articles": {
+    "title": "Health Articles & Insights",
+    "subtitle": "Stay informed with the latest health information and medical insights",
+    "readMore": "Read More",
+    "publishedOn": "Published on",
+    "readingTime": "min read",
+    "category": "Category",
+    "tags": "Tags",
+    "searchPlaceholder": "Search articles...",
+    "noArticles": "No articles found",
+    "loadMore": "Load More Articles",
+    "featured": "Featured Articles",
+    "latest": "Latest Articles",
+    "categories": {
+      "all": "All Categories",
+      "general": "General Health",
+      "nutrition": "Nutrition",
+      "exercise": "Exercise & Fitness",
+      "mental": "Mental Health",
+      "prevention": "Disease Prevention",
+      "treatment": "Treatment & Recovery"
+    }
   },
   "login": {
     "title": "Welcome to MediTrack",
@@ -144,13 +168,13 @@
         "analyzing": "Analyzing..."
       },
       "elapsed": "Elapsed: {s}s",
-      "comfort": "You can stay on this page — we’ll notify when done.",
-      "youCan": "💡 Tip: You can switch tabs. We’ll keep working in the background.",
+      "comfort": "You can stay on this page — we'll notify when done.",
+      "youCan": "💡 Tip: You can switch tabs. We'll keep working in the background.",
       "tips": {
         "0": "We ensure your data is encrypted in transit.",
-        "1": "We’re extracting key biomarkers from your document.",
+        "1": "We're extracting key biomarkers from your document.",
         "2": "AI is mapping results to clinical ranges.",
-        "3": "You’ll get summaries plus actionable recommendations.",
+        "3": "You'll get summaries plus actionable recommendations.",
         "4": "You can upload a different file anytime."
       }
     },

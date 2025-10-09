@@ -4,6 +4,7 @@
     "home": "Trang chủ",
     "upload": "Tải lên & Phân tích",
     "about": "Giới thiệu",
+    "articles": "Bài viết",
     "login": "Đăng nhập",
     "logout": "Đăng xuất"
   },
@@ -31,6 +32,29 @@
     "featureAccurate": "Kết quả chính xác",
     "featurePrivacy": "Ưu tiên quyền riêng tư",
     "featureFast": "Tốc độ nhanh chóng"
+  },
+  "articles": {
+    "title": "Bài viết sức khỏe & Thông tin hữu ích",
+    "subtitle": "Cập nhật thông tin sức khỏe mới nhất và hiểu biết y tế",
+    "readMore": "Đọc thêm",
+    "publishedOn": "Đăng ngày",
+    "readingTime": "phút đọc",
+    "category": "Danh mục",
+    "tags": "Thẻ",
+    "searchPlaceholder": "Tìm kiếm bài viết...",
+    "noArticles": "Không tìm thấy bài viết",
+    "loadMore": "Tải thêm bài viết",
+    "featured": "Bài viết nổi bật",
+    "latest": "Bài viết mới nhất",
+    "categories": {
+      "all": "Tất cả danh mục",
+      "general": "Sức khỏe tổng quát",
+      "nutrition": "Dinh dưỡng",
+      "exercise": "Tập luyện & Thể dục",
+      "mental": "Sức khỏe tinh thần",
+      "prevention": "Phòng ngừa bệnh tật",
+      "treatment": "Điều trị & Hồi phục"
+    }
   },
   "login": {
     "title": "Chào mừng đến với MediTrack",

@@ -110,6 +110,16 @@ export function Navigation() {
               >
                 {t('about')}
               </Link>
+              <Link
+                href={`/${locale}/articles`}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  isActive('/articles')
+                    ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
+                    : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
+                }`}
+              >
+                {t('articles')}
+              </Link>
               {!isAuthed ? (
                 <Link
                   href={`/${locale}/login`}
@@ -189,6 +199,19 @@ export function Navigation() {
           >
             {t('about')}
           </Link>
+
+          <Link 
+            href={`/${locale}/articles`} 
+            onClick={closeDrawer} 
+            className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+              isActive('/articles') 
+                ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
+                : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+            }`}
+          >
+            {t('articles')}
+          </Link>
+
           {!isAuthed ? (
             <Link 
               href={`/${locale}/login`} 
