@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
 import { analyzeService } from "@/services/analyzeService";
 import { useTranslations } from "next-intl";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import AuthGuard from "./AuthGuard";
 import LoginModal from "./LoginModal";
 import Button from "./ui/Button";
 
@@ -44,8 +46,9 @@ function formatBytes(bytes: number) {
 	return Math.round(bytes / Math.pow(1024, i)) + " " + sizes[i];
 }
 
-export default function UploadAndAnalysisPage() {
+function UploadAndAnalysisPageContent() {
 	const t = useTranslations('upload');
+	const { isAuthenticated } = useAuth();
 
 	const [step, setStep] = useState<Step>(1);
 	const [file, setFile] = useState<File | null>(null);
@@ -70,32 +73,6 @@ export default function UploadAndAnalysisPage() {
 	], [t]);
 
 	const isImage = useMemo(() => (file ? file.type.startsWith("image/") : false), [file]);
-
-	// Check if user is authenticated
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-	// Function to check authentication status
-	const checkAuthStatus = useCallback(() => {
-		if (typeof window !== 'undefined') {
-			const token = localStorage.getItem("authToken");
-			setIsAuthenticated(!!token);
-		}
-	}, []);
-
-	useEffect(() => {
-		checkAuthStatus();
-
-		// Listen for authentication state changes
-		const handleAuthChange = () => {
-			checkAuthStatus();
-		};
-
-		window.addEventListener('authStateChanged', handleAuthChange);
-
-		return () => {
-			window.removeEventListener('authStateChanged', handleAuthChange);
-		};
-	}, [checkAuthStatus]);
 
 	const resetAll = useCallback(() => {
 		if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -187,7 +164,6 @@ export default function UploadAndAnalysisPage() {
 			// Smoothly complete to 100%
 			for (let i = Math.max(progress, 90); i <= 100; i += 2) {
 				// small delay for smoothness
-				// eslint-disable-next-line no-await-in-loop
 				await new Promise((r) => setTimeout(r, 40));
 				setProgress(i);
 			}
@@ -201,7 +177,7 @@ export default function UploadAndAnalysisPage() {
 			});
 			setStep(3);
 			toast.success(t('toast.analysisComplete'));
-		} catch (error) {
+		} catch {
 			toast.error(t('toast.analysisError'));
 			// Reset processing UI state on error
 			setPhase('idle');
@@ -216,51 +192,7 @@ export default function UploadAndAnalysisPage() {
 		}
 	};
 
-	const downloadPdf = () => {
-		// Check if user is authenticated for download
-		if (!isAuthenticated) {
-			setShowLoginModal(true);
-			return;
-		}
 
-		    toast.success(t('toast.downloadStarted'));
-		const blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/pdf" });
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement("a");
-		a.href = url;
-		a.download = "medi-track-results.pdf";
-		a.click();
-		URL.revokeObjectURL(url);
-		setTimeout(() => {
-			      toast.success(t('toast.downloadComplete'));
-		}, 1000);
-	};
-
-	const shareResults = async () => {
-		// Check if user is authenticated for sharing
-		if (!isAuthenticated) {
-			setShowLoginModal(true);
-			return;
-		}
-
-		try {
-			if (navigator.share) {
-				await navigator.share({
-					title: 'My Lab Test Results',
-					text: 'Check out my lab test results from MediTrack',
-					url: window.location.href,
-				});
-				        toast.success(t('toast.shareSuccess'));
-			} else {
-				// Fallback to clipboard
-				await navigator.clipboard.writeText(JSON.stringify(results));
-				        toast.success(t('toast.linkCopied'));
-			}
-		} catch (error) {
-			console.error(error);
-			toast.error(t('toast.shareError'));
-		}
-	};
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -609,5 +541,13 @@ export default function UploadAndAnalysisPage() {
 				onLoginSuccess={handleLoginSuccess}
 			/>
 		</div>
+	);
+}
+
+export default function UploadAndAnalysisPage() {
+	return (
+		<AuthGuard>
+			<UploadAndAnalysisPageContent />
+		</AuthGuard>
 	);
 } 

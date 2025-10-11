@@ -32,9 +32,6 @@ type Metric = {
 	level: LevelMetric;
 };
 
-type MetricSummary = Metric;
-
-type MetricRisks = Metric & { explaination: string; };
 
 type AnalysisResponse = {
 	// analysis: {

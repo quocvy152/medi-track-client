@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { ArticleCategoryFilter, ArticleSearchProps } from '@/types/article';
 import { useTranslations } from 'next-intl';
-import { ArticleCategory, ArticleCategoryFilter, ArticleSearchProps } from '@/types/article';
+import { useEffect, useState } from 'react';
 import { Input } from './ui/Input';
 
 export function ArticleSearch({ 
@@ -69,7 +69,7 @@ export function ArticleSearch({
         <div className="mt-4 flex flex-wrap gap-2">
           {searchQuery && (
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
-              Search: "{searchQuery}"
+              Search: &quot;{searchQuery}&quot;
               <button
                 onClick={() => onSearch('')}
                 className="ml-2 text-blue-600 hover:text-blue-800"

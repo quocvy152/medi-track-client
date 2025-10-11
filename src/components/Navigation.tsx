@@ -1,6 +1,7 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useAuth } from "@/hooks/useAuth";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
@@ -13,62 +14,20 @@ export function Navigation() {
   const locale = useLocale();
   const t = useTranslations('nav');
   const [mounted, setMounted] = useState(false);
-  const [isAuthed, setIsAuthed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  // Function to check authentication status
-  const checkAuthStatus = () => {
-    try {
-      const token = localStorage.getItem('authToken') || localStorage.getItem('isLoggedIn');
-      setIsAuthed(!!token);
-    } catch {
-      setIsAuthed(false);
-    }
-  };
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
     setMounted(true);
-    checkAuthStatus();
-
-    // Listen for storage changes (when login/logout happens in other components)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'authToken' || e.key === 'isLoggedIn') {
-        checkAuthStatus();
-      }
-    };
-
-    // Listen for custom events (for same-tab communication)
-    const handleAuthChange = () => {
-      checkAuthStatus();
-    };
-
-    // Add event listeners
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('authStateChanged', handleAuthChange);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('authStateChanged', handleAuthChange);
-    };
   }, []);
 
   const isActive = (path: string) => mounted && pathname === `/${locale}${path}`;
 
   const closeDrawer = () => setDrawerOpen(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    setIsAuthed(false);
-    
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new Event('authStateChanged'));
-    
-    // Refresh the page to update the state
-    window.location.reload();
+  const handleLogout = async () => {
+    await logout();
+    closeDrawer();
   };
 
   return (
@@ -120,7 +79,7 @@ export function Navigation() {
               >
                 {t('articles')}
               </Link>
-              {!isAuthed ? (
+              {!isAuthenticated ? (
                 <Link
                   href={`/${locale}/login`}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
@@ -212,7 +171,7 @@ export function Navigation() {
             {t('articles')}
           </Link>
 
-          {!isAuthed ? (
+          {!isAuthenticated ? (
             <Link 
               href={`/${locale}/login`} 
               onClick={closeDrawer} 

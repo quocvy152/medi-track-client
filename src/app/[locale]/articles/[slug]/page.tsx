@@ -1,7 +1,6 @@
-import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
-import { notFound } from 'next/navigation';
 import { ArticleDetailPage } from '@/components/ArticleDetailPage';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface ArticlePageProps {
   params: {
