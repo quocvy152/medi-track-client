@@ -25,12 +25,12 @@ export interface AnalysisRequest {
 
 type LevelMetric = 'High' | 'Normal' | 'Low';
 
-type Metric = {
-	name: string;
-	value: string | number;
-	unit: string;
-	level: LevelMetric;
-};
+// type Metric = {
+// 	name: string;
+// 	value: string | number;
+// 	unit: string;
+// 	level: LevelMetric;
+// };
 
 
 type AnalysisResponse = {

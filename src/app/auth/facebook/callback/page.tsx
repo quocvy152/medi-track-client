@@ -44,7 +44,7 @@ function FacebookCallbackInner() {
     };
 
     run();
-  }, []);
+  }, [params, router]);
 
   return null;
 }

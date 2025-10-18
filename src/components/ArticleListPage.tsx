@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
 import { Article, ArticleCategory, ArticleCategoryFilter, ArticleFilters } from '@/types/article';
-import { ArticleSearch } from './ArticleSearch';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
 import { ArticleList } from './ArticleList';
+import { ArticleSearch } from './ArticleSearch';
 import { Loading } from './ui/Loading';
 
 interface ArticleListPageProps {
@@ -140,7 +140,7 @@ const mockArticles: Article[] = [
   }
 ];
 
-export function ArticleListPage({ locale, searchParams }: ArticleListPageProps) {
+export function ArticleListPage({ searchParams }: ArticleListPageProps) {
   const t = useTranslations('articles');
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -197,10 +197,6 @@ export function ArticleListPage({ locale, searchParams }: ArticleListPageProps) 
       category: category === 'all' ? undefined : category as ArticleCategory,
       page: 1 
     }));
-  };
-
-  const handleLoadMore = () => {
-    setFilters(prev => ({ ...prev, page: (prev.page || 1) + 1 }));
   };
 
   if (loading) {

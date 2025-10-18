@@ -1,4 +1,5 @@
 import { ArticleDetailPage } from '@/components/ArticleDetailPage';
+import type { Article } from '@/types/article';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -10,9 +11,9 @@ interface ArticlePageProps {
 }
 
 // Mock function to get article by slug
-async function getArticleBySlug(slug: string) {
+async function getArticleBySlug(slug: string): Promise<Article | null> {
   // In a real app, this would fetch from your API/database
-  const mockArticles = [
+  const mockArticles: Article[] = [
     {
       id: '1',
       title: 'Understanding Your Blood Test Results: A Complete Guide',
@@ -141,7 +142,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <ArticleDetailPage 
-      article={article}
+      article={article as Article}
       locale={params.locale}
     />
   );

@@ -28,11 +28,7 @@ export default function AuthGuard({
 
     // If not authenticated or token is expired
     if (!isAuthenticated || !tokenInfo?.isValid || tokenInfo?.isExpired) {
-      if (showLoginModal) {
-        setShowModal(true);
-      } else {
-        router.push(redirectTo);
-      }
+      router.push(redirectTo);
     }
   }, [isAuthenticated, isLoading, tokenInfo, showLoginModal, redirectTo, router]);
 
