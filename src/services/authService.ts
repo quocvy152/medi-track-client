@@ -83,7 +83,7 @@ export class AuthService extends BaseService {
 		} catch (error: unknown) {
 			return {
 				success: false,
-				data: null as any,
+				data: null as unknown as AuthResponse,
 				message: error instanceof Error ? error.message : String(error),
 			};
 		}
