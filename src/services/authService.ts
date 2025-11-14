@@ -46,19 +46,18 @@ export class AuthService extends BaseService {
 	 */
 	async login(credentials: LoginCredentials): Promise<ApiResponse<AuthResponse>> {
 		const response = await this.post<AuthResponse>('/signin', credentials);
+
+		const { accessToken, refreshToken, user } = response.data;
 		
 		if (typeof window !== 'undefined') {
-			localStorage.setItem('authToken', response.accessToken);
-			localStorage.setItem('refreshToken', response.refreshToken);
-			localStorage.setItem('user', JSON.stringify(response.user));
+			localStorage.setItem('authToken', accessToken);
+			localStorage.setItem('refreshToken', refreshToken);
+			localStorage.setItem('user', JSON.stringify(user));
 			
 			window.dispatchEvent(new Event('authStateChanged'));
 		}
 		
-		return {
-			success: true,
-			data: response,
-		};
+		return response;
 	}
 
 	/**
@@ -67,19 +66,18 @@ export class AuthService extends BaseService {
 	async register(data: RegisterData): Promise<ApiResponse<AuthResponse>> {
 		try {
 			const response = await this.post<AuthResponse>('/signup', data);
+
+			const { accessToken, refreshToken, user } = response.data;
 		
 			if (typeof window !== 'undefined') {
-				localStorage.setItem('authToken', response.accessToken);
-				localStorage.setItem('refreshToken', response.refreshToken);
-				localStorage.setItem('user', JSON.stringify(response.user));
+				localStorage.setItem('authToken', accessToken);
+				localStorage.setItem('refreshToken', refreshToken);
+				localStorage.setItem('user', JSON.stringify(user));
 				
 				window.dispatchEvent(new Event('authStateChanged'));
 			}
 			
-			return {
-				success: true,
-				data: response,
-			};
+			return response;
 		} catch (error: unknown) {
 			return {
 				success: false,
@@ -90,31 +88,31 @@ export class AuthService extends BaseService {
 	}
 
 	/**
-	 * User logout
+	 * User logout - clears all authentication data from localStorage
+	 * No API call needed as per requirements
+	 * @param silent - If true, don't dispatch authStateChanged event (prevents infinite loops)
 	 */
-	async logout(): Promise<void> {
-		try {
-			await this.post('/logout');
-		} catch (error) {
-			// Even if logout fails, clear local storage
-			console.warn('Logout request fails, but clearing local storage' + error);
-		} finally {
-			// Clear local storage
-			if (typeof window !== 'undefined') {
-				localStorage.removeItem('authToken');
-				localStorage.removeItem('refreshToken');
-				localStorage.removeItem('user');
-				
-				// Dispatch custom event to notify Navigation component
+	async logout(silent = false): Promise<void> {
+		// Clear local storage immediately
+		if (typeof window !== 'undefined') {
+			localStorage.removeItem('authToken');
+			localStorage.removeItem('refreshToken');
+			localStorage.removeItem('user');
+			
+			// Only dispatch event if not silent (to prevent infinite loops during logout)
+			if (!silent) {
 				window.dispatchEvent(new Event('authStateChanged'));
 			}
 		}
+		
+		// Return a resolved promise to allow smooth async handling
+		return Promise.resolve();
 	}
 
 	/**
 	 * Refresh access token
 	 */
-	async refreshToken(): Promise<{ token: string }> {
+	async refreshToken(): Promise<ApiResponse<{ token: string }>> {
 		const refreshToken = localStorage.getItem('refreshToken');
 		if (!refreshToken) {
 			throw new Error('No refresh token available');
@@ -122,9 +120,11 @@ export class AuthService extends BaseService {
 
 		const response = await this.post<{ token: string }>('/refresh', { refreshToken });
 		
+		const { token } = response.data;
+		
 		// Update stored token
 		if (typeof window !== 'undefined') {
-			localStorage.setItem('authToken', response.token);
+			localStorage.setItem('authToken', token);
 			
 			// Dispatch custom event to notify Navigation component
 			window.dispatchEvent(new Event('authStateChanged'));
@@ -151,21 +151,21 @@ export class AuthService extends BaseService {
 	/**
 	 * Change password
 	 */
-	async changePassword(data: { currentPassword: string; newPassword: string }): Promise<void> {
+	async changePassword(data: { currentPassword: string; newPassword: string }): Promise<ApiResponse<void>> {
 		return this.post('/change-password', data);
 	}
 
 	/**
 	 * Request password reset
 	 */
-	async requestPasswordReset(email: string): Promise<void> {
+	async requestPasswordReset(email: string): Promise<ApiResponse<void>> {
 		return this.post('/forgot-password', { email });
 	}
 
 	/**
 	 * Reset password with token
 	 */
-	async resetPassword(data: { token: string; newPassword: string }): Promise<void> {
+	async resetPassword(data: { token: string; newPassword: string }): Promise<ApiResponse<void>> {
 		return this.post('/reset-password', data);
 	}
 
@@ -209,17 +209,16 @@ export class AuthService extends BaseService {
 	async socialSignIn(data: GoogleSignInData): Promise<ApiResponse<AuthResponse>> {
 		const response = await this.post<AuthResponse>('/social', data);
 
+		const { accessToken, refreshToken, user } = response.data;
+
 		if (typeof window !== 'undefined') {
-			localStorage.setItem('authToken', response.accessToken);
-			localStorage.setItem('refreshToken', response.refreshToken);
-			localStorage.setItem('user', JSON.stringify(response.user));
+			localStorage.setItem('authToken', accessToken);
+			localStorage.setItem('refreshToken', refreshToken);
+			localStorage.setItem('user', JSON.stringify(user));
 			window.dispatchEvent(new Event('authStateChanged'));
 		}
 
-		return {
-			success: true,
-			data: response,
-		};
+		return response;
 	}
 }
 

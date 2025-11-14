@@ -28,9 +28,9 @@ function FacebookCallbackInner() {
 
       try {
         const response = await handleFacebookCallback(code);
-        const { state } = response;
+        const { success } = response;
 
-        if (state) {
+        if (success) {
           toast.success("Đăng nhập bằng Facebook thành công!");
           router.replace(`/vi`);
         } else {

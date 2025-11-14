@@ -101,12 +101,12 @@ export abstract class BaseService {
 	/**
 	 * Generic POST request
 	 */
-	protected async post<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<T> {
+	protected async post<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<ApiResponse<T>> {
 		try {
 			const url = this.buildUrl(endpoint, config?.params);
 			const axiosConfig = this.convertConfig(config);
 			const response = await apiClient.post<ApiResponse<T>>(url, data, axiosConfig);
-			return response.data.data;
+			return response.data;
 		} catch (error) {
 			this.handleError(error);
 		}

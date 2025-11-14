@@ -1,21 +1,23 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Loading } from "@/components/ui/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('nav');
   const [mounted, setMounted] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, isLoggingOut } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -34,8 +36,20 @@ export function Navigation() {
   const closeDrawer = () => setDrawerOpen(false);
 
   const handleLogout = async () => {
-    await logout();
-    closeDrawer();
+    try {
+      await logout();
+      // Close drawer first
+      closeDrawer();
+      // Redirect to home page and refresh to ensure UI updates
+      router.push(`/${locale}`);
+      // Use setTimeout to ensure state is updated before refresh
+      setTimeout(() => {
+        router.refresh();
+      }, 100);
+    } catch (error) {
+      console.error('Logout error:', error);
+      closeDrawer();
+    }
   };
 
   return (
@@ -113,8 +127,10 @@ export function Navigation() {
               ) : (
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-red-400 hover:bg-red-900/20 border border-transparent hover:border-red-600/50 transition-all duration-300"
+                  disabled={isLoggingOut}
+                  className="px-4 py-2 rounded-xl text-sm font-medium text-gray-300 hover:text-red-400 hover:bg-red-900/20 border border-transparent hover:border-red-600/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
+                  {isLoggingOut && <Loading size="sm" />}
                   {t('logout')}
                 </button>
               )}
@@ -219,12 +235,11 @@ export function Navigation() {
             </Link>
           ) : (
             <button
-              onClick={() => {
-                handleLogout();
-                closeDrawer();
-              }}
-              className="mt-2 w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-red-400 hover:bg-red-900/20 border border-transparent hover:border-red-600/50 transition-all duration-300"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="mt-2 w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-red-400 hover:bg-red-900/20 border border-transparent hover:border-red-600/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
+              {isLoggingOut && <Loading size="sm" />}
               {t('logout')}
             </button>
           )}

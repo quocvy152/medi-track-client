@@ -30,9 +30,9 @@ function GoogleCallbackInner() {
 
       try {
         const response = await handleGoogleCallback(code);
-        const { state } = response;
+        const { success } = response;
 
-        if (state) {
+        if (success) {
           toast.success("Đăng nhập bằng Google thành công!");
           router.replace(`/vi`);
         } else {
