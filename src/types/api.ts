@@ -8,10 +8,10 @@ export interface PaginationParams {
 
 export interface PaginatedResponse<T> {
 	data: T[];
-	total: number;
-	page: number;
-	limit: number;
-	totalPages: number;
+	total?: number;
+	page?: number;
+	limit?: number;
+	totalPages?: number;
 }
 
 export interface ApiError {
@@ -24,7 +24,7 @@ export interface ApiError {
 export interface ApiResponse<T = unknown> {
 	data: T;
 	message?: string;
-	state: boolean;
+	success: boolean;
 }
 
 // HTTP Methods

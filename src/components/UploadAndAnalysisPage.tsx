@@ -6,7 +6,6 @@ import { analyzeService } from "@/services/analyzeService";
 import { useTranslations } from "next-intl";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import AuthGuard from "./AuthGuard";
 import LoginModal from "./LoginModal";
 import Button from "./ui/Button";
 
@@ -127,6 +126,12 @@ function UploadAndAnalysisPageContent() {
 	const startProcessing = async () => {
 		let elapsedTimer: number | undefined;
 		let tipTimer: number | undefined;
+		let virtualProgressTimer: number | undefined;
+		let lastProgressUpdate = 0;
+		const PROGRESS_UPDATE_INTERVAL = 500; // Update progress every 500ms
+		const TARGET_TIME_TO_90 = 18000; // 18 seconds to reach 90%
+		const PROGRESS_INCREMENT = 90 / (TARGET_TIME_TO_90 / PROGRESS_UPDATE_INTERVAL); // ~0.5% per 500ms
+		
 		try {
 			if (!file) return;
 			
@@ -137,9 +142,13 @@ function UploadAndAnalysisPageContent() {
 
 			setStep(2);
 			toast.success(t('toast.processingStarted'));
+			// Reset progress to 0 and ensure it starts from 0%
 			setProgress(0);
 			setPhase('upload');
 			setElapsedSeconds(0);
+			
+			// Small delay to ensure UI is ready before starting progress animation
+			await new Promise((r) => setTimeout(r, 1000));
 
 			// Timers: elapsed and rotating tips
 			elapsedTimer = window.setInterval(() => {
@@ -149,23 +158,76 @@ function UploadAndAnalysisPageContent() {
 				setTipIndex((i) => (i + 1) % tips.length);
 			}, 3500);
 
-			// Use real upload progress up to ~90%
+			// Virtual progress that increases slowly and smoothly from 0% to 90%
+			// Then stops at 90% until server responds
+			let virtualProgress = 0;
+			let realProgress = 0;
+			let isUploadComplete = false;
+			let hasReached90 = false;
+			
+			// Start virtual progress animation
+			// Progress will increase from 0% to 90% over ~18 seconds
+			// Then stop at 90% until server processing is complete
+			virtualProgressTimer = window.setInterval(() => {
+				const now = Date.now();
+				
+				// Only update if enough time has passed
+				if (now - lastProgressUpdate < PROGRESS_UPDATE_INTERVAL) return;
+				
+				// If upload is complete and we've reached 90%, continue to 100%
+				if (isUploadComplete && hasReached90) {
+					// After server responds, smoothly complete from 90% to 100%
+					// Increase by smaller increments to make it smooth: ~0.5% per 500ms
+					if (virtualProgress < 100) {
+						virtualProgress = Math.min(100, virtualProgress + 0.5);
+					}
+				} else if (!hasReached90) {
+					// Gradually increase from 0% to 90% over ~18 seconds
+					// Each update increases by PROGRESS_INCREMENT
+					virtualProgress = Math.min(90, virtualProgress + PROGRESS_INCREMENT);
+					
+					// Check if we've reached 90%
+					if (virtualProgress >= 90) {
+						hasReached90 = true;
+						virtualProgress = 90; // Ensure we stop exactly at 90%
+					}
+				}
+				// If hasReached90 is true but isUploadComplete is false, stay at 90%
+				setProgress(Math.round(virtualProgress));
+				lastProgressUpdate = now;
+			}, PROGRESS_UPDATE_INTERVAL);
+
+			// Use real upload progress
+			// Note: We don't use real progress to drive the UI, we just track it
+			// The virtual progress will reach 90% and wait for server response
 			const resultsAnalyze = await analyzeService.analyzeFile({ 
 				file, 
 				onProgress: (p) => {
-					const capped = Math.min(90, Math.round(p * 0.9));
-					setProgress(capped);
+					realProgress = p;
 					if (p >= 100) {
+						isUploadComplete = true;
 						setPhase('analyze');
+						// Once upload is complete, virtual progress will continue from 90% to 100%
 					}
 				}
 			});
 
-			// Smoothly complete to 100%
-			for (let i = Math.max(progress, 90); i <= 100; i += 2) {
-				// small delay for smoothness
-				await new Promise((r) => setTimeout(r, 40));
-				setProgress(i);
+			// Mark upload as complete - this will trigger progress to continue from 90% to 100%
+			isUploadComplete = true;
+			setPhase('analyze');
+			
+			// Wait for progress to complete from 90% to 100%
+			// Progress increases by 0.5% every 500ms, so 10% takes 10 seconds (20 updates × 500ms)
+			// Wait 10.5 seconds to ensure smooth completion to 100%
+			await new Promise((r) => setTimeout(r, 10500));
+			
+			// Ensure progress is at 100%
+			setProgress(100);
+			
+			// Stop virtual progress timer
+			if (virtualProgressTimer) {
+				window.clearInterval(virtualProgressTimer);
+				virtualProgressTimer = undefined;
 			}
 
 			const analysis = JSON.parse(JSON.stringify(resultsAnalyze.analysis));
@@ -188,11 +250,10 @@ function UploadAndAnalysisPageContent() {
 		} finally {
 			if (elapsedTimer) window.clearInterval(elapsedTimer);
 			if (tipTimer) window.clearInterval(tipTimer);
+			if (virtualProgressTimer) window.clearInterval(virtualProgressTimer);
 			setPhase('idle');
 		}
 	};
-
-
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -354,14 +415,22 @@ function UploadAndAnalysisPageContent() {
 								</div>
 
 								<div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-									{phase === 'upload' ? (
-										<div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-200 rounded-full" style={{ width: `${progress}%` }} />
-									) : (
-										<div className="relative h-full w-full">
-											<div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-600/30" />
-											<div className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" style={{ width: '92%' }} />
-										</div>
-									)}
+									<div className="relative h-full w-full">
+										{/* Background layer */}
+										<div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-600/30 rounded-full" />
+										{/* Actual progress bar - continues from current progress value */}
+										<div 
+											className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300 ease-out"
+											style={{ width: `${progress}%` }}
+										/>
+										{/* Subtle pulse effect overlay on the progress bar */}
+										{progress < 100 && (
+											<div 
+												className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full"
+												style={{ width: `${progress}%` }}
+											/>
+										)}
+									</div>
 								</div>
 								<div className="mt-4 flex items-center justify-between text-sm">
 									<div className="text-blue-400 font-medium">
@@ -545,9 +614,5 @@ function UploadAndAnalysisPageContent() {
 }
 
 export default function UploadAndAnalysisPage() {
-	return (
-		<AuthGuard>
-			<UploadAndAnalysisPageContent />
-		</AuthGuard>
-	);
+	return <UploadAndAnalysisPageContent />;
 } 

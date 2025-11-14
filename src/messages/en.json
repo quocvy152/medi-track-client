@@ -6,7 +6,8 @@
     "about": "About",
     "articles": "Articles",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "history": "Analysis History"
   },
   "home": {
     "title": "Welcome to {brand}",
@@ -208,5 +209,34 @@
       "analysisError": "Failed to analyze results. Please try again."
     },
     "description": "Upload your medical test results and get AI-powered insights in seconds. Try it for free!"
+  },
+  "history": {
+    "title": "Analysis History",
+    "subtitle": "View all your analysis results",
+    "empty": {
+      "title": "No analysis history",
+      "description": "You haven't performed any analysis yet. Upload a test file to get started!",
+      "button": "Upload Now"
+    },
+    "card": {
+      "fileName": "File name",
+      "fileSize": "File size",
+      "analyzedAt": "Analyzed at",
+      "viewDetails": "View Details",
+      "viewFile": "View File",
+      "delete": "Delete"
+    },
+    "details": {
+      "title": "Analysis Result Details",
+      "back": "Back to History",
+      "analyzedAt": "Analyzed at",
+      "fileName": "File name"
+    },
+    "toast": {
+      "deleteSuccess": "Analysis result deleted successfully!",
+      "deleteError": "Failed to delete analysis result. Please try again.",
+      "loadError": "Failed to load analysis history. Please try again.",
+      "fileNotFound": "File path not found"
+    }
   }
 } 

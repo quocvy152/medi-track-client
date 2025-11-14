@@ -55,9 +55,9 @@ export default function LoginPage() {
       const { email, password } = formData;
 
       const response = await authService.login({ email, password });
-      const { state, data } = response;
+      const { success, data } = response;
 
-      if (state) {
+      if (success) {
         localStorage.setItem("authToken", data?.accessToken || '');
         toast.success(t('loginSuccess'));
         
@@ -88,7 +88,7 @@ export default function LoginPage() {
       const url = getFacebookAuthUrl();
       window.location.href = url;
     } catch {
-      toast.error('Failed to start Google Sign-In');
+      toast.error('Failed to start Facebook Sign-In');
     }
   };
 
@@ -115,27 +115,31 @@ export default function LoginPage() {
 
     setIsLoading(true);
 
-    const { name, email, password } = formData;
+    try {
+      const { name, email, password } = formData;
 
-    const response = await authService.register({ email, password, firstName: name });
-    const { state, } = response;
+      const response = await authService.register({ email, password, firstName: name });
+      const { success } = response;
 
-    if (state) {
-      toast.success(t('signupSuccess'));
+      if (success) {
+        toast.success(t('signupSuccess'));
 
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          confirmPassword: ''
+        });
 
-      setActiveTab('signin');
-    } else {
+        setActiveTab('signin');
+      } else {
+        toast.error(t('signupError'));
+      }
+    } catch {
       toast.error(t('signupError'));
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
@@ -229,7 +233,7 @@ export default function LoginPage() {
                 <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
-                <SocialButton provider="facebook" onClick={() => {}}>
+                <SocialButton provider="facebook" onClick={handleFacebookStart}>
                   Continue with Facebook
                 </SocialButton>
               </div>

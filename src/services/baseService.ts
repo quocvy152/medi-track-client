@@ -87,12 +87,12 @@ export abstract class BaseService {
 	/**
 	 * Generic GET request
 	 */
-	protected async get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
+	protected async get<T>(endpoint: string, config?: RequestConfig): Promise<ApiResponse<T>> {
 		try {
 			const url = this.buildUrl(endpoint, config?.params);
 			const axiosConfig = this.convertConfig(config);
 			const response = await apiClient.get<ApiResponse<T>>(url, axiosConfig);
-			return response.data.data;
+			return response.data;
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -143,12 +143,11 @@ export abstract class BaseService {
 	/**
 	 * Generic DELETE request
 	 */
-	protected async delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
+	protected async delete<T>(endpoint: string, config?: RequestConfig): Promise<void> {
 		try {
 			const url = this.buildUrl(endpoint, config?.params);
 			const axiosConfig = this.convertConfig(config);
-			const response = await apiClient.delete<ApiResponse<T>>(url, axiosConfig);
-			return response.data.data;
+			await apiClient.delete<ApiResponse<T>>(url, axiosConfig);
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -161,7 +160,10 @@ export abstract class BaseService {
 		endpoint: string, 
 		params?: PaginationParams & Record<string, unknown>
 	): Promise<PaginatedResponse<T>> {
-		return this.get<PaginatedResponse<T>>(endpoint, { params });
+		const url = this.buildUrl(endpoint, params);
+		const axiosConfig = this.convertConfig();
+		const response = await apiClient.get<PaginatedResponse<T>>(url, axiosConfig);
+		return response.data;
 	}
 
 	/**

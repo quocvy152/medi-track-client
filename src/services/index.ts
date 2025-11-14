@@ -2,7 +2,6 @@
 export { api, apiClient, createApiClient } from './apiClient';
 export { authService } from './authService';
 export { BaseService } from './baseService';
-export { fetchHealth, healthService } from './healthService';
 export { uploadService } from './uploadService';
 
 // Export types
@@ -17,7 +16,3 @@ export type {
 export type {
     FileAnalysisResult, FileUploadResponse, UploadOptions, UploadProgress
 } from './uploadService';
-
-export type {
-    HealthStatus
-} from './healthService';

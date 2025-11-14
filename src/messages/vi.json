@@ -6,7 +6,8 @@
     "about": "Giới thiệu",
     "articles": "Bài viết",
     "login": "Đăng nhập",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "history": "Lịch sử phân tích"
   },
   "home": {
     "title": "Chào mừng đến với {brand}",
@@ -208,5 +209,34 @@
       "analysisError": "Không thể phân tích kết quả. Vui lòng thử lại."
     },
     "description": "Tải lên kết quả xét nghiệm y tế của bạn và nhận thông tin chi tiết từ AI chỉ trong vài giây. Dùng thử miễn phí!"
+  },
+  "history": {
+    "title": "Lịch sử kết quả phân tích",
+    "subtitle": "Xem lại tất cả các kết quả phân tích của bạn",
+    "empty": {
+      "title": "Chưa có lịch sử phân tích",
+      "description": "Bạn chưa thực hiện phân tích nào. Hãy tải lên file xét nghiệm để bắt đầu!",
+      "button": "Tải lên ngay"
+    },
+    "card": {
+      "fileName": "Tên file",
+      "fileSize": "Kích thước",
+      "analyzedAt": "Phân tích lúc",
+      "viewDetails": "Xem chi tiết",
+      "viewFile": "Xem file",
+      "delete": "Xóa"
+    },
+    "details": {
+      "title": "Chi tiết kết quả phân tích",
+      "back": "Quay lại lịch sử",
+      "analyzedAt": "Phân tích lúc",
+      "fileName": "Tên file"
+    },
+    "toast": {
+      "deleteSuccess": "Đã xóa kết quả phân tích thành công!",
+      "deleteError": "Không thể xóa kết quả phân tích. Vui lòng thử lại.",
+      "loadError": "Không thể tải lịch sử phân tích. Vui lòng thử lại.",
+      "fileNotFound": "Không tìm thấy đường dẫn file"
+    }
   }
 } 

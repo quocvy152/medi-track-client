@@ -1,10 +1,5 @@
+import type { ApiResponse } from '@/types/api';
 import { BaseService } from './baseService';
-
-type ApiResponse<T> = {
-	state: boolean;
-	data: T | null;
-	message?: string;
-  };
 
 export interface LoginCredentials {
 	email: string;
@@ -61,7 +56,7 @@ export class AuthService extends BaseService {
 		}
 		
 		return {
-			state: true,
+			success: true,
 			data: response,
 		};
 	}
@@ -82,13 +77,13 @@ export class AuthService extends BaseService {
 			}
 			
 			return {
-				state: true,
+				success: true,
 				data: response,
 			};
 		} catch (error: unknown) {
 			return {
-				state: false,
-				data: null,
+				success: false,
+				data: null as any,
 				message: error instanceof Error ? error.message : String(error),
 			};
 		}
@@ -142,7 +137,8 @@ export class AuthService extends BaseService {
 	 * Get current user profile
 	 */
 	async getProfile(): Promise<User> {
-		return this.get<User>('/profile');
+		const response = await this.get<User>('/profile');
+		return response.data;
 	}
 
 	/**
@@ -221,7 +217,7 @@ export class AuthService extends BaseService {
 		}
 
 		return {
-			state: true,
+			success: true,
 			data: response,
 		};
 	}

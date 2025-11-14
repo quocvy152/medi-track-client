@@ -21,7 +21,15 @@ export function Navigation() {
     setMounted(true);
   }, []);
 
-  const isActive = (path: string) => mounted && pathname === `/${locale}${path}`;
+  const isActive = (path: string) => {
+    if (!mounted || !pathname) return false;
+    const fullPath = `/${locale}${path}`;
+    // For history, also match sub-paths like /history/[id]
+    if (path === '/history') {
+      return pathname === fullPath || pathname.startsWith(`${fullPath}/`);
+    }
+    return pathname === fullPath;
+  };
 
   const closeDrawer = () => setDrawerOpen(false);
 
@@ -79,6 +87,18 @@ export function Navigation() {
               >
                 {t('articles')}
               </Link>
+              {isAuthenticated && (
+                <Link
+                  href={`/${locale}/history`}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    isActive('/history')
+                      ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
+                      : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
+                  }`}
+                >
+                  {t('history')}
+                </Link>
+              )}
               {!isAuthenticated ? (
                 <Link
                   href={`/${locale}/login`}
@@ -170,6 +190,20 @@ export function Navigation() {
           >
             {t('articles')}
           </Link>
+
+          {isAuthenticated && (
+            <Link 
+              href={`/${locale}/history`} 
+              onClick={closeDrawer} 
+              className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                isActive('/history') 
+                  ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
+                  : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+              }`}
+            >
+              {t('history')}
+            </Link>
+          )}
 
           {!isAuthenticated ? (
             <Link 
