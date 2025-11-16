@@ -164,11 +164,8 @@ function UploadAndAnalysisPageContent() {
 			// Virtual progress that increases slowly and smoothly from 0% to 90%
 			// Then stops at 90% until server responds
 			let virtualProgress = 0;
-			let realProgress = 0;
 			let isApiComplete = false;
 			let hasReached90 = false;
-			let apiResults: any = null;
-			let apiError: Error | null = null;
 			
 			// Start virtual progress animation
 			// Progress will increase from 0% to 90% over 10 seconds
@@ -206,7 +203,6 @@ function UploadAndAnalysisPageContent() {
 			const apiPromise = analyzeService.analyzeFile({ 
 				file, 
 				onProgress: (p) => {
-					realProgress = p;
 					if (p >= 100) {
 						setPhase('analyze');
 					}
@@ -214,7 +210,6 @@ function UploadAndAnalysisPageContent() {
 			}).then((results) => {
 				// API completed successfully
 				isApiComplete = true;
-				apiResults = results;
 				// Clear timeout if API completes first
 				if (timeoutId) {
 					clearTimeout(timeoutId);
@@ -225,7 +220,6 @@ function UploadAndAnalysisPageContent() {
 			}).catch((error) => {
 				// API failed
 				isApiComplete = true;
-				apiError = error;
 				// Clear timeout if API fails
 				if (timeoutId) {
 					clearTimeout(timeoutId);
@@ -242,9 +236,9 @@ function UploadAndAnalysisPageContent() {
 			});
 
 			// Race between API call and timeout
-			let resultsAnalyze: any;
+			let resultsAnalyze: ApiResponse<{ analysis: AnalysisResults }>;
 			try {
-				resultsAnalyze = await Promise.race([apiPromise, timeoutPromise]);
+				resultsAnalyze = await Promise.race([apiPromise, timeoutPromise]) as unknown as ApiResponse<{ analysis: AnalysisResults }>;
 			} catch (raceError) {
 				// If the race fails (timeout or API error), rethrow it
 				throw raceError;
@@ -267,13 +261,13 @@ function UploadAndAnalysisPageContent() {
 				throw new Error('No results received from server');
 			}
 
-			let result: ApiResponse<{ analysis: AnalysisResults }> = resultsAnalyze;
+			const result = resultsAnalyze;
 
 			if (!result.success) {
-				throw new Error(resultsAnalyze.message || 'Failed to analyze file');
+				throw new Error(result.message || 'Failed to analyze file');
 			}
 			
-			let analysis = result.data.analysis;
+			const analysis = result.data.analysis;
 
 			setResults({
 				summary: analysis.summary,
@@ -282,9 +276,9 @@ function UploadAndAnalysisPageContent() {
 			});
 			setStep(3);
 			toast.success(t('toast.analysisComplete'));
-		} catch (error: any) {
+		} catch (error: unknown) {
 			// Handle timeout or other errors
-			const errorMessage = error?.message?.includes('timeout') 
+			const errorMessage = (error instanceof Error && error.message?.includes('timeout'))
 				? 'Xử lý quá thời gian chờ. Vui lòng thử lại.' 
 				: t('toast.analysisError');
 			toast.error(errorMessage);
