@@ -173,7 +173,7 @@ export abstract class BaseService {
 		endpoint: string, 
 		file: File, 
 		onProgress?: (progress: number) => void
-	): Promise<T> {
+	): Promise<ApiResponse<T>> {
 		try {
 			const formData = new FormData();
 			formData.append('file', file);
@@ -196,7 +196,7 @@ export abstract class BaseService {
 				}
 			);
 
-			return response.data.data;
+			return response.data;
 		} catch (error) {
 			this.handleError(error);
 		}

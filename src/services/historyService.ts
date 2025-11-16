@@ -24,7 +24,7 @@ export interface AnalysisHistoryItem {
 			value: string | number;
 			unit: string;
 			level: 'High' | 'Normal' | 'Low';
-			explaination: string;
+			explanation: string;
 		}>;
 		recommendations: string[];
 	};

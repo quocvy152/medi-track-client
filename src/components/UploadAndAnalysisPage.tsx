@@ -3,6 +3,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { analyzeService } from "@/services/analyzeService";
+import { ApiResponse } from "@/services/apiClient";
 import { useTranslations } from "next-intl";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -22,7 +23,7 @@ type Metric = {
 
 type MetricSummary = Metric;
 
-type MetricRisks = Metric & { explaination: string; };
+type MetricRisks = Metric & { explanation: string; };
 
 type AnalysisResults = {
 	summary: MetricSummary[],
@@ -127,10 +128,12 @@ function UploadAndAnalysisPageContent() {
 		let elapsedTimer: number | undefined;
 		let tipTimer: number | undefined;
 		let virtualProgressTimer: number | undefined;
+		let timeoutId: number | undefined;
 		let lastProgressUpdate = 0;
 		const PROGRESS_UPDATE_INTERVAL = 500; // Update progress every 500ms
-		const TARGET_TIME_TO_90 = 18000; // 18 seconds to reach 90%
-		const PROGRESS_INCREMENT = 90 / (TARGET_TIME_TO_90 / PROGRESS_UPDATE_INTERVAL); // ~0.5% per 500ms
+		const TARGET_TIME_TO_90 = 10000; // 10 seconds to reach 90%
+		const PROGRESS_INCREMENT = 90 / (TARGET_TIME_TO_90 / PROGRESS_UPDATE_INTERVAL); // ~0.45% per 500ms
+		const MAX_TIMEOUT = 60000; // 60 seconds timeout
 		
 		try {
 			if (!file) return;
@@ -162,11 +165,13 @@ function UploadAndAnalysisPageContent() {
 			// Then stops at 90% until server responds
 			let virtualProgress = 0;
 			let realProgress = 0;
-			let isUploadComplete = false;
+			let isApiComplete = false;
 			let hasReached90 = false;
+			let apiResults: any = null;
+			let apiError: Error | null = null;
 			
 			// Start virtual progress animation
-			// Progress will increase from 0% to 90% over ~18 seconds
+			// Progress will increase from 0% to 90% over 10 seconds
 			// Then stop at 90% until server processing is complete
 			virtualProgressTimer = window.setInterval(() => {
 				const now = Date.now();
@@ -174,16 +179,16 @@ function UploadAndAnalysisPageContent() {
 				// Only update if enough time has passed
 				if (now - lastProgressUpdate < PROGRESS_UPDATE_INTERVAL) return;
 				
-				// If upload is complete and we've reached 90%, continue to 100%
-				if (isUploadComplete && hasReached90) {
-					// After server responds, smoothly complete from 90% to 100%
-					// Increase by smaller increments to make it smooth: ~0.5% per 500ms
-					if (virtualProgress < 100) {
-						virtualProgress = Math.min(100, virtualProgress + 0.5);
-					}
-				} else if (!hasReached90) {
-					// Gradually increase from 0% to 90% over ~18 seconds
-					// Each update increases by PROGRESS_INCREMENT
+				// If API is complete, immediately jump to 100%
+				if (isApiComplete) {
+					virtualProgress = 100;
+					setProgress(100);
+					lastProgressUpdate = now;
+					return;
+				}
+				
+				// Gradually increase from 0% to 90% over 10 seconds
+				if (!hasReached90) {
 					virtualProgress = Math.min(90, virtualProgress + PROGRESS_INCREMENT);
 					
 					// Check if we've reached 90%
@@ -192,37 +197,58 @@ function UploadAndAnalysisPageContent() {
 						virtualProgress = 90; // Ensure we stop exactly at 90%
 					}
 				}
-				// If hasReached90 is true but isUploadComplete is false, stay at 90%
+				// If hasReached90 is true but isApiComplete is false, stay at 90%
 				setProgress(Math.round(virtualProgress));
 				lastProgressUpdate = now;
 			}, PROGRESS_UPDATE_INTERVAL);
 
-			// Use real upload progress
-			// Note: We don't use real progress to drive the UI, we just track it
-			// The virtual progress will reach 90% and wait for server response
-			const resultsAnalyze = await analyzeService.analyzeFile({ 
+			// Start API call and timeout race
+			const apiPromise = analyzeService.analyzeFile({ 
 				file, 
 				onProgress: (p) => {
 					realProgress = p;
 					if (p >= 100) {
-						isUploadComplete = true;
 						setPhase('analyze');
-						// Once upload is complete, virtual progress will continue from 90% to 100%
 					}
 				}
+			}).then((results) => {
+				// API completed successfully
+				isApiComplete = true;
+				apiResults = results;
+				// Clear timeout if API completes first
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
+				// Immediately jump progress to 100%
+				setProgress(100);
+				return results;
+			}).catch((error) => {
+				// API failed
+				isApiComplete = true;
+				apiError = error;
+				// Clear timeout if API fails
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
+				throw error;
 			});
 
-			// Mark upload as complete - this will trigger progress to continue from 90% to 100%
-			isUploadComplete = true;
-			setPhase('analyze');
-			
-			// Wait for progress to complete from 90% to 100%
-			// Progress increases by 0.5% every 500ms, so 10% takes 10 seconds (20 updates × 500ms)
-			// Wait 10.5 seconds to ensure smooth completion to 100%
-			await new Promise((r) => setTimeout(r, 10500));
-			
-			// Ensure progress is at 100%
-			setProgress(100);
+			const timeoutPromise = new Promise<never>((_, reject) => {
+				timeoutId = window.setTimeout(() => {
+					if (!isApiComplete) {
+						reject(new Error('API processing timeout after 60 seconds'));
+					}
+				}, MAX_TIMEOUT);
+			});
+
+			// Race between API call and timeout
+			let resultsAnalyze: any;
+			try {
+				resultsAnalyze = await Promise.race([apiPromise, timeoutPromise]);
+			} catch (raceError) {
+				// If the race fails (timeout or API error), rethrow it
+				throw raceError;
+			}
 			
 			// Stop virtual progress timer
 			if (virtualProgressTimer) {
@@ -230,7 +256,24 @@ function UploadAndAnalysisPageContent() {
 				virtualProgressTimer = undefined;
 			}
 
-			const analysis = JSON.parse(JSON.stringify(resultsAnalyze.analysis));
+			// Ensure progress is at 100%
+			setProgress(100);
+			
+			// Small delay to show 100% before displaying results
+			await new Promise((r) => setTimeout(r, 300));
+
+			// Validate that we have results
+			if (!resultsAnalyze) {
+				throw new Error('No results received from server');
+			}
+
+			let result: ApiResponse<{ analysis: AnalysisResults }> = resultsAnalyze;
+
+			if (!result.success) {
+				throw new Error(resultsAnalyze.message || 'Failed to analyze file');
+			}
+			
+			let analysis = result.data.analysis;
 
 			setResults({
 				summary: analysis.summary,
@@ -239,8 +282,12 @@ function UploadAndAnalysisPageContent() {
 			});
 			setStep(3);
 			toast.success(t('toast.analysisComplete'));
-		} catch {
-			toast.error(t('toast.analysisError'));
+		} catch (error: any) {
+			// Handle timeout or other errors
+			const errorMessage = error?.message?.includes('timeout') 
+				? 'Xử lý quá thời gian chờ. Vui lòng thử lại.' 
+				: t('toast.analysisError');
+			toast.error(errorMessage);
 			// Reset processing UI state on error
 			setPhase('idle');
 			setProgress(0);
@@ -251,6 +298,7 @@ function UploadAndAnalysisPageContent() {
 			if (elapsedTimer) window.clearInterval(elapsedTimer);
 			if (tipTimer) window.clearInterval(tipTimer);
 			if (virtualProgressTimer) window.clearInterval(virtualProgressTimer);
+			if (timeoutId) window.clearTimeout(timeoutId);
 			setPhase('idle');
 		}
 	};
@@ -269,29 +317,32 @@ function UploadAndAnalysisPageContent() {
 
 			<div className="mx-auto w-full max-w-7xl px-4 pb-16">
 				{/* Progress Steps */}
-				<div className="flex items-center justify-center gap-6 mb-12">
+				<div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mb-8 md:mb-12 px-2">
 					{[
 						{ id: 1, label: t('step.upload'), icon: "🗂" },
 						{ id: 2, label: t('step.processing'), icon: "⚡" },
 						{ id: 3, label: t('step.results'), icon: "📊" },
 					].map((s) => (
-						<div key={s.id} className="flex items-center">
-							<div className={`h-16 w-16 rounded-full flex items-center justify-center text-2xl transition-all duration-300 ${
-								s.id === step 
-									? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 scale-110" 
-									: s.id < step 
-										? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
-										: "bg-gray-700 text-gray-400 border border-gray-600"
-							}`}>
-								{step > s.id ? "✓" : s.icon}
-							</div>
-							<div className={`ml-4 text-sm font-medium ${
-								s.id === step ? "text-white" : s.id < step ? "text-green-400" : "text-gray-400"
-							}`}>
-								{s.label}
+						<div key={s.id} className="flex items-center flex-shrink-0">
+							<div className="flex flex-col items-center">
+								<div className={`h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl transition-all duration-300 ${
+									s.id === step 
+										? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 md:scale-110" 
+										: s.id < step 
+											? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
+											: "bg-gray-700 text-gray-400 border border-gray-600"
+								}`}>
+									{step > s.id ? "✓" : s.icon}
+								</div>
+								<div className={`mt-1 md:mt-2 text-[10px] sm:text-xs md:text-sm font-medium text-center whitespace-nowrap ${
+									s.id === step ? "text-white" : s.id < step ? "text-green-400" : "text-gray-400"
+								}`}>
+									<span className="hidden sm:inline">{s.label}</span>
+									<span className="sm:hidden">{s.label.split(' ')[0]}</span>
+								</div>
 							</div>
 							{s.id < 3 && (
-								<div className={`w-12 h-px mx-4 ${
+								<div className={`w-4 sm:w-6 md:w-12 h-px mx-1 sm:mx-2 md:mx-4 ${
 									s.id < step ? "bg-gradient-to-r from-green-500 to-emerald-600" : "bg-gray-600"
 								}`} />
 							)}
@@ -521,7 +572,7 @@ function UploadAndAnalysisPageContent() {
 																</div>
 															</div>
 															<p className="text-gray-300 text-lg leading-relaxed">
-																{risk.explaination}
+																{risk.explanation}
 															</p>
 														</div>
 													</div>

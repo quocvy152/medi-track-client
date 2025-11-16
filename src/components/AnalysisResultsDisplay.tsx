@@ -2,7 +2,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React from "react";
 import Button from "./ui/Button";
 
 type LevelMetric = 'High' | 'Normal' | 'Low';
@@ -11,12 +10,13 @@ type Metric = {
 	name: string;
 	value: string | number;
 	unit: string;
+	range?: string; // Optional because API may not always return this field
 	level: LevelMetric;
 };
 
 type MetricSummary = Metric;
 
-type MetricRisks = Metric & { explaination: string; };
+type MetricRisks = Metric & { explanation: string; };
 
 type AnalysisResults = {
 	summary: MetricSummary[],
@@ -37,6 +37,9 @@ export default function AnalysisResultsDisplay({
 }: AnalysisResultsDisplayProps) {
 	const t = useTranslations('upload');
 
+	// Parse only if results is a string, otherwise use directly
+	const resultsConverted: AnalysisResults = JSON.parse(results as unknown as string);
+
 	return (
 		<div className="space-y-8">
 			{/* Part 1: Test Results Summary */}
@@ -52,7 +55,7 @@ export default function AnalysisResultsDisplay({
 				</div>
 				
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-					{results.summary.map((itSummary, idx) => (
+					{resultsConverted.summary.map((itSummary, idx) => (
 						<div key={idx} className={`p-5 rounded-2xl border-2 transition-all duration-300 ${
 							itSummary.level === 'Normal' 
 								? 'bg-green-900/20 border-green-500/30 hover:bg-green-900/30' 
@@ -90,7 +93,7 @@ export default function AnalysisResultsDisplay({
 				</div>
 				
 				<div className="space-y-6">
-					{results.risks
+					{resultsConverted.risks
 						.filter(risk => risk.level !== 'Normal')
 						.map((risk, idx) => (
 							<div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
@@ -110,7 +113,7 @@ export default function AnalysisResultsDisplay({
 											</div>
 										</div>
 										<p className="text-gray-300 text-lg leading-relaxed">
-											{risk.explaination}
+											{risk.explanation}
 										</p>
 									</div>
 								</div>
@@ -133,8 +136,8 @@ export default function AnalysisResultsDisplay({
 				</div>
 				
 				<div className="space-y-6">
-					{results.recommendations && results.recommendations.length > 0 ? (
-						results.recommendations.map((recommend, idx) => (
+					{resultsConverted.recommendations.length > 0 ? (
+						resultsConverted.recommendations.map((recommend, idx) => (
 							<div key={idx} className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
 								<div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
 									{idx + 1}

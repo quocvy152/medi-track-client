@@ -1,3 +1,4 @@
+import { ApiResponse } from './apiClient';
 import { BaseService } from './baseService';
 
 export interface AnalysisMetric {
@@ -48,7 +49,7 @@ export class AnalyzeService extends BaseService {
 		super('/ai/analyze');
 	}
 
-	async analyzeFile(request: AnalysisRequest): Promise<AnalysisResponse> {
+	async analyzeFile(request: AnalysisRequest): Promise<ApiResponse<AnalysisResponse>> {
 		const { file } = request;
 		return this.uploadFile<AnalysisResponse>('', file, request.onProgress);
 	}

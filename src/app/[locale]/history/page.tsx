@@ -69,7 +69,6 @@ export default function HistoryPage() {
 	};
 
 	const handleDelete = async (id: string, e: React.MouseEvent) => {
-		console.log("🚀 ~ handleDelete ~ id:", id)
 		e.stopPropagation();
 		if (!confirm('Bạn có chắc chắn muốn xóa kết quả phân tích này?')) {
 			return;
@@ -191,23 +190,27 @@ export default function HistoryPage() {
 								</div>
 
 								{/* Action Buttons */}
-								<div className="flex flex-col gap-3">
+								<div className="flex items-center gap-2 flex-wrap">
 									{item.file?.path && (
 										<Button
 											onClick={(e) => handleViewFile(item, e)}
-											className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+											className="flex-1 min-w-[120px] bg-gray-700/50 hover:bg-gray-700 border border-gray-600/50 hover:border-cyan-500/50 text-gray-300 hover:text-cyan-300 font-medium py-2 px-3 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 text-sm"
 										>
-											<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
 											</svg>
-											{t('card.viewFile')}
+											<span className="hidden sm:inline">{t('card.viewFile')}</span>
+											<span className="sm:hidden">File</span>
 										</Button>
 									)}
 									<Button
 										onClick={() => handleViewDetails(item)}
-										className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+										className="flex-1 min-w-[140px] bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-lg hover:shadow-blue-500/25 transition-all duration-300 flex items-center justify-center gap-2"
 									>
+										<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+										</svg>
 										{t('card.viewDetails')}
 									</Button>
 								</div>
