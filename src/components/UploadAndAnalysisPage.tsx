@@ -153,6 +153,34 @@ function UploadAndAnalysisPageContent() {
 			// Small delay to ensure UI is ready before starting progress animation
 			await new Promise((r) => setTimeout(r, 1000));
 
+			// Start API call and timeout race
+			const apiPromise = analyzeService.analyzeFile({ 
+				file, 
+				onProgress: (p) => {
+					if (p >= 100) {
+						setPhase('analyze');
+					}
+				}
+			}).then((results) => {
+				// API completed successfully
+				isApiComplete = true;
+				// Clear timeout if API completes first
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
+				// Immediately jump progress to 100%
+				setProgress(100);
+				return results;
+			}).catch((error) => {
+				// API failed
+				isApiComplete = true;
+				// Clear timeout if API fails
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
+				throw error;
+			});
+
 			// Timers: elapsed and rotating tips
 			elapsedTimer = window.setInterval(() => {
 				setElapsedSeconds((s) => s + 1);
@@ -198,34 +226,6 @@ function UploadAndAnalysisPageContent() {
 				setProgress(Math.round(virtualProgress));
 				lastProgressUpdate = now;
 			}, PROGRESS_UPDATE_INTERVAL);
-
-			// Start API call and timeout race
-			const apiPromise = analyzeService.analyzeFile({ 
-				file, 
-				onProgress: (p) => {
-					if (p >= 100) {
-						setPhase('analyze');
-					}
-				}
-			}).then((results) => {
-				// API completed successfully
-				isApiComplete = true;
-				// Clear timeout if API completes first
-				if (timeoutId) {
-					clearTimeout(timeoutId);
-				}
-				// Immediately jump progress to 100%
-				setProgress(100);
-				return results;
-			}).catch((error) => {
-				// API failed
-				isApiComplete = true;
-				// Clear timeout if API fails
-				if (timeoutId) {
-					clearTimeout(timeoutId);
-				}
-				throw error;
-			});
 
 			const timeoutPromise = new Promise<never>((_, reject) => {
 				timeoutId = window.setTimeout(() => {
@@ -280,7 +280,7 @@ function UploadAndAnalysisPageContent() {
 			// Handle timeout or other errors
 			const errorMessage = (error instanceof Error && error.message?.includes('timeout'))
 				? 'Xử lý quá thời gian chờ. Vui lòng thử lại.' 
-				: t('toast.analysisError');
+				: (error as Error)?.message || t('toast.analysisError');
 			toast.error(errorMessage);
 			// Reset processing UI state on error
 			setPhase('idle');
@@ -297,8 +297,51 @@ function UploadAndAnalysisPageContent() {
 		}
 	};
 
+	// Medical icons for background decoration with animations
+	const medicalIcons = useMemo(() => [
+		{ icon: '🏥', position: { top: '5%', left: '3%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float', delay: 0 },
+		{ icon: '❤️', position: { top: '12%', right: '8%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float-reverse', delay: 0.3 },
+		{ icon: '🩺', position: { top: '25%', left: '10%' }, size: 'text-3xl sm:text-4xl md:text-5xl', showOnMobile: false, animation: 'gentle-rotate', delay: 0.6 },
+		{ icon: '🧬', position: { top: '45%', left: '2%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float-reverse', delay: 1.2 },
+		{ icon: '🔬', position: { top: '55%', right: '12%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'gentle-rotate', delay: 1.5 },
+		{ icon: '🫀', position: { top: '75%', right: '4%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float-reverse', delay: 2.1 },
+		{ icon: '🧪', position: { top: '50%', right: '2%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'gentle-rotate', delay: 2.7 },
+		{ icon: '🦠', position: { top: '70%', left: '12%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float-reverse', delay: 3.0 },
+		{ icon: '🩹', position: { top: '30%', right: '15%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 3.3 },
+		{ icon: '⚗️', position: { top: '40%', left: '18%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 4.2 },
+		// { icon: '💊', position: { top: '60%', left: '5%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'gentle-rotate', delay: 3.6 },
+		// { icon: '⚕️', position: { top: '35%', right: '5%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'float', delay: 0.9 },
+		// { icon: '💉', position: { top: '65%', left: '8%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 1.8 },
+		// { icon: '🫁', position: { top: '20%', left: '15%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float', delay: 2.4 },
+		// { icon: '📋', position: { top: '80%', right: '8%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float-reverse', delay: 3.9 },
+	], []);
+
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
+			{/* Background Medical Icons */}
+			<div className="fixed inset-0 pointer-events-none z-0">
+				{medicalIcons.map((item, idx) => (
+					<div
+						key={idx}
+						className={`absolute opacity-0 hover:opacity-35 transition-opacity duration-500 ${
+							item.showOnMobile ? 'block' : 'hidden md:block'
+						}`}
+						style={{
+							top: item.position.top,
+							left: item.position.left,
+							right: item.position.right,
+							animation: `fade-in-float 1s ease-out ${item.delay}s forwards, ${item.animation === 'float' ? 'float' : item.animation === 'float-reverse' ? 'float-reverse' : 'gentle-rotate'} ${item.animation === 'gentle-rotate' ? '8s' : item.animation === 'float-reverse' ? '7s' : '6s'} ease-in-out ${1 + item.delay}s infinite`,
+						}}
+					>
+						<div className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg border-2 border-white/50 hover:scale-110 transition-transform duration-300 flex items-center justify-center aspect-square w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
+							<span className={`${item.size} block leading-none`}>{item.icon}</span>
+						</div>
+					</div>
+				))}
+			</div>
+
+			{/* Main Content - relative z-index to appear above background icons */}
+			<div className="relative z-10">
 			{/* Header Section */}
 			<div className="text-center pt-16 pb-12 px-4">
 				<h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
@@ -654,6 +697,7 @@ function UploadAndAnalysisPageContent() {
 				onClose={() => setShowLoginModal(false)}
 				onLoginSuccess={handleLoginSuccess}
 			/>
+			</div>
 		</div>
 	);
 }
