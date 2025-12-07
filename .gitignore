@@ -53,3 +53,6 @@ next-env.d.ts
 
 # MacOS
 .DS_Store
+
+.cursor
+.shared

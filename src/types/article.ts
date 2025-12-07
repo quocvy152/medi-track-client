@@ -53,6 +53,7 @@ export interface ArticleCardProps {
   article: Article;
   featured?: boolean;
   className?: string;
+  locale?: string;
 }
 
 export interface ArticleListProps {
@@ -61,6 +62,7 @@ export interface ArticleListProps {
   onLoadMore?: () => void;
   hasMore?: boolean;
   className?: string;
+  locale?: string;
 }
 
 export interface ArticleSearchProps {

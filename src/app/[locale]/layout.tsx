@@ -50,6 +50,8 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages} locale={locale}>
       <div className="min-h-screen flex flex-col">
         <Navigation />
+        {/* Spacer for fixed floating header */}
+        <div className="h-20 md:h-24 lg:h-28" />
         <main className="flex-1">{children}</main>
         <Footer />
         <Toaster

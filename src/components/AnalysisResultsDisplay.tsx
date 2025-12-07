@@ -1,7 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useTranslations } from "next-intl";
 import Button from "./ui/Button";
 
 type LevelMetric = 'High' | 'Normal' | 'Low';
@@ -35,8 +33,6 @@ export default function AnalysisResultsDisplay({
 	onBack,
 	showBackButton = false 
 }: AnalysisResultsDisplayProps) {
-	const t = useTranslations('upload');
-
 	// Parse only if results is a string, otherwise use directly
 	const resultsConverted: AnalysisResults = JSON.parse(results as unknown as string);
 

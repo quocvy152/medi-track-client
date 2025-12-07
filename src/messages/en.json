@@ -88,7 +88,19 @@
     "googleSignInSuccess": "Sign in with Google successful!"
   },
   "footer": {
+    "description": "Track and understand your medical test results with AI-powered insights. Your health data, simplified.",
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "about": "About",
+    "articles": "Articles",
+    "upload": "Upload & Analysis",
+    "resources": "Resources",
     "terms": "Terms & Policy",
+    "privacy": "Privacy Policy",
+    "support": "Support",
+    "contact": "Contact",
+    "supportHours": "24/7 Support Available",
+    "madeWith": "Made with care for your health",
     "copyright": "© {year} MediTrack. All rights reserved."
   },
   "lang": {
@@ -230,7 +242,20 @@
       "title": "Analysis Result Details",
       "back": "Back to History",
       "analyzedAt": "Analyzed at",
-      "fileName": "File name"
+      "fileName": "File name",
+      "notFound": {
+        "title": "Analysis Result Not Found",
+        "description": "The analysis result you're looking for doesn't exist or has been removed."
+      },
+      "breadcrumbs": {
+        "home": "Home",
+        "history": "History"
+      },
+      "metadata": {
+        "fileInfo": "File Information",
+        "analysisDate": "Analysis Date",
+        "fileSize": "File Size"
+      }
     },
     "toast": {
       "deleteSuccess": "Analysis result deleted successfully!",

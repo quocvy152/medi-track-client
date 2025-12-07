@@ -4,6 +4,24 @@
 import { useAuth } from "@/hooks/useAuth";
 import { analyzeService } from "@/services/analyzeService";
 import { ApiResponse } from "@/services/apiClient";
+import {
+	BeakerIcon,
+	BoltIcon,
+	CameraIcon,
+	ChartBarIcon,
+	CheckCircleIcon,
+	ClipboardDocumentIcon,
+	ClockIcon,
+	DocumentArrowUpIcon,
+	DocumentTextIcon,
+	ExclamationTriangleIcon,
+	LightBulbIcon,
+} from "@heroicons/react/24/outline";
+import {
+	BoltIcon as BoltIconSolid,
+	ChartBarIcon as ChartBarIconSolid,
+	DocumentArrowUpIcon as DocumentArrowUpIconSolid
+} from "@heroicons/react/24/solid";
 import { useTranslations } from "next-intl";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -297,50 +315,17 @@ function UploadAndAnalysisPageContent() {
 		}
 	};
 
-	// Medical icons for background decoration with animations
-	const medicalIcons = useMemo(() => [
-		{ icon: '🏥', position: { top: '5%', left: '3%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float', delay: 0 },
-		{ icon: '❤️', position: { top: '12%', right: '8%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float-reverse', delay: 0.3 },
-		{ icon: '🩺', position: { top: '25%', left: '10%' }, size: 'text-3xl sm:text-4xl md:text-5xl', showOnMobile: false, animation: 'gentle-rotate', delay: 0.6 },
-		{ icon: '🧬', position: { top: '45%', left: '2%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float-reverse', delay: 1.2 },
-		{ icon: '🔬', position: { top: '55%', right: '12%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'gentle-rotate', delay: 1.5 },
-		{ icon: '🫀', position: { top: '75%', right: '4%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float-reverse', delay: 2.1 },
-		{ icon: '🧪', position: { top: '50%', right: '2%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'gentle-rotate', delay: 2.7 },
-		{ icon: '🦠', position: { top: '70%', left: '12%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float-reverse', delay: 3.0 },
-		{ icon: '🩹', position: { top: '30%', right: '15%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 3.3 },
-		{ icon: '⚗️', position: { top: '40%', left: '18%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 4.2 },
-		// { icon: '💊', position: { top: '60%', left: '5%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'gentle-rotate', delay: 3.6 },
-		// { icon: '⚕️', position: { top: '35%', right: '5%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: true, animation: 'float', delay: 0.9 },
-		// { icon: '💉', position: { top: '65%', left: '8%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: true, animation: 'float', delay: 1.8 },
-		// { icon: '🫁', position: { top: '20%', left: '15%' }, size: 'text-xl sm:text-2xl md:text-3xl', showOnMobile: false, animation: 'float', delay: 2.4 },
-		// { icon: '📋', position: { top: '80%', right: '8%' }, size: 'text-2xl sm:text-3xl md:text-4xl', showOnMobile: false, animation: 'float-reverse', delay: 3.9 },
-	], []);
+	// Medical icons for background decoration - removed for cleaner professional look
+	// Background will use subtle gradient patterns instead
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden">
-			{/* Background Medical Icons */}
-			<div className="fixed inset-0 pointer-events-none z-0">
-				{medicalIcons.map((item, idx) => (
-					<div
-						key={idx}
-						className={`absolute opacity-0 hover:opacity-35 transition-opacity duration-500 ${
-							item.showOnMobile ? 'block' : 'hidden md:block'
-						}`}
-						style={{
-							top: item.position.top,
-							left: item.position.left,
-							right: item.position.right,
-							animation: `fade-in-float 1s ease-out ${item.delay}s forwards, ${item.animation === 'float' ? 'float' : item.animation === 'float-reverse' ? 'float-reverse' : 'gentle-rotate'} ${item.animation === 'gentle-rotate' ? '8s' : item.animation === 'float-reverse' ? '7s' : '6s'} ease-in-out ${1 + item.delay}s infinite`,
-						}}
-					>
-						<div className="bg-white/90 backdrop-blur-sm rounded-full shadow-lg border-2 border-white/50 hover:scale-110 transition-transform duration-300 flex items-center justify-center aspect-square w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16">
-							<span className={`${item.size} block leading-none`}>{item.icon}</span>
-						</div>
-					</div>
-				))}
+		<div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 relative overflow-hidden">
+			{/* Subtle background pattern */}
+			<div className="fixed inset-0 pointer-events-none z-0 opacity-5">
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(8,145,178,0.1),transparent_50%)]" />
 			</div>
 
-			{/* Main Content - relative z-index to appear above background icons */}
+			{/* Main Content */}
 			<div className="relative z-10">
 			{/* Header Section */}
 			<div className="text-center pt-16 pb-12 px-4">
@@ -356,35 +341,38 @@ function UploadAndAnalysisPageContent() {
 				{/* Progress Steps */}
 				<div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mb-8 md:mb-12 px-2">
 					{[
-						{ id: 1, label: t('step.upload'), icon: "🗂" },
-						{ id: 2, label: t('step.processing'), icon: "⚡" },
-						{ id: 3, label: t('step.results'), icon: "📊" },
-					].map((s) => (
-						<div key={s.id} className="flex items-center flex-shrink-0">
-							<div className="flex flex-col items-center">
-								<div className={`h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 rounded-full flex items-center justify-center text-lg sm:text-xl md:text-2xl transition-all duration-300 ${
-									s.id === step 
-										? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 md:scale-110" 
-										: s.id < step 
-											? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/25" 
-											: "bg-gray-700 text-gray-400 border border-gray-600"
-								}`}>
-									{step > s.id ? "✓" : s.icon}
+						{ id: 1, label: t('step.upload'), icon: DocumentArrowUpIcon, iconSolid: DocumentArrowUpIconSolid },
+						{ id: 2, label: t('step.processing'), icon: BoltIcon, iconSolid: BoltIconSolid },
+						{ id: 3, label: t('step.results'), icon: ChartBarIcon, iconSolid: ChartBarIconSolid },
+					].map((s) => {
+						const IconComponent = step > s.id ? CheckCircleIcon : s.id === step ? s.iconSolid : s.icon;
+						return (
+							<div key={s.id} className="flex items-center flex-shrink-0">
+								<div className="flex flex-col items-center">
+									<div className={`h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
+										s.id === step 
+											? "bg-gradient-to-r from-cyan-500 to-teal-600 text-white shadow-lg shadow-cyan-500/25 md:scale-110" 
+											: s.id < step 
+												? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25" 
+												: "bg-slate-700/50 text-slate-400 border border-slate-600"
+									}`}>
+										<IconComponent className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" aria-hidden="true" />
+									</div>
+									<div className={`mt-1 md:mt-2 text-[10px] sm:text-xs md:text-sm font-medium text-center whitespace-nowrap ${
+										s.id === step ? "text-white" : s.id < step ? "text-emerald-400" : "text-slate-400"
+									}`}>
+										<span className="hidden sm:inline">{s.label}</span>
+										<span className="sm:hidden">{s.label.split(' ')[0]}</span>
+									</div>
 								</div>
-								<div className={`mt-1 md:mt-2 text-[10px] sm:text-xs md:text-sm font-medium text-center whitespace-nowrap ${
-									s.id === step ? "text-white" : s.id < step ? "text-green-400" : "text-gray-400"
-								}`}>
-									<span className="hidden sm:inline">{s.label}</span>
-									<span className="sm:hidden">{s.label.split(' ')[0]}</span>
-								</div>
+								{s.id < 3 && (
+									<div className={`w-4 sm:w-6 md:w-12 h-px mx-1 sm:mx-2 md:mx-4 transition-colors duration-300 ${
+										s.id < step ? "bg-gradient-to-r from-emerald-500 to-teal-600" : "bg-slate-600"
+									}`} />
+								)}
 							</div>
-							{s.id < 3 && (
-								<div className={`w-4 sm:w-6 md:w-12 h-px mx-1 sm:mx-2 md:mx-4 ${
-									s.id < step ? "bg-gradient-to-r from-green-500 to-emerald-600" : "bg-gray-600"
-								}`} />
-							)}
-						</div>
-					))}
+						);
+					})}
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -393,24 +381,39 @@ function UploadAndAnalysisPageContent() {
 						<div
 							onDragOver={(e) => e.preventDefault()}
 							onDrop={onDrop}
-							className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8 text-center shadow-2xl hover:shadow-blue-500/10 transition-all duration-300"
+							className="bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 text-center shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300 cursor-pointer"
+							role="button"
+							tabIndex={0}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter' || e.key === ' ') {
+									e.preventDefault();
+									inputRef.current?.click();
+								}
+							}}
+							aria-label={t('dropHere')}
 						>
-							<div className="text-3xl mb-4">📋</div>
+							<div className="flex justify-center mb-4">
+								<ClipboardDocumentIcon className="w-12 h-12 text-cyan-400" aria-hidden="true" />
+							</div>
 							<div className="text-white text-xl font-semibold mb-2">{t('dropHere')}</div>
-							<div className="text-gray-400 mb-6">{t('hintTypes', { max: MAX_SIZE_MB })}</div>
+							<div className="text-slate-400 mb-6">{t('hintTypes', { max: MAX_SIZE_MB })}</div>
 							
 							<div className="space-y-4 mb-6">
 								<Button 
 									onClick={() => inputRef.current?.click()}
-									className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
+									className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+									aria-label={t('btn.upload')}
 								>
+									<DocumentArrowUpIcon className="w-5 h-5" aria-hidden="true" />
 									{t('btn.upload')}
 								</Button>
 								<Button 
 									variant="secondary" 
 									onClick={() => cameraRef.current?.click()}
-									className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+									className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-xl border border-slate-600 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+									aria-label={t('btn.capture')}
 								>
+									<CameraIcon className="w-5 h-5" aria-hidden="true" />
 									{t('btn.capture')}
 								</Button>
 							</div>
@@ -432,36 +435,39 @@ function UploadAndAnalysisPageContent() {
 							/>
 
 							{file && (
-								<div className="mt-6 p-4 bg-gray-700/50 rounded-xl border border-gray-600/50">
+								<div className="mt-6 p-4 bg-slate-700/50 rounded-xl border border-slate-600/50">
 									<div className="flex items-center justify-between mb-3">
 										<div className="text-white font-medium truncate max-w-[70%]">{file.name}</div>
-										<div className="text-gray-400 text-sm">{formatBytes(file.size)}</div>
+										<div className="text-slate-400 text-sm">{formatBytes(file.size)}</div>
 									</div>
 									{isImage && previewUrl ? (
-										<div className="mb-4 overflow-hidden rounded-lg border border-gray-600/50">
-											<img src={previewUrl} alt="Preview" className="w-full h-48 object-cover" />
+										<div className="mb-4 overflow-hidden rounded-lg border border-slate-600/50">
+											<img src={previewUrl} alt={`Preview of ${file.name}`} className="w-full h-48 object-cover" />
 										</div>
 									) : (
-										<div className="mb-4 text-sm text-gray-400">{t('errors.previewUnavailable')}</div>
+										<div className="mb-4 text-sm text-slate-400">{t('errors.previewUnavailable')}</div>
 									)}
 									<div className="space-y-3">
 										<Button 
 											onClick={startProcessing} 
 											disabled={!file}
-											className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-green-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+											className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+											aria-label={t('btn.analyze')}
 										>
+											<BeakerIcon className="w-5 h-5" aria-hidden="true" />
 											{isAuthenticated ? t('btn.analyze') : t('btn.analyze')}
 										</Button>
 										<Button 
 											variant="secondary" 
 											onClick={resetAll}
-											className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl border border-gray-600 transition-all duration-300"
+											className="w-full bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-xl border border-slate-600 transition-all duration-300 cursor-pointer"
+											aria-label={t('btn.uploadNew')}
 										>
 											{t('btn.uploadNew')}
 										</Button>
 									</div>
 									{!isAuthenticated && (
-										<div className="mt-3 text-sm text-blue-400 bg-blue-900/20 rounded-lg p-2">
+										<div className="mt-3 text-sm text-cyan-400 bg-cyan-900/20 rounded-lg p-2" role="alert">
 											{t('loginRequired')}
 										</div>
 									)}
@@ -469,7 +475,9 @@ function UploadAndAnalysisPageContent() {
 							)}
 
 							{error && (
-								<div className="mt-4 text-sm text-red-400 bg-red-900/20 rounded-lg p-3">{error}</div>
+								<div className="mt-4 text-sm text-red-400 bg-red-900/20 rounded-lg p-3" role="alert" aria-live="polite">
+									{error}
+								</div>
 							)}
 						</div>
 					</div>
@@ -477,61 +485,69 @@ function UploadAndAnalysisPageContent() {
 					{/* Main Content Area */}
 					<div className="lg:col-span-2">
 						{step === 1 && (
-							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-12 shadow-2xl text-center">
-								<div className="text-6xl mb-6">🔬</div>
+							<div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-12 shadow-2xl text-center">
+								<div className="flex justify-center mb-6">
+									<BeakerIcon className="w-16 h-16 text-cyan-400" aria-hidden="true" />
+								</div>
 								<div className="text-white text-2xl font-semibold mb-4">Sẵn sàng phân tích kết quả của bạn?</div>
-								<div className="text-gray-400 text-lg">Tải lên tệp xét nghiệm y tế của bạn để bắt đầu</div>
+								<div className="text-slate-400 text-lg">Tải lên tệp xét nghiệm y tế của bạn để bắt đầu</div>
 							</div>
 						)}
 
 						{step === 2 && (
-							<div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 p-8 shadow-2xl">
+							<div className="bg-slate-800/60 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
 								<div className="flex items-start justify-between gap-4 mb-6">
 									<div className="flex items-center gap-4">
-										<div className="text-4xl">⚡</div>
+										<BoltIcon className="w-10 h-10 text-cyan-400 flex-shrink-0" aria-hidden="true" />
 										<div>
 											<div className="text-white text-xl font-semibold">{t('processing.title')}</div>
-											<div className="text-gray-400">{t('processing.subtitle')}</div>
+											<div className="text-slate-400">{t('processing.subtitle')}</div>
 										</div>
 									</div>
 									<div className="flex items-center gap-2">
-										<span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 ring-1 ring-blue-400/30 text-blue-200 font-semibold text-xs md:text-sm tracking-wide">
-											<span className="text-lg">⏱</span>
+										<span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/15 to-teal-500/15 ring-1 ring-cyan-400/30 text-cyan-200 font-semibold text-xs md:text-sm tracking-wide">
+											<ClockIcon className="w-4 h-4" aria-hidden="true" />
 											<span className="font-mono tabular-nums">{t('processing.elapsed', { s: elapsedSeconds })}</span>
 										</span>
 									</div>
 								</div>
 
-								<div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+								<div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
 									<div className="relative h-full w-full">
 										{/* Background layer */}
-										<div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-600/30 rounded-full" />
+										<div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-teal-600/30 rounded-full" />
 										{/* Actual progress bar - continues from current progress value */}
 										<div 
-											className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300 ease-out"
+											className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-teal-600 rounded-full transition-all duration-300 ease-out"
 											style={{ width: `${progress}%` }}
+											role="progressbar"
+											aria-valuenow={progress}
+											aria-valuemin={0}
+											aria-valuemax={100}
+											aria-label="Processing progress"
 										/>
 										{/* Subtle pulse effect overlay on the progress bar */}
 										{progress < 100 && (
 											<div 
-												className="absolute inset-0 animate-pulse bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full"
+												className="absolute inset-0 animate-pulse bg-gradient-to-r from-cyan-500/20 to-teal-600/20 rounded-full"
 												style={{ width: `${progress}%` }}
 											/>
 										)}
 									</div>
 								</div>
 								<div className="mt-4 flex items-center justify-between text-sm">
-									<div className="text-blue-400 font-medium">
+									<div className="text-cyan-400 font-medium">
 										{phase === 'upload' ? t('processing.phases.uploading') : t('processing.phases.analyzing')}
 									</div>
-									<div className="text-gray-400">{t('processing.comfort')}</div>
+									<div className="text-slate-400">{t('processing.comfort')}</div>
 								</div>
 
-								<div className="mt-6 p-5 bg-gradient-to-r from-blue-900/20 to-purple-900/10 rounded-2xl border border-blue-500/20 shadow-inner">
-									<div className="text-base md:text-lg text-blue-200/90 font-medium leading-relaxed">
-										<span className="mr-2 align-middle text-blue-300/90">💡</span>{tips[tipIndex]}
+								<div className="mt-6 p-5 bg-gradient-to-r from-cyan-900/20 to-teal-900/10 rounded-2xl border border-cyan-500/20 shadow-inner">
+									<div className="text-base md:text-lg text-cyan-200/90 font-medium leading-relaxed flex items-start gap-2">
+										<LightBulbIcon className="w-5 h-5 text-cyan-300/90 flex-shrink-0 mt-0.5" aria-hidden="true" />
+										<span>{tips[tipIndex]}</span>
 									</div>
-									<div className="text-xs md:text-sm mt-3 uppercase tracking-widest text-blue-300/60">{t('processing.youCan')}</div>
+									<div className="text-xs md:text-sm mt-3 uppercase tracking-widest text-cyan-300/60">{t('processing.youCan')}</div>
 								</div>
 							</div>
 						)}
@@ -539,35 +555,35 @@ function UploadAndAnalysisPageContent() {
 						{step === 3 && results && (
 							<div className="space-y-8">
 								{/* Part 1: Test Results Summary */}
-								<div className="bg-gradient-to-br from-blue-900/30 to-indigo-900/30 backdrop-blur-sm rounded-3xl border border-blue-500/20 p-8 shadow-2xl shadow-blue-500/10">
+								<div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/30 backdrop-blur-sm rounded-3xl border border-cyan-500/20 p-8 shadow-2xl shadow-cyan-500/10">
 									<div className="flex items-center gap-4 mb-8">
-										<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-xl">
-											📋
+										<div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-xl flex items-center justify-center">
+											<ClipboardDocumentIcon className="w-6 h-6 text-white" aria-hidden="true" />
 										</div>
 										<div>
 											<h3 className="text-2xl font-bold text-white">Tóm tắt kết quả xét nghiệm</h3>
-											<p className="text-gray-400">Tổng quan các chỉ số trong kết quả của bạn</p>
+											<p className="text-slate-400">Tổng quan các chỉ số trong kết quả của bạn</p>
 										</div>
 									</div>
 									
 									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 										{results.summary.map((itSummary, idx) => (
-											<div key={idx} className={`p-5 rounded-2xl border-2 transition-all duration-300 ${
+											<div key={idx} className={`p-5 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
 												itSummary.level === 'Normal' 
-													? 'bg-green-900/20 border-green-500/30 hover:bg-green-900/30' 
-													: 'bg-orange-900/20 border-orange-500/30 hover:bg-orange-900/30'
+													? 'bg-emerald-900/20 border-emerald-500/30 hover:bg-emerald-900/30' 
+													: 'bg-amber-900/20 border-amber-500/30 hover:bg-amber-900/30'
 											} shadow-lg hover:shadow-xl`}>
 												<div className="flex items-center justify-between mb-3">
 													<h4 className="text-lg font-semibold text-white">{itSummary.name}</h4>
 													<div className={`w-3 h-3 rounded-full ${
-														itSummary.level === 'Normal' ? 'bg-green-500' : 'bg-orange-500'
-													}`}></div>
+														itSummary.level === 'Normal' ? 'bg-emerald-500' : 'bg-amber-500'
+													}`} aria-label={itSummary.level === 'Normal' ? 'Normal level' : 'Attention required'}></div>
 												</div>
 												<div className="text-2xl font-bold text-white mb-2">
-													{itSummary.value} <span className="text-sm text-gray-400">{itSummary.unit}</span>
+													{itSummary.value} <span className="text-sm text-slate-400">{itSummary.unit}</span>
 												</div>
 												<p className={`text-sm font-medium ${
-													itSummary.level === 'Normal' ? 'text-green-300' : 'text-orange-300'
+													itSummary.level === 'Normal' ? 'text-emerald-300' : 'text-amber-300'
 												}`}>
 													{itSummary.level === 'Normal' ? 'Bình thường' : 'Cần chú ý'}
 												</p>
@@ -579,12 +595,12 @@ function UploadAndAnalysisPageContent() {
 								{/* Part 2: Health Concerns & Important Notes */}
 								<div className="bg-gradient-to-br from-amber-900/30 to-orange-900/30 backdrop-blur-sm rounded-3xl border border-amber-500/20 p-8 shadow-2xl shadow-amber-500/10">
 									<div className="flex items-center gap-4 mb-8">
-										<div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center text-xl">
-											⚠️
+										<div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center">
+											<ExclamationTriangleIcon className="w-6 h-6 text-white" aria-hidden="true" />
 										</div>
 										<div>
 											<h3 className="text-2xl font-bold text-white">Điều cần lưu ý về sức khỏe</h3>
-											<p className="text-gray-400">Những chỉ số cần quan tâm và tình trạng hiện tại</p>
+											<p className="text-slate-400">Những chỉ số cần quan tâm và tình trạng hiện tại</p>
 										</div>
 									</div>
 									
@@ -592,23 +608,23 @@ function UploadAndAnalysisPageContent() {
 										{results.risks
 											.filter(risk => risk.level !== 'Normal')
 											.map((risk, idx) => (
-												<div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
+												<div key={idx} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer">
 													<div className="flex items-start gap-4">
-														<div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+														<div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${
 															risk.level === 'High' 
 																? 'bg-gradient-to-br from-red-500 to-pink-600' 
-																: 'bg-gradient-to-br from-blue-500 to-cyan-600'
-														}`}>
+																: 'bg-gradient-to-br from-cyan-500 to-teal-600'
+														}`} aria-label={risk.level === 'High' ? 'High level' : 'Low level'}>
 															{risk.level === 'High' ? '↑' : '↓'}
 														</div>
 														<div className="flex-1">
 															<div className="flex items-center justify-between mb-2">
 																<h4 className="text-xl font-bold text-white">{risk.name}</h4>
 																<div className="text-2xl font-bold text-white">
-																	{risk.value} <span className="text-sm text-gray-400">{risk.unit}</span>
+																	{risk.value} <span className="text-sm text-slate-400">{risk.unit}</span>
 																</div>
 															</div>
-															<p className="text-gray-300 text-lg leading-relaxed">
+															<p className="text-slate-300 text-lg leading-relaxed">
 																{risk.explanation}
 															</p>
 														</div>
@@ -635,52 +651,42 @@ function UploadAndAnalysisPageContent() {
 								{/* Part 3: Recommendations & Next Steps */}
 								<div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/30 backdrop-blur-sm rounded-3xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
 									<div className="flex items-center gap-4 mb-8">
-										<div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center text-xl">
-											💡
+										<div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+											<LightBulbIcon className="w-6 h-6 text-white" aria-hidden="true" />
 										</div>
 										<div>
 											<h3 className="text-2xl font-bold text-white">Lời khuyên & Hướng dẫn</h3>
-											<p className="text-gray-400">Những điều bạn nên làm tiếp theo</p>
+											<p className="text-slate-400">Những điều bạn nên làm tiếp theo</p>
 										</div>
 									</div>
 									
 									<div className="space-y-6">
 										{results.recommendations && results.recommendations.length > 0 ? (
 											results.recommendations.map((recommend, idx) => (
-												<div key={idx} className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300">
-													<div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+												<div key={idx} className="flex items-start gap-4 p-6 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer">
+													<div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-sm" aria-label={`Recommendation ${idx + 1}`}>
 														{idx + 1}
 													</div>
-													<p className="text-gray-200 text-lg leading-relaxed">
+													<p className="text-slate-200 text-lg leading-relaxed">
 														{recommend}
 													</p>
 												</div>
 											))
 										) : (
 											<div className="p-6 bg-white/5 rounded-2xl border border-white/10">
-												<p className="text-gray-200 text-lg leading-relaxed"></p>
+												<p className="text-slate-200 text-lg leading-relaxed"></p>
 											</div>
 										)}
 									</div>
 
 									{/* Action Buttons */}
 									<div className="flex flex-col sm:flex-row gap-4 mt-8">
-										{/* <Button 
-											onClick={downloadPdf}
-											className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-blue-500/25 transition-all duration-300"
-										>
-											📄 Tải báo cáo PDF
-										</Button> */}
-										{/* <Button 
-											onClick={shareResults}
-											className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-4 px-8 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300"
-										>
-											🔗 Chia sẻ kết quả
-										</Button> */}
 										<Button 
 											onClick={resetAll}
-											className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-4 px-8 rounded-xl border border-gray-600 transition-all duration-300"
+											className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-4 px-8 rounded-xl border border-slate-600 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+											aria-label="Start new analysis"
 										>
+											<DocumentTextIcon className="w-5 h-5" aria-hidden="true" />
 											Phân tích mới
 										</Button>
 									</div>

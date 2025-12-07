@@ -24,8 +24,6 @@ export interface AnalysisRequest {
 	onProgress?: (progress: number) => void;
 }
 
-type LevelMetric = 'High' | 'Normal' | 'Low';
-
 // type Metric = {
 // 	name: string;
 // 	value: string | number;

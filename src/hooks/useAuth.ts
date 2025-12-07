@@ -52,8 +52,7 @@ export function useAuth() {
         console.error('Error parsing user data:', error);
       }
 
-      // Only update state if token actually changed to prevent unnecessary re-renders
-      const tokenChanged = token !== lastTokenRef.current;
+      // Update last token reference
       lastTokenRef.current = token;
 
       setAuthState(prev => ({

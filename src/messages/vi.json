@@ -88,7 +88,19 @@
     "googleSignInSuccess": "Đăng nhập thành công!"
   },
   "footer": {
+    "description": "Theo dõi và hiểu kết quả xét nghiệm y tế của bạn với thông tin chi tiết được hỗ trợ bởi AI. Dữ liệu sức khỏe của bạn, được đơn giản hóa.",
+    "quickLinks": "Liên kết nhanh",
+    "home": "Trang chủ",
+    "about": "Giới thiệu",
+    "articles": "Bài viết",
+    "upload": "Tải lên & Phân tích",
+    "resources": "Tài nguyên",
     "terms": "Điều khoản & Chính sách",
+    "privacy": "Chính sách bảo mật",
+    "support": "Hỗ trợ",
+    "contact": "Liên hệ",
+    "supportHours": "Hỗ trợ 24/7",
+    "madeWith": "Được tạo với sự quan tâm đến sức khỏe của bạn",
     "copyright": "© {year} MediTrack. Bảo lưu mọi quyền."
   },
   "lang": {
@@ -230,7 +242,20 @@
       "title": "Chi tiết kết quả phân tích",
       "back": "Quay lại lịch sử",
       "analyzedAt": "Phân tích lúc",
-      "fileName": "Tên file"
+      "fileName": "Tên file",
+      "notFound": {
+        "title": "Không tìm thấy kết quả phân tích",
+        "description": "Kết quả phân tích bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+      },
+      "breadcrumbs": {
+        "home": "Trang chủ",
+        "history": "Lịch sử"
+      },
+      "metadata": {
+        "fileInfo": "Thông tin file",
+        "analysisDate": "Ngày phân tích",
+        "fileSize": "Kích thước file"
+      }
     },
     "toast": {
       "deleteSuccess": "Đã xóa kết quả phân tích thành công!",

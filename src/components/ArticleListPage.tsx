@@ -140,9 +140,8 @@ const mockArticles: Article[] = [
   }
 ];
 
-export function ArticleListPage({ searchParams }: ArticleListPageProps) {
+export function ArticleListPage({ locale, searchParams }: ArticleListPageProps) {
   const t = useTranslations('articles');
-  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<ArticleFilters>({
     category: searchParams.category as ArticleCategory,
@@ -155,7 +154,7 @@ export function ArticleListPage({ searchParams }: ArticleListPageProps) {
   const filteredArticles = useMemo(() => {
     let filtered = [...mockArticles];
 
-    if (filters.category && filters.category !== 'all') {
+    if (filters.category) {
       filtered = filtered.filter(article => article.category === filters.category);
     }
 
@@ -180,7 +179,6 @@ export function ArticleListPage({ searchParams }: ArticleListPageProps) {
     const loadArticles = async () => {
       setLoading(true);
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate loading
-      setArticles(filteredArticles);
       setLoading(false);
     };
 
@@ -201,7 +199,7 @@ export function ArticleListPage({ searchParams }: ArticleListPageProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center h-64">
             <Loading />
@@ -212,40 +210,52 @@ export function ArticleListPage({ searchParams }: ArticleListPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/30 to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
+      {/* Modern Hero Section */}
+      <div className="relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-600 via-cyan-500 to-cyan-400 dark:from-cyan-400 dark:via-cyan-300 dark:to-cyan-200 bg-clip-text text-transparent leading-tight">
               {t('title')}
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
               {t('subtitle')}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filters */}
-        <ArticleSearch
-          onSearch={handleSearch}
-          onCategoryChange={handleCategoryChange}
-          selectedCategory={filters.category || 'all'}
-          searchQuery={filters.search || ''}
-          className="mb-8"
-        />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        {/* Search and Filters - Modern Glass Card */}
+        <div className="mb-12 -mt-8">
+          <ArticleSearch
+            onSearch={handleSearch}
+            onCategoryChange={handleCategoryChange}
+            selectedCategory={filters.category || 'all'}
+            searchQuery={filters.search || ''}
+            className="mb-8"
+          />
+        </div>
 
         {/* Featured Articles */}
         {featuredArticles.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              {t('featured')}
-            </h2>
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-1 w-12 bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full" />
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+                {t('featured')}
+              </h2>
+            </div>
             <ArticleList
               articles={featuredArticles}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+              locale={locale}
             />
           </div>
         )}
@@ -253,29 +263,33 @@ export function ArticleListPage({ searchParams }: ArticleListPageProps) {
         {/* Regular Articles */}
         {regularArticles.length > 0 && (
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">
-              {t('latest')}
-            </h2>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="h-1 w-12 bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full" />
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
+                {t('latest')}
+              </h2>
+            </div>
             <ArticleList
               articles={regularArticles}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+              locale={locale}
             />
           </div>
         )}
 
         {/* No Articles Found */}
         {filteredArticles.length === 0 && !loading && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 mb-6">
+              <svg className="w-10 h-10 text-slate-400 dark:text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
               {t('noArticles')}
             </h3>
-            <p className="text-gray-500">
-              Try adjusting your search or filter criteria.
+            <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+              Try adjusting your search or filter criteria to find what you&apos;re looking for.
             </p>
           </div>
         )}

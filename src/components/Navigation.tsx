@@ -2,7 +2,7 @@
 
 import { Loading } from "@/components/ui/Loading";
 import { useAuth } from "@/hooks/useAuth";
-import { ArrowRightOnRectangleIcon, Bars3Icon, ChevronDownIcon, Cog6ToothIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ArrowRightOnRectangleIcon, Bars3Icon, ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -112,210 +112,197 @@ export function Navigation() {
 
   return (
     <>
-      <nav className="bg-gray-900/95 backdrop-blur-sm shadow-2xl border-b border-gray-700/50 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Left: hamburger */}
-            <button
-              type="button"
-              aria-label="Open menu"
-              onClick={() => setDrawerOpen(true)}
-              className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
-            >
-              <Bars3Icon className="w-6 h-6" />
-            </button>
-
-            {/* Logo */}
-            <Link href={`/${locale}`} className="hidden md:flex items-center space-x-2">
-              <Image
-                src="/images/medi_track_logo.png"
-                alt="MediTrack Logo"
-                width={150}
-                height={150}
-                className="object-contain"
-                priority
-              />
-            </Link>
-
-            {/* Right actions */}
-            <div className="hidden md:flex items-center space-x-6">
-              <Link
-                href={`/${locale}/about`}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  isActive('/about')
-                    ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
-                }`}
+      {/* Floating Modern Header */}
+      <nav className="fixed top-4 left-4 right-4 z-50 md:top-6 md:left-6 md:right-6 lg:top-8 lg:left-8 lg:right-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-slate-900/10 dark:shadow-slate-900/50 border border-slate-200/50 dark:border-slate-700/50 px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16 md:h-20">
+              {/* Mobile Menu Button */}
+              <button
+                type="button"
+                aria-label="Open menu"
+                onClick={() => setDrawerOpen(true)}
+                className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors duration-200 cursor-pointer"
               >
-                {t('about')}
+                <Bars3Icon className="w-6 h-6" />
+              </button>
+
+              {/* Logo */}
+              <Link 
+                href={`/${locale}`} 
+                className="flex items-center space-x-3 group cursor-pointer"
+              >
+                <div className="relative">
+                  <Image
+                    src="/images/medi_track_logo.png"
+                    alt="MediTrack Logo"
+                    width={140}
+                    height={40}
+                    className="object-contain h-8 md:h-10 w-auto transition-opacity duration-200 group-hover:opacity-90"
+                    priority
+                  />
+                </div>
               </Link>
 
-              <Link
-                href={`/${locale}/articles`}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  isActive('/articles')
-                    ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
-                }`}
-              >
-                {t('articles')}
-              </Link>
-              
-              <Link
-                href={`/${locale}/upload`}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                  isActive('/upload') || pathname === `/${locale}` || pathname === `/${locale}/`
-                    ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
-                }`}
-              >
-                {t('upload')}
-              </Link>
-
-              {isAuthenticated && (
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
                 <Link
-                  href={`/${locale}/history`}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    isActive('/history')
-                      ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
-                      : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
+                  href={`/${locale}/about`}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                    isActive('/about')
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm"
+                      : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                   }`}
                 >
-                  {t('history')}
+                  {t('about')}
                 </Link>
-              )}
-              {!isAuthenticated ? (
+
                 <Link
-                  href={`/${locale}/login`}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    isActive('/login')
-                      ? "text-white bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/50 shadow-lg shadow-blue-500/25"
-                      : "text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50"
+                  href={`/${locale}/articles`}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                    isActive('/articles')
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm"
+                      : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                   }`}
                 >
-                  {t('login')}
+                  {t('articles')}
                 </Link>
-              ) : (
-                <div className="relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-800/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                    aria-label="User menu"
-                    aria-expanded={userMenuOpen}
+                
+                <Link
+                  href={`/${locale}/upload`}
+                  className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                    isActive('/upload') || pathname === `/${locale}` || pathname === `/${locale}/`
+                      ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm"
+                      : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                  }`}
+                >
+                  {t('upload')}
+                </Link>
+
+                {isAuthenticated && (
+                  <Link
+                    href={`/${locale}/history`}
+                    className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+                      isActive('/history')
+                        ? "text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm"
+                        : "text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                    }`}
                   >
-                    {/* Avatar */}
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-gray-700">
-                      {userAvatar ? (
-                        <Image
-                          src={userAvatar}
-                          alt={userName || 'User'}
-                          width={32}
-                          height={32}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-white text-xs font-semibold">
-                          {userInitials}
+                    {t('history')}
+                  </Link>
+                )}
+
+                {/* Auth Section */}
+                {!isAuthenticated ? (
+                  <Link
+                    href={`/${locale}/login`}
+                    className={`ml-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                      isActive('/login')
+                        ? "text-white bg-gradient-to-r from-cyan-600 to-cyan-500 shadow-md shadow-cyan-500/30"
+                        : "text-white bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/30"
+                    }`}
+                  >
+                    {t('login')}
+                  </Link>
+                ) : (
+                  <div className="relative ml-2" ref={userMenuRef}>
+                    <button
+                      onClick={() => setUserMenuOpen(!userMenuOpen)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 cursor-pointer"
+                      aria-label="User menu"
+                      aria-expanded={userMenuOpen}
+                    >
+                      {/* Avatar */}
+                      <div className="w-9 h-9 rounded-full overflow-hidden bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center border-2 border-cyan-200 dark:border-cyan-800 shadow-sm">
+                        {userAvatar ? (
+                          <Image
+                            src={userAvatar}
+                            alt={userName || 'User'}
+                            width={36}
+                            height={36}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-white text-xs font-semibold">
+                            {userInitials}
+                          </span>
+                        )}
+                      </div>
+                      {/* Name (hidden on small screens) */}
+                      {userName && (
+                        <span className="hidden lg:block text-sm font-medium text-slate-700 dark:text-slate-200 max-w-[120px] truncate">
+                          {userName}
                         </span>
                       )}
-                    </div>
-                    {/* Name (hidden on small screens) */}
-                    {userName && (
-                      <span className="hidden lg:block text-sm font-medium text-gray-300 max-w-[120px] truncate">
-                        {userName}
-                      </span>
-                    )}
-                    <ChevronDownIcon
-                      className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                        userMenuOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
+                      <ChevronDownIcon
+                        className={`w-4 h-4 text-slate-500 dark:text-slate-400 transition-transform duration-200 ${
+                          userMenuOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
 
-                  {/* Dropdown Menu */}
-                  {userMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-xl border border-gray-700/50 py-1 z-50">
-                      {/* User Info Section */}
-                      <div className="px-4 py-3 border-b border-gray-700/50">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-gray-700 flex-shrink-0">
-                            {userAvatar ? (
-                              <Image
-                                src={userAvatar}
-                                alt={userName || 'User'}
-                                width={40}
-                                height={40}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <span className="text-white text-sm font-semibold">
-                                {userInitials}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            {userName && (
-                              <p className="text-sm font-semibold text-white truncate">
-                                {userName}
-                              </p>
-                            )}
-                            {userEmail && (
-                              <p className="text-xs text-gray-400 truncate">
-                                {userEmail}
-                              </p>
-                            )}
+                    {/* Dropdown Menu */}
+                    {userMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-2 z-50 backdrop-blur-sm">
+                        {/* User Info Section */}
+                        <div className="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center border-2 border-cyan-200 dark:border-cyan-800 flex-shrink-0 shadow-sm">
+                              {userAvatar ? (
+                                <Image
+                                  src={userAvatar}
+                                  alt={userName || 'User'}
+                                  width={40}
+                                  height={40}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-white text-sm font-semibold">
+                                  {userInitials}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              {userName && (
+                                <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                                  {userName}
+                                </p>
+                              )}
+                              {userEmail && (
+                                <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                                  {userEmail}
+                                </p>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Menu Items */}
-                      <div className="py-1">
-                        {/* <Link
-                          href={`/${locale}/profile`}
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
-                        >
-                          <UserIcon className="w-5 h-5" />
-                          <span>Profile</span>
-                        </Link>
-                        <Link
-                          href={`/${locale}/settings`}
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 transition-colors"
-                        >
-                          <Cog6ToothIcon className="w-5 h-5" />
-                          <span>Settings</span>
-                        </Link> */}
-                        {/* <div className="border-t border-gray-700/50 my-1" /> */}
-                        <button
-                          onClick={handleLogout}
-                          disabled={isLoggingOut}
-                          className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {isLoggingOut ? (
-                            <>
-                              <Loading size="sm" />
-                              <span>Logging out...</span>
-                            </>
-                          ) : (
-                            <>
-                              <ArrowRightOnRectangleIcon className="w-5 h-5" />
-                              <span>{t('logout')}</span>
-                            </>
-                          )}
-                        </button>
+                        {/* Menu Items */}
+                        <div className="py-1">
+                          <button
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                          >
+                            {isLoggingOut ? (
+                              <>
+                                <Loading size="sm" />
+                                <span>Logging out...</span>
+                              </>
+                            ) : (
+                              <>
+                                <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                                <span>{t('logout')}</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              {/* <LanguageSwitcher /> */}
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-
-            {/* Mobile right: language switch only */}
-            {/* <div className="md:hidden">
-              <LanguageSwitcher />
-            </div> */}
           </div>
         </div>
       </nav>
@@ -325,34 +312,42 @@ export function Navigation() {
         <button
           aria-label="Close menu"
           onClick={closeDrawer}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
         />
       )}
 
-      {/* Side drawer */}
+      {/* Modern Side Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 w-72 bg-gray-900/95 backdrop-blur-sm border-r border-gray-700/50 z-50 transform transition-transform duration-300 ease-out md:hidden ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed inset-y-0 left-0 w-80 bg-white dark:bg-slate-900 backdrop-blur-xl border-r border-slate-200 dark:border-slate-700 z-50 transform transition-transform duration-300 ease-out md:hidden shadow-2xl ${drawerOpen ? 'translate-x-0' : '-translate-x-full'}`}
         aria-hidden={!drawerOpen}
       >
-        <div className="h-16 px-4 flex items-center justify-between border-b border-gray-700/50">
-          <span className="text-base font-semibold text-white">Menu</span>
+        <div className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-700">
+          <div className="flex items-center space-x-3">
+            <Image
+              src="/images/medi_track_logo.png"
+              alt="MediTrack Logo"
+              width={120}
+              height={35}
+              className="object-contain h-7"
+            />
+          </div>
           <button
             type="button"
             aria-label="Close menu"
             onClick={closeDrawer}
-            className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300"
+            className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-colors duration-200 cursor-pointer"
           >
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
-        <nav className="px-2 py-3">
+        <nav className="px-4 py-6 space-y-2">
           <Link 
             href={`/${locale}/about`} 
             onClick={closeDrawer} 
-            className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
               isActive('/about') 
-                ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+                ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm' 
+                : 'text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
             }`}
           >
             {t('about')}
@@ -361,10 +356,10 @@ export function Navigation() {
           <Link 
             href={`/${locale}/articles`} 
             onClick={closeDrawer} 
-            className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
               isActive('/articles') 
-                ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+                ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm' 
+                : 'text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
             }`}
           >
             {t('articles')}
@@ -373,10 +368,10 @@ export function Navigation() {
           <Link 
             href={`/${locale}/upload`} 
             onClick={closeDrawer} 
-            className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
               isActive('/upload') || pathname === `/${locale}` || pathname === `/${locale}/`
-                ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+                ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm' 
+                : 'text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
             }`}
           >
             {t('upload')}
@@ -386,10 +381,10 @@ export function Navigation() {
             <Link 
               href={`/${locale}/history`} 
               onClick={closeDrawer} 
-              className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+              className={`flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
                 isActive('/history') 
-                  ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
-                  : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+                  ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/30 shadow-sm' 
+                  : 'text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'
               }`}
             >
               {t('history')}
@@ -400,10 +395,10 @@ export function Navigation() {
             <Link 
               href={`/${locale}/login`} 
               onClick={closeDrawer} 
-              className={`mt-2 flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+              className={`mt-4 flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-cyan-600 to-cyan-500 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-200 cursor-pointer ${
                 isActive('/login') 
-                  ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-white border border-blue-500/50 shadow-lg shadow-blue-500/25' 
-                  : 'text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50'
+                  ? 'ring-2 ring-cyan-500/50' 
+                  : ''
               }`}
             >
               {t('login')}
@@ -411,9 +406,9 @@ export function Navigation() {
           ) : (
             <>
               {/* User Info in Mobile Drawer */}
-              <div className="mt-4 px-4 py-3 bg-gray-800/50 rounded-xl border border-gray-700/50">
+              <div className="mt-6 px-4 py-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-2 border-gray-700 flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center border-2 border-cyan-200 dark:border-cyan-800 flex-shrink-0 shadow-sm">
                     {userAvatar ? (
                       <Image
                         src={userAvatar}
@@ -430,12 +425,12 @@ export function Navigation() {
                   </div>
                   <div className="flex-1 min-w-0">
                     {userName && (
-                      <p className="text-sm font-semibold text-white truncate">
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
                         {userName}
                       </p>
                     )}
                     {userEmail && (
-                      <p className="text-xs text-gray-400 truncate">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                         {userEmail}
                       </p>
                     )}
@@ -443,27 +438,11 @@ export function Navigation() {
                 </div>
               </div>
 
-              {/* Menu Items in Mobile Drawer */}
-              <Link
-                href={`/${locale}/profile`}
-                onClick={closeDrawer}
-                className="mt-2 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50 transition-all duration-300"
-              >
-                <UserIcon className="w-5 h-5" />
-                <span>Profile</span>
-              </Link>
-              <Link
-                href={`/${locale}/settings`}
-                onClick={closeDrawer}
-                className="mt-2 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800/50 border border-transparent hover:border-gray-600/50 transition-all duration-300"
-              >
-                <Cog6ToothIcon className="w-5 h-5" />
-                <span>Settings</span>
-              </Link>
+              {/* Logout Button in Mobile Drawer */}
               <button
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="mt-2 w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-red-400 hover:bg-red-900/20 border border-transparent hover:border-red-600/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="mt-4 w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 border border-transparent hover:border-red-200 dark:hover:border-red-900/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 cursor-pointer"
               >
                 {isLoggingOut ? (
                   <>
