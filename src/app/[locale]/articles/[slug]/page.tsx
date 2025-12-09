@@ -74,15 +74,14 @@ async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug);
+  const { slug, locale } = await params;
+  const article = await getArticleBySlug(slug);
   
   if (!article) {
     return {
       title: 'Article Not Found',
     };
   }
-
-  const locale = params.locale;
 
   return {
     title: article.seo.metaTitle,
@@ -134,7 +133,8 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const article = await getArticleBySlug(params.slug);
+  const { slug, locale } = await params;
+  const article = await getArticleBySlug(slug);
   
   if (!article) {
     notFound();
@@ -143,7 +143,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   return (
     <ArticleDetailPage 
       article={article as Article}
-      locale={params.locale}
+      locale={locale}
     />
   );
 }

@@ -15,7 +15,7 @@ interface ArticlesPageProps {
 
 export async function generateMetadata({ params }: ArticlesPageProps): Promise<Metadata> {
   const t = await getTranslations('articles');
-  const locale = params.locale;
+  const { locale } = await params;
 
   return {
     title: t('title'),
@@ -74,10 +74,11 @@ export async function generateMetadata({ params }: ArticlesPageProps): Promise<M
   };
 }
 
-export default function ArticlesPage({ params, searchParams }: ArticlesPageProps) {
+export default async function ArticlesPage({ params, searchParams }: ArticlesPageProps) {
+  const { locale } = await params;
   return (
     <ArticleListPage 
-      locale={params.locale}
+      locale={locale}
       searchParams={searchParams}
     />
   );

@@ -24,7 +24,7 @@ const mockArticles: Article[] = [
     slug: 'understanding-blood-test-results-guide',
     excerpt: 'Learn how to interpret your blood test results and understand what each marker means for your health.',
     content: 'Full article content here...',
-    featuredImage: '/images/articles/blood-test-guide.jpg',
+    featuredImage: '/images/blog/blood-test-guide.jpg',
     category: 'general',
     tags: ['blood test', 'health', 'diagnosis'],
     author: {
@@ -48,7 +48,7 @@ const mockArticles: Article[] = [
     slug: 'importance-regular-health-checkups',
     excerpt: 'Discover why regular health checkups are crucial for maintaining good health and preventing diseases.',
     content: 'Full article content here...',
-    featuredImage: '/images/articles/health-checkup.jpg',
+    featuredImage: '/images/blog/health-checkup.jpg',
     category: 'prevention',
     tags: ['checkup', 'prevention', 'health'],
     author: {
@@ -72,7 +72,7 @@ const mockArticles: Article[] = [
     slug: 'nutrition-tips-better-health',
     excerpt: 'Simple nutrition tips that can significantly improve your overall health and well-being.',
     content: 'Full article content here...',
-    featuredImage: '/images/articles/nutrition-tips.jpg',
+    featuredImage: '/images/blog/nutrition-tips.jpg',
     category: 'nutrition',
     tags: ['nutrition', 'diet', 'health'],
     author: {
@@ -96,7 +96,7 @@ const mockArticles: Article[] = [
     slug: 'exercise-mental-health-connection',
     excerpt: 'Explore how regular exercise can improve your mental health and reduce stress and anxiety.',
     content: 'Full article content here...',
-    featuredImage: '/images/articles/exercise-mental-health.jpg',
+    featuredImage: '/images/blog/exercise-mental-health.jpg',
     category: 'mental',
     tags: ['exercise', 'mental health', 'stress'],
     author: {
@@ -120,7 +120,7 @@ const mockArticles: Article[] = [
     slug: 'recovery-after-surgery-what-expect',
     excerpt: 'A comprehensive guide to post-surgical recovery, including tips for faster healing.',
     content: 'Full article content here...',
-    featuredImage: '/images/articles/surgery-recovery.jpg',
+    featuredImage: '/images/blog/surgery-recovery.jpg',
     category: 'treatment',
     tags: ['surgery', 'recovery', 'healing'],
     author: {

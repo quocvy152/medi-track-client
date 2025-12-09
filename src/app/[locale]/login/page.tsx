@@ -6,6 +6,7 @@ import { SocialButton } from "@/components/ui/SocialButton";
 import { getFacebookAuthUrl } from "@/lib/facebookAuth";
 import { getGoogleAuthUrl } from "@/lib/googleAuth";
 import { authService } from "@/services/authService";
+import { EnvelopeIcon, LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -143,51 +144,73 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <div className="mx-auto bg-white-600 rounded-full flex items-center justify-center mb-4 overflow-hidden">
-            <Image
-              src="/images/medi_track_logo.png"
-              alt="MediTrack Logo"
-              width={150}
-              height={150}
-              className="object-contain"
-              priority
-            />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-950 to-slate-900 relative overflow-hidden flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+      {/* Background Effects */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-400/5 rounded-full blur-3xl" />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-md">
+        {/* Logo Section */}
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-6 flex items-center justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-xl animate-pulse-slow" />
+              <div className="relative bg-white/10 dark:bg-slate-900/20 backdrop-blur-sm rounded-2xl p-4 border border-white/20 dark:border-slate-700/50 shadow-xl">
+                <Image
+                  src="/images/medi_track_logo.png"
+                  alt="MediTrack Logo"
+                  width={120}
+                  height={120}
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h2>
-          <p className="text-gray-600">{t('subtitle')}</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-3 font-heading">
+            {t('title')}
+          </h1>
+          <p className="text-slate-300 text-lg">
+            {t('subtitle')}
+          </p>
         </div>
 
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          <button
-            onClick={() => setActiveTab("signin")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "signin"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            {t('signin')}
-          </button>
-          <button
-            onClick={() => setActiveTab("signup")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "signup"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-700 hover:text-gray-900"
-            }`}
-          >
-            {t('signup')}
-          </button>
+        {/* Tab Switcher */}
+        <div className="mb-6 bg-white/10 dark:bg-slate-800/50 backdrop-blur-xl rounded-2xl p-1.5 border border-white/20 dark:border-slate-700/50 shadow-lg">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab("signin")}
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                activeTab === "signin"
+                  ? "bg-white dark:bg-slate-700 text-cyan-600 dark:text-cyan-400 shadow-md"
+                  : "text-slate-300 dark:text-slate-400 hover:text-white dark:hover:text-slate-200"
+              }`}
+            >
+              {t('signin')}
+            </button>
+            <button
+              onClick={() => setActiveTab("signup")}
+              className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                activeTab === "signup"
+                  ? "bg-white dark:bg-slate-700 text-cyan-600 dark:text-cyan-400 shadow-md"
+                  : "text-slate-300 dark:text-slate-400 hover:text-white dark:hover:text-slate-200"
+              }`}
+            >
+              {t('signup')}
+            </button>
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-xl p-8 border border-gray-100">
+        {/* Main Card */}
+        <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 dark:border-slate-700/50 p-8 md:p-10">
           {activeTab === "signin" ? (
             <>
               {/* Social auth */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-6">
                 <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
@@ -197,31 +220,63 @@ export default function LoginPage() {
               </div>
 
               {/* Divider */}
-              <div className="flex items-center my-6">
-                <div className="flex-1 h-px bg-gray-200" />
-                <span className="px-3 text-sm text-gray-500">{t('descriptionBtnLogin')}</span>
-                <div className="flex-1 h-px bg-gray-200" />
+              <div className="flex items-center my-8">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
+                <span className="px-4 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                  {t('descriptionBtnLogin')}
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
               </div>
 
               {/* Sign In Form */}
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <Input
-                  type="email"
-                  name="email"
-                  placeholder={t('email')}
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder={t('password')}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Button type="submit" className="w-full" loading={isLoading}>
+              <form onSubmit={handleSignIn} className="space-y-5">
+                <div className="space-y-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('email')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <EnvelopeIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder={t('email')}
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('password')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <LockClosedIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder={t('password')}
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 text-white font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 rounded-xl" 
+                  loading={isLoading}
+                >
                   {t('signin')}
                 </Button>
               </form>
@@ -229,7 +284,7 @@ export default function LoginPage() {
           ) : (
             <>
               {/* Social auth */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-6">
                 <SocialButton provider="google" onClick={handleGoogleStart}>
                   Continue with Google
                 </SocialButton>
@@ -239,47 +294,105 @@ export default function LoginPage() {
               </div>
 
               {/* Divider */}
-              <div className="flex items-center my-6">
-                <div className="flex-1 h-px bg-gray-200" />
-                <span className="px-3 text-sm text-gray-500">{t('descriptionBtnLogin')}</span>
-                <div className="flex-1 h-px bg-gray-200" />
+              <div className="flex items-center my-8">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
+                <span className="px-4 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                  {t('descriptionBtnLogin')}
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent via-slate-300 dark:via-slate-600 to-transparent" />
               </div>
 
               {/* Sign Up Form */}
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <Input
-                  type="text"
-                  name="name"
-                  placeholder={t('name')}
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Input
-                  type="email"
-                  name="email"
-                  placeholder={t('email')}
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder={t('password')}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder={t('confirmPassword')}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  required
-                />
-                <Button type="submit" className="w-full" loading={isLoading}>
+              <form onSubmit={handleSignUp} className="space-y-5">
+                <div className="space-y-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('name')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <UserIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder={t('name')}
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label htmlFor="email-signup" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('email')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <EnvelopeIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="email"
+                      name="email"
+                      id="email-signup"
+                      placeholder={t('email')}
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label htmlFor="password-signup" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('password')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <LockClosedIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="password"
+                      name="password"
+                      id="password-signup"
+                      placeholder={t('password')}
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    {t('confirmPassword')}
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <LockClosedIcon className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <Input
+                      type="password"
+                      name="confirmPassword"
+                      id="confirmPassword"
+                      placeholder={t('confirmPassword')}
+                      value={formData.confirmPassword}
+                      onChange={handleInputChange}
+                      className="pl-12 h-12 bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-700 hover:to-cyan-600 text-white font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 rounded-xl" 
+                  loading={isLoading}
+                >
                   {t('signup')}
                 </Button>
               </form>

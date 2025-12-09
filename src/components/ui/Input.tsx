@@ -20,29 +20,29 @@ export function Input({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor={inputId} className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
           {label}
         </label>
       )}
       <input
         id={inputId}
         className={`
-          w-full px-3 py-2 border rounded-md shadow-sm 
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-          transition-colors duration-200 placeholder:text-gray-400 text-black
+          w-full px-4 py-3 border rounded-xl shadow-sm 
+          focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-500
+          transition-all duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500
           ${error 
-            ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
-            : 'border-gray-300'
+            ? 'border-red-300 dark:border-red-600 focus:ring-red-500/20 focus:border-red-500 dark:focus:border-red-500' 
+            : 'border-slate-200 dark:border-slate-700'
           }
           ${className}
         `}
         {...props}
       />
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1.5 text-sm text-red-600 dark:text-red-400">{error}</p>
       )}
       {helperText && !error && (
-        <p className="mt-1 text-sm text-gray-500">{helperText}</p>
+        <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">{helperText}</p>
       )}
     </div>
   );
