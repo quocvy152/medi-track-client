@@ -112,11 +112,10 @@ export function Navigation() {
 
   return (
     <>
-      {/* Floating Modern Header */}
-      <nav className="fixed top-4 left-4 right-4 z-50 md:top-6 md:left-6 md:right-6 lg:top-8 lg:left-8 lg:right-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-slate-900/10 dark:shadow-slate-900/50 border border-slate-200/50 dark:border-slate-700/50 px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16 md:h-20">
+      {/* Full Width Header */}
+      <nav className="fixed top-0 left-0 right-0 z-50">
+        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-lg shadow-slate-900/10 dark:shadow-slate-900/50 border-b border-slate-200/50 dark:border-slate-700/50">
+          <div className="flex justify-between items-center h-16 md:h-20 px-4 sm:px-6 lg:px-8">
               {/* Mobile Menu Button */}
               <button
                 type="button"
@@ -304,7 +303,6 @@ export function Navigation() {
               </div>
             </div>
           </div>
-        </div>
       </nav>
 
       {/* Overlay */}
